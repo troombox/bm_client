@@ -35,6 +35,7 @@ public class ClientUI extends Application{
 		if(DEBUG_MODE) {
 			debugModeStart();
 		}
+		clientLogic = new BMClientLogic(starting_host, starting_port);
         IClientFxController clientFxController = new LoginControllerFx();
         clientFxController.start(primaryStage);
 	}
