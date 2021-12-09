@@ -1,7 +1,6 @@
 package utility.enums;
 
 public enum DataType {
-	
 	SINGLE_TEXT_STRING("SINGLE_TEXT_STRING"),	//used for messages that contain a single string of text: Connection/Debug
 	ORDER("ORDER"),								//used for Order Messages
 	USER("USER"),								//used for User Messages

@@ -85,10 +85,16 @@ public class User {
 		return isSignedIn;
 	}
 
-
 	public UserType getUserType() {
 		return userType;
 	}
 	
+	@Override
+	public String toString() {
+		return "User [user_ID=" + user_ID + ", firstName=" + firstName + ", lastName=" + lastName + ", personalBranch="
+				+ personalBranch + ", email=" + email + ", phone=" + phone + ", status=" + status + ", w4c=" + w4c
+				+ ", password=" + password + ", isSignedIn=" + isSignedIn + ", userType=" + userType.toString() + "]";
+	}
+
 
 }

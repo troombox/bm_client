@@ -30,7 +30,14 @@ public class MessageParserOrder extends MessageParser{
 		
 		return messageToServer;
 	}
-
-
+	
+	public static Order handleMessageFromServer_OrderDataSent(Object message) {
+		ArrayList<String> msg = (ArrayList<String>)message;
+		if(!msg.get(1).equals("ORDER")) {
+			//TODO:ADD ERROR HANDLING
+			return null; 
+		}
+		return new Order(msg.get(2),msg.get(3),msg.get(4),msg.get(5),msg.get(6),msg.get(7));
+	}
 
 }

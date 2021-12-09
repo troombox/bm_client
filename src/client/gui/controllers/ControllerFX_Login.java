@@ -37,37 +37,27 @@ public class ControllerFX_Login implements IClientFxController {
     	String userEmail = Useremail.getText();
     	String password = Password.getText();
     	if(checkValidInput(userEmail,password)) {
-    		
     		User user = new User(-1, "", "", "", userEmail, "", UserType.USER,"", "", false,password);
-    		ClientUI.clientLogic.sendMessageToServer(user, DataType.USER, RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA);
- 
+    		ClientUI.clientLogic.sendMessageToServer(user, DataType.USER, RequestType.CLIENT_REQUEST_TO_SERVER_LOGIN_REQUEST);
 	    	try {
-				Thread.sleep(100);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				// TODO error handling
 				e.printStackTrace();
 			}
-//	    	if (ClientUI.clientLogic.getLastDataTypeRecieved() == DataType.ERROR_MESSAGE) {
-//				// TODO: TYPE OF ERROR
-//				ErrorMsg.setText((String) ClientUI.clientLogic.getLastDataRecieved());
-//				} else {
-//					//on successful data delivery - open new window
-//					((Node) event.getSource()).getScene().getWindow().hide(); // hiding primary window
-//					Stage primaryStage = new Stage();
-//					Object recievedData = ClientUI.clientLogic.getLastDataRecieved();
-//					Pane root = openWantedWindow(loader,(String)((ArrayList)recievedData).get(8));
-//					
-//					//what does OrderDetailsFrameController do ??
-//					OrderDetailsFrameController orderDetailsFrameController = loader.getController();
-//					orderDetailsFrameController.loadOrder((Order) ClientUI.clientLogic.getLastDataRecieved());
-//					Scene scene = new Scene(root);
-////					scene.getStylesheets().add(getClass().getResource("/gui_/OrderDetailsFrame.css").toExternalForm());
-//					primaryStage.setTitle("Show Order");
-//					primaryStage.setScene(scene);
-//					primaryStage.show();
-//				}
+	    	if(ClientUI.clientLogic.getTypeOfLastDataRecieved() == DataType.ERROR_MESSAGE) {
+	    		ErrorMsg.setText(ClientUI.clientLogic.getLastDataRecieved().toString());
+	    		return;
+	    	}
+	    	if(ClientUI.clientLogic.getTypeOfLastDataRecieved() != DataType.USER) {
+	    		System.out.println("NOT USER DATA, WHY?!" + ClientUI.clientLogic.getTypeOfLastDataRecieved().toString());//testprint
+	    		//something went *very* wrong!
+	    		return;
+	    	}
+	    	User userDataFromServer = (User)ClientUI.clientLogic.getLastDataRecieved();
+	    	System.out.println(userDataFromServer.toString()); //testprint
+	    	openWantedWindow(userDataFromServer.getUserType());
     	}
-
     }
     
     private void openWantedWindow(UserType userType) throws IOException {

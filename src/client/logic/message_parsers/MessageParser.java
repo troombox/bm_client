@@ -17,23 +17,14 @@ public class MessageParser {
 		switch(msg.get(0)) {
 		case "SERVER_MESSAGE_TO_CLIENT_DATA_PROVIDED":
 			return RequestType.SERVER_MESSAGE_TO_CLIENT_DATA_PROVIDED;
+		case "SERVER_MESSAGE_TO_CLIENT_LOGIN_SUCCESS":
+			return RequestType.SERVER_MESSAGE_TO_CLIENT_LOGIN_SUCCESS;
 		case "SERVER_MESSAGE_TO_CLIENT_ERROR":
 			return RequestType.SERVER_MESSAGE_TO_CLIENT_ERROR;
 		default:
 			//TODO: ADD error handling for this case;
 			return RequestType.CLIENT_REQUEST_TO_SERVER_UNKNOWN_REQUEST;
 		}
-	}
-	
-	public static Object prepareMessageToServer_DataTypeSingleTextString(String textString, RequestType requestType) {
-		//DEBUG MESSAGE:
-		// [CLIENT_REQUEST_TO_SERVER_DEBUG_MESSAGE | SINGLE_TEXT_STRING | _TEXT_STRING_ ]
-		ArrayList<String> messageToServer = new ArrayList<String>();	
-		messageToServer.add(requestType.toString());
-		messageToServer.add(DataType.SINGLE_TEXT_STRING.toString());
-		messageToServer.add(textString);
-		
-		return messageToServer;
 	}
 	
 	public static DataType parseMessageFromServer_DataType(Object message) {
@@ -52,6 +43,19 @@ public class MessageParser {
 			//TODO: ADD error handling for this case;
 			return DataType.UNKNOWN;
 		}
+	}
+	
+	//--------------------------------- DEBUG METHODS
+	
+	public static Object prepareMessageToServer_DataTypeSingleTextString(String textString, RequestType requestType) {
+		//DEBUG MESSAGE:
+		// [CLIENT_REQUEST_TO_SERVER_DEBUG_MESSAGE | SINGLE_TEXT_STRING | _TEXT_STRING_ ]
+		ArrayList<String> messageToServer = new ArrayList<String>();	
+		messageToServer.add(requestType.toString());
+		messageToServer.add(DataType.SINGLE_TEXT_STRING.toString());
+		messageToServer.add(textString);
+		
+		return messageToServer;
 	}
 
 }
