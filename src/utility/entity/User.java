@@ -16,9 +16,8 @@ public class User {
 	boolean isSignedIn;	
 	UserType userType;
 	
-	
-	public User(int user_ID, String firstName, String lastName, String personalBranch, String email, String phone,
-			String status, String w4c, String password, boolean isSignedIn, UserType userType) {
+	public User(int user_ID, String firstName, String lastName, String personalBranch, String email, String phone, UserType userType,
+			String status, String w4c, boolean isSignedIn, String password) {
 		this.user_ID = user_ID;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -33,8 +32,8 @@ public class User {
 	}
 	
 	
-	User(int user_ID){
-		this(user_ID, "","","","","","", "", "", false, UserType.USER);
+	public User(String email, String password){
+		this(0, "", "", "", email, "", UserType.USER, "", "", false, password);
 	}
 	
 	public int getUser_ID() {

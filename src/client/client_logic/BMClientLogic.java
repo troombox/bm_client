@@ -3,8 +3,8 @@ package client.client_logic;
 import java.io.IOException;
 
 import ocsf.client.AbstractClient;
-import utility.enums.DataType;
-import utility.enums.RequestType;
+import utility.entity.*;
+import utility.enums.*;
 
 public class BMClientLogic extends AbstractClient{
 	
@@ -16,14 +16,24 @@ public class BMClientLogic extends AbstractClient{
 
 	@Override
 	protected void handleMessageFromServer(Object msg) {
-		// TODO Auto-generated method stub
-	}
-	
-	public void sendMessageToServer(Object dataToSendToServer, DataType dataType, RequestType requestType) {
 		
 	}
 	
+	public void sendMessageToServer(Object dataToSendToServer, DataType dataType, RequestType requestType) {
+		Object message;
+		switch(dataType) {
+		case USER:
+			System.out.println("case user");
+			message = MessageParserUser.createMessageToServerDataType_User((User)dataToSendToServer, requestType);
+			break;
+		default:
+			return;
+		}
+		handleMessageToServer(message);
+	}
+	
 	private void handleMessageToServer(Object msg) {
+		System.out.println("Sending");
 		try {
 			sendToServer(msg);
 		} catch (IOException e) {

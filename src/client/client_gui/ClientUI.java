@@ -1,5 +1,7 @@
 package client.client_gui;
 
+import java.io.IOException;
+
 import client.client_logic.BMClientLogic;
 import client.interfaces.IClientFxController;
 import javafx.application.Application;
@@ -23,7 +25,9 @@ public class ClientUI extends Application{
 	private int starting_port = DEFAULT_PORT;
 	private String starting_host = DEFAULT_HOST;
 	//client side logic object
-	private static BMClientLogic clientLogic;
+	public static BMClientLogic clientLogic;
+	
+	public static Stage parentWindow;
 
 	
 	public static void main(String[] args) {
@@ -31,13 +35,25 @@ public class ClientUI extends Application{
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) {
+		//preparing stage:
+		parentWindow = primaryStage;
+		parentWindow.setResizable(false);
+		parentWindow.setOnCloseRequest(e->{
+			System.exit(0);
+		});
+        IClientFxController clientFxController = new LoginControllerFx();
+        clientFxController.start(parentWindow);
 		if(DEBUG_MODE) {
 			debugModeStart();
+		} else {
+			try {
+				clientLogic = new BMClientLogic(starting_host, starting_port);
+			} catch (IOException exception) {
+				exception.printStackTrace();
+				System.exit(1);
+			}
 		}
-		clientLogic = new BMClientLogic(starting_host, starting_port);
-        IClientFxController clientFxController = new LoginControllerFx();
-        clientFxController.start(primaryStage);
 	}
 	
 	private void debugModeStart() {
@@ -62,6 +78,12 @@ public class ClientUI extends Application{
     		starting_port = Integer.valueOf(txtFieldSetPort.getText());
     		starting_host = txtFieldSetHost.getText();
     		stage.close();
+    		try {
+				clientLogic = new BMClientLogic(starting_host, starting_port);
+			} catch (IOException exception) {
+				exception.printStackTrace();
+				System.exit(1);
+			}
     	});
 	}
 
