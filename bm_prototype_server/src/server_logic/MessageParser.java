@@ -3,8 +3,10 @@ package server_logic;
 import java.util.ArrayList;
 
 import entity.Order;
+import entity.User;
 import utility.DataType;
 import utility.RequestType;
+import utility.UserType;
 
 public class MessageParser {
 	
@@ -41,6 +43,8 @@ public class MessageParser {
 		switch(msg.get(1)) {
 		case "ORDER":
 			return DataType.ORDER;
+		case "USER":
+			return DataType.USER;
 		case "SINGLE_TEXT_STRING":
 			return DataType.SINGLE_TEXT_STRING;
 		default:
@@ -62,6 +66,18 @@ public class MessageParser {
 		return order;
 	}
 	
+	public static User parseMessageDataType_User(Object message) {
+		ArrayList<String> msg = (ArrayList<String>)message;
+		if(!msg.get(1).equals("USER")) {
+			//TODO: ADD error handling for this case;
+			System.out.println("Error parseMessageDataType_User not order");
+			return null;
+		}
+		UserType userType = UserType.fromString(msg.get(8));
+		User user = new User(Integer.parseInt(msg.get(2)), msg.get(3), msg.get(4), msg.get(5), msg.get(6), msg.get(7)
+							,userType,msg.get(9),msg.get(10),Boolean.parseBoolean(msg.get(11)),msg.get(12));
+		return user;
+	}
 	
 	/**
 	 * Get Request Layout:

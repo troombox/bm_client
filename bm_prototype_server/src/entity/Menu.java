@@ -1,4 +1,4 @@
-package bm_project;
+package entity;
 
 public class Menu {
 	

@@ -6,13 +6,16 @@ import server_gui.ServerMainWindowController;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.security.auth.login.LoginException;
+
 import db_logic.DBController;
 import db_logic.OrderDBController;
-
+import db_logic.UserDBController;
 import utility.DataType;
 import utility.RequestType;
 
 import entity.Order;
+import entity.User;
 
 public class BMServerLogic extends AbstractServer{
 	
@@ -20,6 +23,7 @@ public class BMServerLogic extends AbstractServer{
 	
 	DBController dbController;
 	OrderDBController orderDBController;
+	UserDBController userDBController; 
 	 
 	public BMServerLogic(int port, String dbName, String dbUser, String dbPassword) throws Exception {
 		super(port);
@@ -50,6 +54,8 @@ public class BMServerLogic extends AbstractServer{
 		} else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_DEBUG_MESSAGE) {
 			//this is a debug case
 			handleDebugRequest(actionRequired, msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_LOGIN_REQUEST) {
+			
 		}
 		serverPrintToGuiLog("Message From Client Handled, action: " + actionRequired.toString(), true);
 	}
@@ -155,6 +161,16 @@ public class BMServerLogic extends AbstractServer{
 		}
 	}
 	
+	private void handleLoginRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		String errorMsg;
+		User user = MessageParser.parseMessageDataType_User(msg);
+		try{
+			userDBController.checkIfUserInDB(user);
+		}catch(LoginException e) {
+			errorMsg = e.getMessage();
+		}
+	}
+	
 	
 	//-------------------------DEBUG FUNCTIONS
 	private void handleDebugRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
@@ -179,4 +195,6 @@ public class BMServerLogic extends AbstractServer{
 	private void serverPrintToGuiNumberOfClients(int numberOfClients) {
 		guiController.updateNumberOfClientsConnected(numberOfClients);
 	}
+	
+
 }
