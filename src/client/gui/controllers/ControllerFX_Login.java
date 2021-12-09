@@ -50,12 +50,11 @@ public class ControllerFX_Login implements IClientFxController {
 	    		return;
 	    	}
 	    	if(ClientUI.clientLogic.getTypeOfLastDataRecieved() != DataType.USER) {
-	    		System.out.println("NOT USER DATA, WHY?!" + ClientUI.clientLogic.getTypeOfLastDataRecieved().toString());//testprint
 	    		//something went *very* wrong!
 	    		return;
 	    	}
 	    	User userDataFromServer = (User)ClientUI.clientLogic.getLastDataRecieved();
-	    	System.out.println(userDataFromServer.toString()); //testprint
+	    	ClientUI.clientLogic.loginUser(userDataFromServer);
 	    	openWantedWindow(userDataFromServer.getUserType());
     	}
     }
@@ -63,6 +62,8 @@ public class ControllerFX_Login implements IClientFxController {
     private void openWantedWindow(UserType userType) throws IOException {
     	IClientFxController nextScreen = new TempScreenControllerFx();
     	if(userType == UserType.CLIENT_PERSONAL || userType == UserType.CLIENT_BUSINESS) {
+    		nextScreen = new ControllerFX_ClientW4Cscreen();
+    		ClientUI.historyStack.pushFxController(this);
     		nextScreen.start(ClientUI.parentWindow);
     	}
     	if(userType == UserType.HR_MANAGER)

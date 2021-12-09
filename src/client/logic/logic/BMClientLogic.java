@@ -16,6 +16,8 @@ public class BMClientLogic extends AbstractClient{
 	private DataType typeOfLastDataRecieved;
 	private RequestType typeOfLastRequestRecieved;
 	
+	private User loggedInUser;
+	
 	public BMClientLogic(String host, int port) throws IOException {
 	    super(host, port); //Call the superclass constructor
 	    openConnection();
@@ -57,6 +59,24 @@ public class BMClientLogic extends AbstractClient{
 		} catch (IOException e) {
 			System.out.println("Could not send message to server. Terminating client.");
 			System.exit(1);
+		}
+	}
+	
+	//----------------LOGGED-IN USER METHODS
+	
+	public void loginUser(User user) {
+		this.loggedInUser = user;
+	}
+	
+	public void logOutUser() {
+		loggedInUser = new User(-1, "", "", "", "", "", UserType.USER, "", "", false, "");
+	}
+	
+	public User getLoggedUser() {
+		if(loggedInUser == null)
+			return new User(-1, "", "", "", "", "", UserType.USER, "", "", false, "");
+		else {
+			return loggedInUser;
 		}
 	}
 

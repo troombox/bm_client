@@ -33,8 +33,9 @@ public class User {
 	
 	
 	public User(String email, String password){
-		this(0, "", "", "", email, "", UserType.USER, "", "", false, password);
+		this(-1, "", "", "", email, "", UserType.USER, "", "", false, password);
 	}
+	
 	
 	public int getUser_ID() {
 		return user_ID;

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import client.logic.logic.BMClientLogic;
 import client.gui.controllers.ControllerFX_Login;
+import client.gui.history.FxControllerHistory;
 import client.interfaces.IClientFxController;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -29,6 +30,9 @@ public class ClientUI extends Application{
 	public static BMClientLogic clientLogic;
 	
 	public static Stage parentWindow;
+	public static IClientFxController loginScreen;
+	public static FxControllerHistory historyStack;
+	
 
 	
 	public static void main(String[] args) {
@@ -43,8 +47,9 @@ public class ClientUI extends Application{
 		parentWindow.setOnCloseRequest(e->{
 			System.exit(0);
 		});
-        IClientFxController clientFxController = new ControllerFX_Login();
-        clientFxController.start(parentWindow);
+		loginScreen = new ControllerFX_Login();
+        historyStack = new FxControllerHistory(loginScreen);
+        loginScreen.start(parentWindow);
 		if(DEBUG_MODE) {
 			debugModeStart();
 		} else {
