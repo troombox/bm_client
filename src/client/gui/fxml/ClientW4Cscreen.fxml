@@ -31,17 +31,17 @@
       </Pane>
       <Pane prefHeight="414.0" prefWidth="606.0">
          <children>
-            <VBox alignment="TOP_CENTER" layoutX="172.0" layoutY="30.0" prefHeight="164.0" prefWidth="262.0" spacing="15.0">
+            <VBox alignment="TOP_CENTER" layoutX="172.0" layoutY="35.0" prefHeight="164.0" prefWidth="262.0" spacing="15.0">
                <children>
                   <Label text="please insert your W4C details" />
-                  <TextField promptText="code" />
-                  <TextField promptText="employee code" />
+                  <TextField fx:id="textBoxW4CCode" alignment="CENTER" promptText="W4C code" />
                   <Button fx:id="buttonContinue" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#doContinue" prefHeight="35.0" prefWidth="134.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="continue">
                      <effect>
                         <DropShadow />
                      </effect>
                   </Button>
                   <Separator prefWidth="200.0" />
+                  <Label fx:id="ErrorMsg" />
                </children>
             </VBox>
             <Button fx:id="buttonScanQRCode" alignment="CENTER" contentDisplay="CENTER" layoutX="236.0" layoutY="242.0" mnemonicParsing="false" onAction="#doScanQRCode" prefHeight="35.0" prefWidth="134.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="scan QR code">

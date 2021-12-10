@@ -53,7 +53,8 @@ public class BMServerLogic extends AbstractServer{
 		} else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_DEBUG_MESSAGE) {
 			//this is a debug case
 			handleDebugRequest(actionRequired, msg, client);
-		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_LOGIN_REQUEST) {
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_LOGIN_REQUEST ||
+				actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_LOGOUT_REQUEST) {
 			handleLoginRequest(actionRequired, msg, client);
 		}
 		serverPrintToGuiLog("Message From Client Handled, action: " + actionRequired.toString(), true);
@@ -162,15 +163,21 @@ public class BMServerLogic extends AbstractServer{
 	
 	private void handleLoginRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
         User user = MessageParser.parseMessageDataType_User(msg);
-        Object response;
-		try {
-        	User result = userDBController.authenticateAndGetFullUserData(user);
-            response = MessageParser.createMessageToClientDataType_User(result, RequestType.SERVER_MESSAGE_TO_CLIENT_LOGIN_SUCCESS);
-            sendMessageToGivenClient(response,client);
-        }catch(LogInException e) {
-            response = MessageParser.createMessageToClientDataType_Error(e.getErrorType(), e.getMessage());
-            sendMessageToGivenClient(response,client);
+        if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_LOGIN_REQUEST) {
+            Object response;
+    		try {
+            	User result = userDBController.authenticateAndGetFullUserData(user);
+            	userDBController.setUserToLoggedIn(result);
+                response = MessageParser.createMessageToClientDataType_User(result, RequestType.SERVER_MESSAGE_TO_CLIENT_LOGIN_SUCCESS);
+                sendMessageToGivenClient(response,client);
+            }catch(LogInException e) {
+                response = MessageParser.createMessageToClientDataType_Error(e.getErrorType(), e.getMessage());
+                sendMessageToGivenClient(response,client);
+            }
+        } else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_LOGOUT_REQUEST){
+        	userDBController.setUserToLoggedOut(user);
         }
+
     }
 	
 	

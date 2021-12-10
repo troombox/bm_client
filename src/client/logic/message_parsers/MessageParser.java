@@ -47,7 +47,7 @@ public class MessageParser {
 	
 	//--------------------------------- DEBUG METHODS
 	
-	public static Object prepareMessageToServer_DataTypeSingleTextString(String textString, RequestType requestType) {
+	public static Object prepareMessageToServerDataType_SingleTextString(String textString, RequestType requestType) {
 		//DEBUG MESSAGE:
 		// [CLIENT_REQUEST_TO_SERVER_DEBUG_MESSAGE | SINGLE_TEXT_STRING | _TEXT_STRING_ ]
 		ArrayList<String> messageToServer = new ArrayList<String>();	

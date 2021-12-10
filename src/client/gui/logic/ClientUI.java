@@ -45,6 +45,8 @@ public class ClientUI extends Application{
 		parentWindow = primaryStage;
 		parentWindow.setResizable(false);
 		parentWindow.setOnCloseRequest(e->{
+			clientLogic.logOutUser();
+			clientLogic.closeConnectionWithMessageToServer();
 			System.exit(0);
 		});
 		loginScreen = new ControllerFX_Login();

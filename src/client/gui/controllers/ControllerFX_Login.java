@@ -101,7 +101,6 @@ public class ControllerFX_Login implements IClientFxController {
 //      scene.getStylesheets().add(getClass().getResource("/client/client_gui/LoginFxml.css").toExternalForm());
         stage.setTitle("User Login");
         stage.setScene(scene);
-        stage.setResizable(false);
         stage.show();
 	}
 

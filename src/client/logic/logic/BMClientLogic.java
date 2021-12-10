@@ -7,8 +7,10 @@ import client.logic.message_parsers.MessageParser;
 import client.logic.message_parsers.MessageParserError;
 import client.logic.message_parsers.MessageParserUser;
 import ocsf.client.AbstractClient;
-import utility.entity.*;
-import utility.enums.*;
+import utility.entity.User;
+import utility.enums.DataType;
+import utility.enums.RequestType;
+import utility.enums.UserType;
 
 public class BMClientLogic extends AbstractClient{
 	
@@ -47,7 +49,11 @@ public class BMClientLogic extends AbstractClient{
 		case USER:
 			message = MessageParserUser.prepareMessageToServerDataType_User((User)dataToSendToServer, requestType);
 			break;
+		case SINGLE_TEXT_STRING:
+			message = MessageParser.prepareMessageToServerDataType_SingleTextString((String)dataToSendToServer, requestType);
+			break;	
 		default:
+			System.out.println("sendMessageToServer: unknown dataType");
 			return;
 		}
 		handleMessageToServer(message);
@@ -62,6 +68,16 @@ public class BMClientLogic extends AbstractClient{
 		}
 	}
 	
+	public void closeConnectionWithMessageToServer() {
+		sendMessageToServer("disconnected", DataType.SINGLE_TEXT_STRING, RequestType.CLIENT_REQUEST_TO_SERVER_CONNECTION_STATUS);
+		try {
+			closeConnection();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+	}
+	
 	//----------------LOGGED-IN USER METHODS
 	
 	public void loginUser(User user) {
@@ -69,6 +85,10 @@ public class BMClientLogic extends AbstractClient{
 	}
 	
 	public void logOutUser() {
+		if(loggedInUser == null) {
+			return;
+		}
+		sendMessageToServer(loggedInUser, DataType.USER, RequestType.CLIENT_REQUEST_TO_SERVER_LOGOUT_REQUEST);
 		loggedInUser = new User(-1, "", "", "", "", "", UserType.USER, "", "", false, "");
 	}
 	

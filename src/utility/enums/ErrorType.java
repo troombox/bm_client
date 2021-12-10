@@ -4,7 +4,8 @@ public enum ErrorType {
 
 	INVALID_CREDENTIALS_WRONG_PASSWORD("INVALID_CREDENTIALS_WRONG_PASSWORD"),
 	INVALID_CREDENTIALS_USER_NOT_FOUND("INVALID_CREDENTIALS_USER_NOT_FOUND"),
-	UNKNOWN("UNKNOWN");																//used internally, should not be sent as a type
+	INVALID_CREDENTIALS_USER_ALREADY_LOGGED_IN("INVALID_CREDENTIALS_USER_ALREADY_LOGGED_IN"),
+	UNKNOWN("UNKNOWN_ERROR_TYPE");																//used internally, should not be sent as a type
 	
 	private String errorType;
 	
@@ -23,6 +24,8 @@ public enum ErrorType {
 			return ErrorType.INVALID_CREDENTIALS_WRONG_PASSWORD;
 		case "INVALID_CREDENTIALS_USER_NOT_FOUND":
 			return ErrorType.INVALID_CREDENTIALS_USER_NOT_FOUND;
+		case "INVALID_CREDENTIALS_USER_ALREADY_LOGGED_IN":
+			return ErrorType.INVALID_CREDENTIALS_USER_ALREADY_LOGGED_IN;
 		default:
 			return ErrorType.UNKNOWN;
 		}

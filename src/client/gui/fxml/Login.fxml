@@ -35,8 +35,8 @@
                <children>
                   <VBox layoutX="208.0" layoutY="68.0" prefHeight="159.0" prefWidth="217.0">
                      <children>
-                        <TextField fx:id="Useremail" prefHeight="26.0" prefWidth="141.0" promptText="enter email" />
-                        <TextField fx:id="Password" promptText="password">
+                        <TextField fx:id="Useremail" prefHeight="26.0" prefWidth="141.0" promptText="enter email" text="adam@gmail.com" />
+                        <TextField fx:id="Password" promptText="password" text="Gg">
                            <VBox.margin>
                               <Insets top="20.0" />
                            </VBox.margin>

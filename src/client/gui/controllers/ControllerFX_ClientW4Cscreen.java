@@ -13,6 +13,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class ControllerFX_ClientW4Cscreen implements IClientFxController {
@@ -30,9 +32,19 @@ public class ControllerFX_ClientW4Cscreen implements IClientFxController {
 
     @FXML
     private Button buttonScanQRCode;
+    
+    @FXML
+    private TextField textBoxW4CCode;
+    
+    @FXML
+    private Label ErrorMsg;
 
     @FXML
     void doContinue(ActionEvent event) {
+    	String w4cText = textBoxW4CCode.getText();
+    	if(!checkW4CInputText(w4cText)) {
+    		return;
+    	}
     	IClientFxController newScreen = new TempScreenControllerFx();
     	newScreen.start(ClientUI.parentWindow);
     }
@@ -72,6 +84,18 @@ public class ControllerFX_ClientW4Cscreen implements IClientFxController {
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
+	}
+	
+	private boolean checkW4CInputText(String w4cInput) {
+		if((w4cInput.trim().isEmpty())){
+			ErrorMsg.setText("Error: no code entered");
+			return false;
+		}
+		if(ClientUI.clientLogic.getLoggedUser().getW4c().equals(w4cInput)) {
+			return true;
+		}
+		ErrorMsg.setText("Error: the code does't match user");
+		return false;
 	}
 
 }

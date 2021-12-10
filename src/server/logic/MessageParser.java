@@ -33,6 +33,8 @@ public class MessageParser {
 			return RequestType.CLIENT_REQUEST_TO_SERVER_DEBUG_MESSAGE;
 		case "CLIENT_REQUEST_TO_SERVER_LOGIN_REQUEST":
 			return RequestType.CLIENT_REQUEST_TO_SERVER_LOGIN_REQUEST;
+		case "CLIENT_REQUEST_TO_SERVER_LOGOUT_REQUEST":
+			return RequestType.CLIENT_REQUEST_TO_SERVER_LOGOUT_REQUEST;
 		default:
 			// TODO: ADD error handling for this case;
 			return RequestType.CLIENT_REQUEST_TO_SERVER_UNKNOWN_REQUEST;
