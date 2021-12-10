@@ -4,12 +4,12 @@ import java.io.IOException;
 
 import client.logic.message_parsers.MessageParser;
 import ocsf.client.AbstractClient;
-import utililty.message_parsers.MessageParserError;
-import utililty.message_parsers.MessageParserUser;
 import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 import utility.enums.UserType;
+import utility.message_parsers.MessageParserError;
+import utility.message_parsers.MessageParserUser;
 
 public class BMClientLogic extends AbstractClient{
 	

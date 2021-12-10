@@ -10,11 +10,11 @@ import server.db_logic.OrderDBController;
 import server.db_logic.UserDBController;
 import server.exceptions.BMServerException;
 import server.gui.ServerMainWindowController;
-import utililty.message_parsers.MessageParserError;
-import utililty.message_parsers.MessageParserUser;
 import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
+import utility.message_parsers.MessageParserError;
+import utility.message_parsers.MessageParserUser;
 
 public class BMServerLogic extends AbstractServer{
 	
