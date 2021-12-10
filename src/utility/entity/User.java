@@ -4,21 +4,25 @@ import utility.enums.UserType;
 
 public class User {
 
-	int user_ID;
-	String firstName;
-	String lastName;
-	String personalBranch;
-	String email;
-	String phone;
-	String status;
-	String w4c;
-	String password;
-	boolean isSignedIn;	
-	UserType userType;
+	private int user_ID;
+	private String firstName;
+	private String lastName;
+	private String personalBranch;
+	private String email;
+	private String phone;
+	private String status;
+	private String w4c;
+	private String password;
+	private boolean isSignedIn;	
+	private UserType userType;
+	
+	private String personalCode;
+	private String buisnessCode;
+	
 	
 	public User(int user_ID, String firstName, String lastName, String personalBranch, String email, String phone, UserType userType,
-			String status, String w4c, boolean isSignedIn, String password) {
-		this.user_ID = user_ID;
+			String status, String w4c, boolean isSignedIn, String password, String personalCode, String buisnessCode) {
+		this.user_ID = user_ID; 
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.personalBranch = personalBranch;
@@ -29,11 +33,17 @@ public class User {
 		this.password = password;
 		this.isSignedIn = isSignedIn;
 		this.userType = userType;
+		this.personalCode = personalCode;
+		this.buisnessCode = buisnessCode;
 	}
 	
+	public User(int user_ID, String firstName, String lastName, String personalBranch, String email, String phone, UserType userType,
+			String status, String w4c, boolean isSignedIn, String password) {
+		this(user_ID, firstName, lastName, personalBranch, email, phone, userType, status, w4c, isSignedIn, password, "", "");
+	}
 	
 	public User(String email, String password){
-		this(-1, "", "", "", email, "", UserType.USER, "", "", false, password);
+		this(-1, "", "", "", email, "", UserType.USER, "", "", false, password, "", "");
 	}
 	
 	
@@ -90,11 +100,29 @@ public class User {
 		return userType;
 	}
 	
+	public String getPersonalCode() {
+		return personalCode;
+	}
+
+
+	public String getBuisnessCode() {
+		return buisnessCode;
+	}
+
 	@Override
 	public String toString() {
 		return "User [user_ID=" + user_ID + ", firstName=" + firstName + ", lastName=" + lastName + ", personalBranch="
 				+ personalBranch + ", email=" + email + ", phone=" + phone + ", status=" + status + ", w4c=" + w4c
-				+ ", password=" + password + ", isSignedIn=" + isSignedIn + ", userType=" + userType.toString() + "]";
+				+ ", password=" + password + ", isSignedIn=" + isSignedIn + ", userType=" + userType + ", personalCode="
+				+ personalCode + ", buisnessCode=" + buisnessCode + "]";
+	}
+
+	public void setPersonalCode(String personalCode) {
+		this.personalCode = personalCode;
+	}
+
+	public void setBuisnessCode(String buisnessCode) {
+		this.buisnessCode = buisnessCode;
 	}
 
 

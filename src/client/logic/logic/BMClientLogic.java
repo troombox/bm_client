@@ -1,12 +1,11 @@
 package client.logic.logic;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import client.logic.message_parsers.MessageParser;
-import client.logic.message_parsers.MessageParserError;
-import client.logic.message_parsers.MessageParserUser;
 import ocsf.client.AbstractClient;
+import utililty.message_parsers.MessageParserError;
+import utililty.message_parsers.MessageParserUser;
 import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
@@ -33,10 +32,10 @@ public class BMClientLogic extends AbstractClient{
 		typeOfLastRequestRecieved = messageRequestType;
 		switch(messageDataType) {
 			case USER:
-				lastDataRecieved = MessageParserUser.handleMessageFromServer_UserDataSent(messageFromServerToClient);
+				lastDataRecieved = MessageParserUser.handleMessageExtractDataType_User(messageFromServerToClient);
 				break;
 			case ERROR_MESSAGE:
-				lastDataRecieved = MessageParserError.handleMessageFromServer_ErrorTypeSent(messageFromServerToClient);
+				lastDataRecieved = MessageParserError.handleMessageExtractDataType__ErrorType(messageFromServerToClient);
 				break;
 			default:
 				System.out.println("ERROR, UNKNOWN DATA TYPE");
@@ -47,7 +46,7 @@ public class BMClientLogic extends AbstractClient{
 		Object message;
 		switch(dataType) {
 		case USER:
-			message = MessageParserUser.prepareMessageToServerDataType_User((User)dataToSendToServer, requestType);
+			message = MessageParserUser.prepareMessageWithDataType_User((User)dataToSendToServer, requestType);
 			break;
 		case SINGLE_TEXT_STRING:
 			message = MessageParser.prepareMessageToServerDataType_SingleTextString((String)dataToSendToServer, requestType);

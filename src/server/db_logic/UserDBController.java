@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import server.exceptions.LogInException;
+import server.exceptions.BMServerException;
 import utility.enums.ErrorType;
 import utility.enums.UserType;
 import utility.entity.User;
@@ -23,7 +23,7 @@ public class UserDBController {
 		this.dbName = dbController.getDBName();
 	}
 	
-	public User	authenticateAndGetFullUserData(User user) throws LogInException{
+	public User	authenticateAndGetFullUserData(User user) throws BMServerException{
 		User result;
 		String userEmail,password;
 		userEmail = user.getEmail();
@@ -36,13 +36,13 @@ public class UserDBController {
 			ResultSet rs = ps.executeQuery();
 			
 			if(!rs.next()) {//if user doesn't exist 
-				throw new LogInException(ErrorType.INVALID_CREDENTIALS_USER_NOT_FOUND, "user doesn't exist");
+				throw new BMServerException(ErrorType.INVALID_CREDENTIALS_USER_NOT_FOUND, "user doesn't exist");
 			}
 			if(!rs.getString(11).equals(password)) { //password invalid
-				throw new LogInException(ErrorType.INVALID_CREDENTIALS_WRONG_PASSWORD, "password invalid"); 
+				throw new BMServerException(ErrorType.INVALID_CREDENTIALS_WRONG_PASSWORD, "password invalid"); 
 			}
 			if(rs.getBoolean(10) == true) {
-				throw new LogInException(ErrorType.INVALID_CREDENTIALS_USER_ALREADY_LOGGED_IN, "user currently logged");
+				throw new BMServerException(ErrorType.INVALID_CREDENTIALS_USER_ALREADY_LOGGED_IN, "user currently logged");
 			}
 			UserType userType = UserType.fromString(rs.getString(7)); 
 			//DB holds:[user_ID|firstName|lastName|personalBranch|email|phone|userType|status|w4c(!)|isSignedIn|password]
@@ -53,6 +53,32 @@ public class UserDBController {
 //			result = new User(0,"","","","","",userType,"","",rs.getBoolean(10),"");
 			rs.close();
 			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	public User getCodesAccordingToW4C(User user) throws BMServerException {
+		//we assume that the user provided got an w4c
+		User result;
+		String w4cString = user.getW4c();
+		PreparedStatement ps;
+		try {
+			String query = "SELECT * FROM  `"+ dbName + "`." + w4cTableNameInDB + " WHERE w4cCode = ?";
+			ps = dbConnection.prepareStatement(query);
+			ps.setString(1, w4cString);
+			ResultSet rs = ps.executeQuery();
+			if(!rs.next()) {//if w4c doesn't exist 
+				throw new BMServerException(ErrorType.INVALID_W4_VALUE_NOT_FOUND, "w4c not in the system");
+			}
+			String personalCode = rs.getString(2);
+			String buisnessCode = "";
+			if(rs.getString(3) != null) {
+				buisnessCode = rs.getString(3);
+			}
+			return new User(-1, "", "", "", "", "", UserType.USER, "", "", false, "", personalCode, buisnessCode);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;

@@ -8,8 +8,10 @@ import ocsf.server.ConnectionToClient;
 import server.db_logic.DBController;
 import server.db_logic.OrderDBController;
 import server.db_logic.UserDBController;
-import server.exceptions.LogInException;
+import server.exceptions.BMServerException;
 import server.gui.ServerMainWindowController;
+import utililty.message_parsers.MessageParserError;
+import utililty.message_parsers.MessageParserUser;
 import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
@@ -56,6 +58,8 @@ public class BMServerLogic extends AbstractServer{
 		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_LOGIN_REQUEST ||
 				actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_LOGOUT_REQUEST) {
 			handleLoginRequest(actionRequired, msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_W4C_REQUEST ) {
+			handleW4CRequest(actionRequired, msg, client);
 		}
 		serverPrintToGuiLog("Message From Client Handled, action: " + actionRequired.toString(), true);
 	}
@@ -162,23 +166,37 @@ public class BMServerLogic extends AbstractServer{
 	}
 	
 	private void handleLoginRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
-        User user = MessageParser.parseMessageDataType_User(msg);
+        User user = MessageParserUser.handleMessageExtractDataType_User(msg);
         if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_LOGIN_REQUEST) {
             Object response;
     		try {
             	User result = userDBController.authenticateAndGetFullUserData(user);
             	userDBController.setUserToLoggedIn(result);
-                response = MessageParser.createMessageToClientDataType_User(result, RequestType.SERVER_MESSAGE_TO_CLIENT_LOGIN_SUCCESS);
+                response = MessageParserUser.prepareMessageWithDataType_User(result, RequestType.SERVER_MESSAGE_TO_CLIENT_LOGIN_SUCCESS);
                 sendMessageToGivenClient(response,client);
-            }catch(LogInException e) {
-                response = MessageParser.createMessageToClientDataType_Error(e.getErrorType(), e.getMessage());
+            }catch(BMServerException e) {
+                response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(), e.getMessage());
                 sendMessageToGivenClient(response,client);
             }
         } else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_LOGOUT_REQUEST){
         	userDBController.setUserToLoggedOut(user);
         }
-
     }
+	
+	private void handleW4CRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		User user = MessageParserUser.handleMessageExtractDataType_User(msg);
+		if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_W4C_REQUEST) {
+			Object response;
+    		try {
+            	User result = userDBController.getCodesAccordingToW4C(user);
+            	response = MessageParserUser.prepareMessageWithDataType_User(result, RequestType.SERVER_MESSAGE_TO_CLIENT_DATA_PROVIDED);
+            	sendMessageToGivenClient(response,client);
+            }catch(BMServerException e) {
+                response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(), e.getMessage());
+                sendMessageToGivenClient(response,client);
+            }
+		}
+	}
 	
 	
 	//-------------------------DEBUG FUNCTIONS

@@ -16,6 +16,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import utility.entity.User;
+import utility.enums.DataType;
+import utility.enums.RequestType;
 
 public class ControllerFX_ClientW4Cscreen implements IClientFxController {
 	
@@ -45,8 +48,9 @@ public class ControllerFX_ClientW4Cscreen implements IClientFxController {
     	if(!checkW4CInputText(w4cText)) {
     		return;
     	}
-    	IClientFxController newScreen = new TempScreenControllerFx();
-    	newScreen.start(ClientUI.parentWindow);
+    	System.out.println(ClientUI.clientLogic.getLoggedUser().toString());
+    	IClientFxController nextScreen = new ControllerFX_CategoriesScreen();
+    	nextScreen.start(ClientUI.parentWindow);
     }
 
     @FXML
@@ -80,9 +84,8 @@ public class ControllerFX_ClientW4Cscreen implements IClientFxController {
 		}
         Scene scene = new Scene(root);
 //      scene.getStylesheets().add(getClass().getResource("/client/client_gui/LoginFxml.css").toExternalForm());
-        stage.setTitle("User Login");
+        stage.setTitle("W4C Login");
         stage.setScene(scene);
-        stage.setResizable(false);
         stage.show();
 	}
 	
@@ -91,11 +94,25 @@ public class ControllerFX_ClientW4Cscreen implements IClientFxController {
 			ErrorMsg.setText("Error: no code entered");
 			return false;
 		}
-		if(ClientUI.clientLogic.getLoggedUser().getW4c().equals(w4cInput)) {
-			return true;
+		if(!ClientUI.clientLogic.getLoggedUser().getW4c().equals(w4cInput)) {
+			ErrorMsg.setText("Error: the code does't match user");
+			return false;
 		}
-		ErrorMsg.setText("Error: the code does't match user");
-		return false;
+		ClientUI.clientLogic.sendMessageToServer(ClientUI.clientLogic.getLoggedUser(),
+				DataType.USER, RequestType.CLIENT_REQUEST_TO_SERVER_W4C_REQUEST);
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		if(ClientUI.clientLogic.getTypeOfLastDataRecieved() != DataType.USER) {
+			System.out.println("Houston, we got a problem!");
+			return false;
+		}
+		User user = (User)ClientUI.clientLogic.getLastDataRecieved();
+		ClientUI.clientLogic.getLoggedUser().setPersonalCode(user.getPersonalCode());
+		ClientUI.clientLogic.getLoggedUser().setBuisnessCode(user.getBuisnessCode());
+		return true;
 	}
 
 }
