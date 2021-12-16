@@ -28,6 +28,7 @@ public class ClientDBController {
 	public void setNewClient(Client client)  throws BMServerException{
 		String userEmail = client.getEmail();
 		UserType userType = client.getUserType();
+		String personalBranch = client.getPersonalBranch();
 		ResultSet rs = null;
 		PreparedStatement ps;
 		try {
@@ -38,11 +39,11 @@ public class ClientDBController {
 			if(!rs.next()) {//if user doesn't exist 
 				throw new BMServerException(ErrorType.INVALID_CREDENTIALS_USER_NOT_FOUND, "USER DOESN'T EXIST");
 			}
-			query = "UPDATE `" + dbName + "`." + userTableNameInDB + " SET userType = ? WHERE email = ?";
+			query = "UPDATE `" + dbName + "`." + userTableNameInDB + " SET userType = ?  , personalBranch = ?  WHERE email = ?";
 			ps = dbConnection.prepareStatement(query);
 			ps.setString(1, userType.toString());
-			//ps.setString(2, client.getPersonalBranch());
-			ps.setString(2, userEmail);
+			ps.setString(2, client.getPersonalBranch());
+			ps.setString(3, userEmail);
 			ps.executeUpdate();
 			if(userType == UserType.CLIENT_PERSONAL) {
 				query = "INSERT INTO `" + dbName + "`." + personalClientTableInDB + "(personalCode,userId,balance,personalCreditNumber) VALUES(?,?,?,?)";

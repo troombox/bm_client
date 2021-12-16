@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import client.logic.message_parsers.MessageParser;
 import ocsf.client.AbstractClient;
 import utility.entity.Client;
+import utility.entity.Supplier;
 import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
@@ -41,6 +42,9 @@ public class BMClientLogic extends AbstractClient{
 				//need to received back client object??
 				lastDataRecieved = MessageParserBranchManager.handleMessageExtractDataTypeResultRegistretion_Client(messageFromServerToClient);
 				break;
+			case SUPPLIER:
+				lastDataRecieved = MessageParserBranchManager.handleMessageExtractDataTypeResultRegistretion_Supplier(messageFromServerToClient);
+				break;
 			case ERROR_MESSAGE:
 				lastDataRecieved = MessageParserError.handleMessageExtractDataType__ErrorType(messageFromServerToClient);
 				break;
@@ -57,6 +61,10 @@ public class BMClientLogic extends AbstractClient{
 			break;
 		case CLIENT:
 			message = MessageParserBranchManager.prepareMessageWithDataType_Client((Client)dataToSendToServer, requestType);
+			break;
+		case SUPPLIER:
+			System.out.println("here");
+			message = MessageParserBranchManager.prepareMessageWithDataType_Supplier((Supplier)dataToSendToServer, requestType);
 			break;
 		case SINGLE_TEXT_STRING:
 			message = MessageParser.prepareMessageToServerDataType_SingleTextString((String)dataToSendToServer, requestType);

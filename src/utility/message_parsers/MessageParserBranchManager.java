@@ -3,6 +3,7 @@ package utility.message_parsers;
 import java.util.ArrayList;
 
 import utility.entity.Client;
+import utility.entity.Supplier;
 import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
@@ -10,6 +11,7 @@ import utility.enums.UserType;
 
 public class MessageParserBranchManager {
 
+	//----------------------------------------------------------------------------->client
 	public static Client handleMessageExtractDataType_Client(Object message) {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		if (!msg.get(1).equals("CLIENT")) {
@@ -64,4 +66,41 @@ public class MessageParserBranchManager {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		return msg.get(0);
 	}
+	//------------------------------------------------------------------------------------->supplier
+	public static Supplier handleMessageExtractDataType_Supplier(Object message) {
+		ArrayList<String> msg = (ArrayList<String>) message;
+		if (!msg.get(1).equals("SUPPLIER")) {
+			// TODO:ADD ERROR HANDLING
+			return null;
+		}
+		return new Supplier(msg.get(2), msg.get(3), msg.get(4), msg.get(5));
+	}
+	
+	public static Object prepareMessageWithDataType_Supplier(Supplier supplier, RequestType requestType) {
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.SUPPLIER.toString());
+		messageToPrepare.add(String.valueOf(supplier.getRestaurantName()));
+		messageToPrepare.add(supplier.getImagePath());
+		messageToPrepare.add(supplier.getCategories());
+		messageToPrepare.add(supplier.getPersonalBranch());
+		
+		return messageToPrepare;
+	}
+	
+	public static Object prepareMessageWithResultOfRegisterion_Supplier(RequestType requestType) {
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.SUPPLIER.toString());
+		
+		return messageToPrepare;
+	}
+	
+	public static String handleMessageExtractDataTypeResultRegistretion_Supplier(Object message) {
+		ArrayList<String> msg = (ArrayList<String>) message;
+		return msg.get(0);
+	}
+	
+	
+	
 }

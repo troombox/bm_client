@@ -5,6 +5,7 @@ public enum DataType {
 	ORDER("ORDER"),								//used for Order Messages
 	USER("USER"),								//used for User Messages
 	CLIENT("CLIENT"),							//used for branch manager messages
+	SUPPLIER("SUPPLIER"),
 	ERROR_MESSAGE("ERROR_MESSAGE"),				//used for Error Messages
 	UNKNOWN("UNKNOWN");							//used internally, should not be sent as a type
 	

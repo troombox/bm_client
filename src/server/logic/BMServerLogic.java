@@ -8,10 +8,12 @@ import ocsf.server.ConnectionToClient;
 import server.db_logic.ClientDBController;
 import server.db_logic.DBController;
 import server.db_logic.OrderDBController;
+import server.db_logic.SupplierDBController;
 import server.db_logic.UserDBController;
 import server.exceptions.BMServerException;
 import server.gui.ServerMainWindowController;
 import utility.entity.Client;
+import utility.entity.Supplier;
 import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
@@ -27,6 +29,7 @@ public class BMServerLogic extends AbstractServer{
 	OrderDBController orderDBController;
 	UserDBController userDBController; 
 	ClientDBController clientDBController; 
+	SupplierDBController supplierDBController;
 	 
 	public BMServerLogic(int port, String dbName, String dbUser, String dbPassword) throws Exception {
 		super(port);
@@ -66,8 +69,9 @@ public class BMServerLogic extends AbstractServer{
 		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_W4C_REQUEST ) {
 			handleW4CRequest(actionRequired, msg, client);
 		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_REGISTER_CLIENT) {
-			System.out.println("asdkjas;ld");
 			handleRegisterClientRequest(actionRequired,msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_REGISTER_SUPPLIER) {
+			handleRegisterSupplierRequest(actionRequired,msg, client);
 		}
 		serverPrintToGuiLog("Message From Client Handled, action: " + actionRequired.toString(), true);
 	}
@@ -208,13 +212,28 @@ public class BMServerLogic extends AbstractServer{
 	
 	private void handleRegisterClientRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
 		Client newClient = MessageParserBranchManager.handleMessageExtractDataType_Client(msg);
-		System.out.println(newClient.toString());
 		if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_REGISTER_CLIENT) {
 			Object response;
     		try {
     			//newClient
     			clientDBController.setNewClient(newClient);
     			response = MessageParserBranchManager.prepareMessageWithResultOfRegisterion_Client(RequestType.SERVER_MESSAGE_TO_CLIENT_REGISTER_SUCCESS);
+    			sendMessageToGivenClient(response,client);
+            }catch(BMServerException e) {
+                response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(), e.getMessage());
+                sendMessageToGivenClient(response,client);
+            }
+		}
+	}
+	
+	private void handleRegisterSupplierRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		Supplier newSupplier = MessageParserBranchManager.handleMessageExtractDataType_Supplier(msg);
+		if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_REGISTER_SUPPLIER) {
+			Object response;
+    		try {
+    			//newClient
+    			supplierDBController.setNewSupplier(newSupplier);
+    			response = MessageParserBranchManager.prepareMessageWithResultOfRegisterion_Supplier(RequestType.SERVER_MESSAGE_TO_CLIENT_SUPPLIER_REGISTER_SUCCESS);
     			sendMessageToGivenClient(response,client);
             }catch(BMServerException e) {
                 response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(), e.getMessage());

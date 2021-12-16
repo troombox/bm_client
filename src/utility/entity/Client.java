@@ -29,9 +29,9 @@ public class Client extends User{
 		this.userType=userType;
 	}
 	
-	public Client(int ID,String firstName, String lastName,String email, String phone,int personalCreditNumber, 
+	public Client(int ID,String firstName, String lastName,String personalBranch,String email, String phone,int personalCreditNumber, 
 				  int employerCode, int mothlyBalance, UserType type) {
-		this(ID,firstName,lastName, "", email, phone,type,"","",false,"",0,0,0,mothlyBalance,0,employerCode,personalCreditNumber);
+		this(ID,firstName,lastName, personalBranch, email, phone,type,"","",false,"",0,0,0,mothlyBalance,0,employerCode,personalCreditNumber);
 	}
 
 

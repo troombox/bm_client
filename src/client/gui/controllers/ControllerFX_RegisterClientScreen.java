@@ -76,15 +76,16 @@ public class ControllerFX_RegisterClientScreen implements IClientFxController {
     	String email = emailTxt.getText(), phone = phoneNumTxt.getText() , cradit = carditNumTxt.getText();
     	String employerCode = employerCodTxt.getText(),budget = monthlyBalanceTxt.getText();
     	Client client = null;
+    	String personalBranch = ClientUI.clientLogic.getLoggedUser().getPersonalBranch();
     	UserType type;
     	if(businessCheckBox.isSelected() &&checkValidInputForBusiness(id,first,last,email,phone,cradit,employerCode,budget)) {
     		type = UserType.CLIENT_BUSINESS;
-    		client = new Client(Integer.parseInt(id),first,last,email,phone,
+    		client = new Client(Integer.parseInt(id),first,last,personalBranch,email,phone,
     									Integer.parseInt(cradit),Integer.parseInt(employerCode),Integer.parseInt(budget),type);
     	}
     	else if(checkValidInputForPersonal(id,first,last,email,phone,cradit)) {
     		type = UserType.CLIENT_PERSONAL;
-    		client = new Client(Integer.parseInt(id),first,last,email,phone,Integer.parseInt(cradit),-1,-1,type);
+    		client = new Client(Integer.parseInt(id),first,last,personalBranch,email,phone,Integer.parseInt(cradit),-1,-1,type);
     	}
     		ClientUI.clientLogic.sendMessageToServer(client,DataType.CLIENT, RequestType.CLIENT_REQUEST_TO_SERVER_REGISTER_CLIENT);
     		try {

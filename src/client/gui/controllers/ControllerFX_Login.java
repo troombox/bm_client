@@ -69,7 +69,6 @@ public class ControllerFX_Login implements IClientFxController {
     	if(userType == UserType.HR_MANAGER)
     		nextScreen.start(ClientUI.parentWindow);
     	if(userType == UserType.BM_BRANCH_MANAGER)
-    		System.out.println("im here");
     		nextScreen = new ControllerFX_BranchManagerScreen();
     		ClientUI.historyStack.pushFxController(this);
     		nextScreen.start(ClientUI.parentWindow);

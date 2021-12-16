@@ -4,18 +4,23 @@ import java.io.IOException;
 
 import client.gui.logic.ClientUI;
 import client.interfaces.IClientFxController;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class ControllerFX_BranchManagerScreen implements IClientFxController{
 
 	IClientFxController previous;
 	
+    @FXML
+    private Label titleTxt;
+    
     @FXML
     private Button signoutBtn;
 
@@ -71,6 +76,19 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController{
         stage.setTitle("Branch Manager");
         stage.setScene(scene);
         stage.show();
+		
+	}
+	
+	
+		
+	
+	
+	public void setWelcomeMessage() {
+		String name = ClientUI.clientLogic.getLoggedUser().getFirstName();
+		String last = ClientUI.clientLogic.getLoggedUser().getLastName();
+        String branch = ClientUI.clientLogic.getLoggedUser().getPersonalBranch();
+        String welcomeMessage = "Hello " + name + " " + last + "," + branch + " region manager";
+        titleTxt.setText(welcomeMessage);
 	}
 	
 	  @FXML

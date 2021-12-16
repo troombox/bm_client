@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="510.0" prefWidth="606.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="510.0" prefWidth="606.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.controllers.ControllerFX_RegisterSupplyerScreen">
    <children>
       <Pane prefHeight="89.0" prefWidth="606.0" style="-fx-background-color: #FF5700;">
          <children>
@@ -36,17 +36,18 @@
                   <HBox prefHeight="30.0" prefWidth="247.0" spacing="5.0">
                      <children>
                         <TextField prefHeight="26.0" prefWidth="217.0" promptText="upload image" />
-                        <Button mnemonicParsing="false" text="..." />
+                        <Button fx:id="buttonOpenImage" mnemonicParsing="false" onAction="#doOpenFile" text="..." />
                      </children>
                   </HBox>
                   <ComboBox prefHeight="26.0" prefWidth="256.0" promptText="category" />
                </children>
             </VBox>
-            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="236.0" layoutY="197.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="134.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="register">
+            <Button id="registerBtn" fx:id="registerBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="236.0" layoutY="197.0" mnemonicParsing="false" onAction="#sendInformation" prefHeight="35.0" prefWidth="134.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="register">
                <effect>
                   <DropShadow />
                </effect>
             </Button>
+            <Label id="resultTxt" fx:id="resultTxt" layoutX="78.0" layoutY="254.0" prefHeight="17.0" prefWidth="455.0" />
          </children>
       </Pane>
    </children>
