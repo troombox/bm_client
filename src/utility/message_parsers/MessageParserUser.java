@@ -17,7 +17,7 @@ public class MessageParserUser {
 		}
 		return new User(Integer.parseInt(msg.get(2)), msg.get(3), msg.get(4), msg.get(5), msg.get(6), msg.get(7),
 				UserType.fromString(msg.get(8)), msg.get(9), msg.get(10), Boolean.parseBoolean(msg.get(11)),
-				msg.get(12), Integer.parseInt(msg.get(13)), Integer.parseInt(msg.get(14)));
+				msg.get(12), msg.get(13), msg.get(14));
 	}
 
 	public static Object prepareMessageWithDataType_User(User user, RequestType requestType) {
@@ -39,8 +39,8 @@ public class MessageParserUser {
 		messageToPrepare.add(user.getW4c());
 		messageToPrepare.add(String.valueOf(user.isSignedIn()));
 		messageToPrepare.add(user.getPassword());
-		messageToPrepare.add(String.valueOf(user.getPersonalCode()));
-		messageToPrepare.add(String.valueOf(user.getBuisnessCode()));
+		messageToPrepare.add(user.getPersonalCode());
+		messageToPrepare.add(user.getBuisnessCode());
 
 		return messageToPrepare;
 	}

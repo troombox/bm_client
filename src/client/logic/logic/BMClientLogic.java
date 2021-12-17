@@ -4,16 +4,12 @@ import java.io.IOException;
 
 import client.logic.message_parsers.MessageParser;
 import ocsf.client.AbstractClient;
-import utility.entity.Client;
-import utility.entity.Supplier;
 import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 import utility.enums.UserType;
-import utility.message_parsers.MessageParserBranchManager;
 import utility.message_parsers.MessageParserError;
 import utility.message_parsers.MessageParserUser;
-import utility.message_parsers.MessegeParserRestaurants;
 
 public class BMClientLogic extends AbstractClient{
 	
@@ -38,15 +34,6 @@ public class BMClientLogic extends AbstractClient{
 			case USER:
 				lastDataRecieved = MessageParserUser.handleMessageExtractDataType_User(messageFromServerToClient);
 				break;
-			case CLIENT:
-				//need to received back client object??
-				lastDataRecieved = MessageParserBranchManager.handleMessageExtractDataTypeResultRegistretion_Client(messageFromServerToClient);
-				break;
-			case SUPPLIER:
-				lastDataRecieved = MessageParserBranchManager.handleMessageExtractDataTypeResultRegistretion_Supplier(messageFromServerToClient);
-			case RESTAURANTS_LIST:
-				lastDataRecieved = MessegeParserRestaurants.handleMessageExtractDataType_Restaurants(messageFromServerToClient);
-				break;
 			case ERROR_MESSAGE:
 				lastDataRecieved = MessageParserError.handleMessageExtractDataType__ErrorType(messageFromServerToClient);
 				break;
@@ -60,12 +47,6 @@ public class BMClientLogic extends AbstractClient{
 		switch(dataType) {
 		case USER:
 			message = MessageParserUser.prepareMessageWithDataType_User((User)dataToSendToServer, requestType);
-			break;
-		case CLIENT:
-			message = MessageParserBranchManager.prepareMessageWithDataType_Client((Client)dataToSendToServer, requestType);
-			break;
-		case SUPPLIER:
-			message = MessageParserBranchManager.prepareMessageWithDataType_Supplier((Supplier)dataToSendToServer, requestType);
 			break;
 		case SINGLE_TEXT_STRING:
 			message = MessageParser.prepareMessageToServerDataType_SingleTextString((String)dataToSendToServer, requestType);

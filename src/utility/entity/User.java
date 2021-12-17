@@ -16,12 +16,12 @@ public class User {
 	private boolean isSignedIn;	
 	private UserType userType;
 	
-	private int personalCode;
-	private int buisnessCode;
+	private String personalCode;
+	private String buisnessCode;
 	
 	
 	public User(int user_ID, String firstName, String lastName, String personalBranch, String email, String phone, UserType userType,
-			String status, String w4c, boolean isSignedIn, String password, int personalCode, int buisnessCode) {
+			String status, String w4c, boolean isSignedIn, String password, String personalCode, String buisnessCode) {
 		this.user_ID = user_ID; 
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -39,13 +39,11 @@ public class User {
 	
 	public User(int user_ID, String firstName, String lastName, String personalBranch, String email, String phone, UserType userType,
 			String status, String w4c, boolean isSignedIn, String password) {
-
-		this(user_ID, firstName, lastName, personalBranch, email, phone, userType, status, w4c, isSignedIn, password, -1, -1);
+		this(user_ID, firstName, lastName, personalBranch, email, phone, userType, status, w4c, isSignedIn, password, "", "");
 	}
 	
 	public User(String email, String password){
-		this(-1, "", "", "", email, "", UserType.USER, "", "", false, password, -1, -1);
-
+		this(-1, "", "", "", email, "", UserType.USER, "", "", false, password, "", "");
 	}
 	
 	
@@ -102,14 +100,12 @@ public class User {
 		return userType;
 	}
 	
-
-	public int getPersonalCode() {
+	public String getPersonalCode() {
 		return personalCode;
 	}
 
 
-
-	public int getBuisnessCode() {
+	public String getBuisnessCode() {
 		return buisnessCode;
 	}
 
@@ -121,12 +117,11 @@ public class User {
 				+ personalCode + ", buisnessCode=" + buisnessCode + "]";
 	}
 
-
-	public void setPersonalCode(int personalCode) {
+	public void setPersonalCode(String personalCode) {
 		this.personalCode = personalCode;
 	}
 
-	public void setBuisnessCode(int buisnessCode) {
+	public void setBuisnessCode(String buisnessCode) {
 		this.buisnessCode = buisnessCode;
 	}
 
