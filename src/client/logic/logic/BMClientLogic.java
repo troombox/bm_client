@@ -10,6 +10,7 @@ import utility.enums.RequestType;
 import utility.enums.UserType;
 import utility.message_parsers.MessageParserError;
 import utility.message_parsers.MessageParserUser;
+import utility.message_parsers.MessegeParserRestaurants;
 
 public class BMClientLogic extends AbstractClient{
 	
@@ -33,6 +34,9 @@ public class BMClientLogic extends AbstractClient{
 		switch(messageDataType) {
 			case USER:
 				lastDataRecieved = MessageParserUser.handleMessageExtractDataType_User(messageFromServerToClient);
+				break;
+			case RESTAURANTS_LIST:
+				lastDataRecieved = MessegeParserRestaurants.handleMessageExtractDataType_Restaurants(messageFromServerToClient);
 				break;
 			case ERROR_MESSAGE:
 				lastDataRecieved = MessageParserError.handleMessageExtractDataType__ErrorType(messageFromServerToClient);
