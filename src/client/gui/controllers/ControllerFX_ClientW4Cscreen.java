@@ -48,7 +48,7 @@ public class ControllerFX_ClientW4Cscreen implements IClientFxController {
     	if(!checkW4CInputText(w4cText)) {
     		return;
     	}
-    	System.out.println(ClientUI.clientLogic.getLoggedUser().toString());
+    	//System.out.println(ClientUI.clientLogic.getLoggedUser().toString());
     	IClientFxController nextScreen = new ControllerFX_CategoriesScreen();
     	nextScreen.start(ClientUI.parentWindow);
     }
@@ -91,11 +91,13 @@ public class ControllerFX_ClientW4Cscreen implements IClientFxController {
 	
 	private boolean checkW4CInputText(String w4cInput) {
 		if((w4cInput.trim().isEmpty())){
-			ErrorMsg.setText("Error: no code entered");
+			ErrorMsg.setVisible(true);
+			ErrorMsg.setText("You must enter a code");
 			return false;
 		}
 		if(!ClientUI.clientLogic.getLoggedUser().getW4c().equals(w4cInput)) {
-			ErrorMsg.setText("Error: the code does't match user");
+			ErrorMsg.setVisible(true);
+			ErrorMsg.setText("The code does't match your user");
 			return false;
 		}
 		ClientUI.clientLogic.sendMessageToServer(ClientUI.clientLogic.getLoggedUser(),

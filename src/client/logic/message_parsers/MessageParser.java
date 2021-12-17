@@ -39,6 +39,8 @@ public class MessageParser {
 			return DataType.SINGLE_TEXT_STRING;
 		case "ERROR_MESSAGE":
 			return DataType.ERROR_MESSAGE;
+		case "RESTAURANTS_LIST":
+			return DataType.RESTAURANTS_LIST;
 		default:
 			//TODO: ADD error handling for this case;
 			return DataType.UNKNOWN;

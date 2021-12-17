@@ -4,6 +4,7 @@ public enum DataType {
 	SINGLE_TEXT_STRING("SINGLE_TEXT_STRING"),	//used for messages that contain a single string of text: Connection/Debug
 	ORDER("ORDER"),								//used for Order Messages
 	USER("USER"),								//used for User Messages
+	RESTAURANTS_LIST("RESTAURANTS_LIST"),
 	ERROR_MESSAGE("ERROR_MESSAGE"),				//used for Error Messages
 	UNKNOWN("UNKNOWN");							//used internally, should not be sent as a type
 	

@@ -7,10 +7,11 @@
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.controllers.ControllerFX_Login">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.controllers.ControllerFX_Login">
    <children>
       <VBox layoutX="-4.0" layoutY="-9.0" prefHeight="510.0" prefWidth="606.0">
          <children>
@@ -33,36 +34,51 @@
             </Pane>
             <Pane prefHeight="296.0" prefWidth="606.0">
                <children>
-                  <VBox layoutX="208.0" layoutY="68.0" prefHeight="159.0" prefWidth="217.0">
+                  <VBox alignment="TOP_CENTER" layoutX="57.0" layoutY="68.0" prefHeight="215.0" prefWidth="528.0" spacing="20.0">
                      <children>
-                        <TextField fx:id="Useremail" prefHeight="26.0" prefWidth="141.0" promptText="enter email" text="adam@gmail.com" />
-                        <TextField fx:id="Password" promptText="password" text="Gg">
-                           <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin>
-                        </TextField>
+                        <HBox alignment="TOP_CENTER" spacing="10.0">
+                           <children>
+                              <ImageView fitHeight="37.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../images/user.png" />
+                                 </image>
+                              </ImageView>
+                              <TextField fx:id="Useremail" prefHeight="26.0" prefWidth="198.0" promptText="enter email" text="adam@gmail.com" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="TOP_CENTER" prefHeight="39.0" prefWidth="528.0" spacing="10.0">
+                           <children>
+                              <ImageView fitHeight="37.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../images/password.png" />
+                                 </image>
+                              </ImageView>
+                              <TextField fx:id="Password" prefHeight="26.0" prefWidth="200.0" promptText="password" text="Gg" />
+                           </children>
+                        </HBox>
                         <Button fx:id="loginbutton" mnemonicParsing="false" onAction="#loginButtonPressed" prefHeight="42.0" prefWidth="70.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28; -fx-font-size: 16;" text="login">
                            <effect>
                               <DropShadow />
                            </effect>
                            <VBox.margin>
-                              <Insets left="60.0" top="20.0" />
+                              <Insets />
                            </VBox.margin>
                         </Button>
+                        <Label fx:id="ErrorMsg" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" style="-fx-background-color: #f44336; -fx-background-radius: 10px; -fx-text-fill: #ffffff; -fx-font-size: 14;" visible="false" wrapText="true">
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                           <graphic>
+                              <ImageView fitHeight="34.0" fitWidth="36.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../images/error.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Label>
                      </children>
                   </VBox>
                   <Label layoutX="281.0" layoutY="21.0" style="-fx-font-size: 20;" text="login" />
-                  <ImageView fitHeight="37.0" fitWidth="30.0" layoutX="169.0" layoutY="66.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../images/user.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="37.0" fitWidth="30.0" layoutX="169.0" layoutY="110.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../images/password.png" />
-                     </image>
-                  </ImageView>
-                  <Label fx:id="ErrorMsg" layoutX="289.0" layoutY="248.0" />
                </children>
             </Pane>
          </children>

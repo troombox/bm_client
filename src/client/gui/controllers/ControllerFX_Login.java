@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import utility.entity.User;
 import utility.enums.DataType;
+import utility.enums.ErrorType;
 import utility.enums.RequestType;
 import utility.enums.UserType;
 
@@ -46,9 +47,24 @@ public class ControllerFX_Login implements IClientFxController {
 				e.printStackTrace();
 			}
 	    	if(ClientUI.clientLogic.getTypeOfLastDataRecieved() == DataType.ERROR_MESSAGE) {
-	    		ErrorMsg.setText(ClientUI.clientLogic.getLastDataRecieved().toString());
+	    		ErrorMsg.setVisible(true);
+	    		String errorString = ClientUI.clientLogic.getLastDataRecieved().toString();
+	    		switch(errorString) {
+		    		case "INVALID_CREDENTIALS_WRONG_PASSWORD":
+		    			errorString = "Wrong password. Please try again";
+		    			break;
+		    		case "INVALID_CREDENTIALS_USER_NOT_FOUND":
+		    			errorString = "Account not found. Please try again";
+		    			break;
+		    		case "INVALID_CREDENTIALS_USER_ALREADY_LOGGED_IN":
+		    			errorString = "You already logged in";
+		    			break;
+		    		default:
+		    			errorString = ErrorType.UNKNOWN.toString();
+	    		}
+	    		ErrorMsg.setText(errorString);
 	    		return;
-	    	}
+	    		}
 	    	if(ClientUI.clientLogic.getTypeOfLastDataRecieved() != DataType.USER) {
 	    		//something went *very* wrong!
 	    		return;
@@ -56,7 +72,7 @@ public class ControllerFX_Login implements IClientFxController {
 	    	User userDataFromServer = (User)ClientUI.clientLogic.getLastDataRecieved();
 	    	ClientUI.clientLogic.loginUser(userDataFromServer);
 	    	openWantedWindow(userDataFromServer.getUserType());
-    	}
+	    	}
     }
     
     private void openWantedWindow(UserType userType) throws IOException {
@@ -78,10 +94,12 @@ public class ControllerFX_Login implements IClientFxController {
     
     private boolean checkValidInput(String userEmail, String password) {
     	 if (userEmail.trim().isEmpty()) {
+    		 ErrorMsg.setVisible(true);
 			ErrorMsg.setText("You must enter an Email");
 			return false;
     	 }
     	 if (password.trim().isEmpty()) {
+    		 ErrorMsg.setVisible(true);
     		 ErrorMsg.setText("You must enter a password");
     		 return false;
     	 }

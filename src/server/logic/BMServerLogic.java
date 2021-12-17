@@ -7,14 +7,17 @@ import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 import server.db_logic.DBController;
 import server.db_logic.OrderDBController;
+import server.db_logic.RestaurantDBController;
 import server.db_logic.UserDBController;
 import server.exceptions.BMServerException;
 import server.gui.ServerMainWindowController;
+import utility.entity.Restaurant;
 import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 import utility.message_parsers.MessageParserError;
 import utility.message_parsers.MessageParserUser;
+import utility.message_parsers.MessegeParserRestaurants;
 
 public class BMServerLogic extends AbstractServer{
 	
@@ -23,6 +26,7 @@ public class BMServerLogic extends AbstractServer{
 	DBController dbController;
 	OrderDBController orderDBController;
 	UserDBController userDBController; 
+	RestaurantDBController restaurantDBController; 
 	 
 	public BMServerLogic(int port, String dbName, String dbUser, String dbPassword) throws Exception {
 		super(port);
@@ -37,12 +41,15 @@ public class BMServerLogic extends AbstractServer{
 		}
 		this.orderDBController = new OrderDBController(dbController);
 		this.userDBController = new UserDBController(dbController);
+		this.restaurantDBController = new RestaurantDBController(dbController); 
 	}
 	
 	public void handleMessageFromClient (Object msg, ConnectionToClient client) {
 //		serverPrintToGuiLog("Message From Client Recieved, client:" + client.toString(), true);
 		//we are assuming message is ArrayList<String>
 		RequestType actionRequired = MessageParser.parseMessageFromClient_RequestType(msg);
+		serverPrintToGuiLog("Message From Client Handled, action: " + actionRequired.toString(), true);
+
 		if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA) {
 			//if client requests data - we call the request function to handle
 			handleGetRequest(actionRequired, msg, client);
@@ -60,8 +67,9 @@ public class BMServerLogic extends AbstractServer{
 			handleLoginRequest(actionRequired, msg, client);
 		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_W4C_REQUEST ) {
 			handleW4CRequest(actionRequired, msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_SEARCH_RESTAURANT_REQUEST) {
+			handleSearchRequest(actionRequired, msg, client);
 		}
-		serverPrintToGuiLog("Message From Client Handled, action: " + actionRequired.toString(), true);
 	}
 	
 	public void sendMessageToGivenClient(Object msg, ConnectionToClient client) {
@@ -197,6 +205,24 @@ public class BMServerLogic extends AbstractServer{
             }
 		}
 	}
+	
+	private void handleSearchRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		String searchText = MessageParser.parseMessageDataType_SingleTextString(msg);
+		
+		if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_SEARCH_RESTAURANT_REQUEST) {
+			Object response;
+    		try {
+    			ArrayList<Restaurant> result =  restaurantDBController.GetRestaurantsListFromSearchData(searchText);
+            	response = MessegeParserRestaurants.prepareMessageWithDataType_Restaurants(result, RequestType.SERVER_MESSAGE_TO_CLIENT_DATA_PROVIDED);
+            	sendMessageToGivenClient(response,client);
+            }catch(BMServerException e) {
+                response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(), e.getMessage());
+                sendMessageToGivenClient(response,client);
+            }
+		}
+	}
+		
+
 	
 	
 	//-------------------------DEBUG FUNCTIONS
