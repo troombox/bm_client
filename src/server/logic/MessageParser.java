@@ -33,6 +33,8 @@ public class MessageParser {
 			return RequestType.CLIENT_REQUEST_TO_SERVER_LOGOUT_REQUEST;
 		case "CLIENT_REQUEST_TO_SERVER_W4C_REQUEST":
 			return RequestType.CLIENT_REQUEST_TO_SERVER_W4C_REQUEST;
+		case "CLIENT_REQUEST_TO_SERVER_REGISTER_CLIENT":
+			return RequestType.CLIENT_REQUEST_TO_SERVER_REGISTER_CLIENT;
 		case "CLIENT_REQUEST_TO_SERVER_SEARCH_RESTAURANT_REQUEST":
 			return RequestType.CLIENT_REQUEST_TO_SERVER_SEARCH_RESTAURANT_REQUEST;
 		default:
@@ -49,10 +51,13 @@ public class MessageParser {
 			return DataType.ORDER;
 		case "USER":
 			return DataType.USER;
+		case "CLIENT":
+			return DataType.CLIENT;
 		case "SINGLE_TEXT_STRING":
 			return DataType.SINGLE_TEXT_STRING;
 		case "RESTAURANTS_LIST":
 			return DataType.RESTAURANTS_LIST;
+
 		default:
 			// TODO: ADD error handling for this case;
 			return DataType.UNKNOWN;

@@ -73,10 +73,10 @@ public class UserDBController {
 			if(!rs.next()) {//if w4c doesn't exist 
 				throw new BMServerException(ErrorType.INVALID_W4_VALUE_NOT_FOUND, "w4c not in the system");
 			}
-			String personalCode = rs.getString(2);
-			String buisnessCode = "";
-			if(rs.getString(3) != null) {
-				buisnessCode = rs.getString(3);
+			int personalCode = rs.getInt(2);
+			int buisnessCode = -1;
+			if(rs.getInt(3) != -1) {
+				buisnessCode = rs.getInt(3);
 			}
 			return new User(-1, "", "", "", "", "", UserType.USER, "", "", false, "", personalCode, buisnessCode);
 		} catch (SQLException e) {

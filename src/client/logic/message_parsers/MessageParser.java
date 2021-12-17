@@ -21,6 +21,9 @@ public class MessageParser {
 			return RequestType.SERVER_MESSAGE_TO_CLIENT_LOGIN_SUCCESS;
 		case "SERVER_MESSAGE_TO_CLIENT_ERROR":
 			return RequestType.SERVER_MESSAGE_TO_CLIENT_ERROR;
+		case "SERVER_MESSAGE_TO_CLIENT_REGISTER_SUCCESS":
+			return RequestType.SERVER_MESSAGE_TO_CLIENT_REGISTER_SUCCESS;
+
 		default:
 			//TODO: ADD error handling for this case;
 			return RequestType.CLIENT_REQUEST_TO_SERVER_UNKNOWN_REQUEST;
@@ -35,12 +38,16 @@ public class MessageParser {
 			return DataType.ORDER;
 		case "USER":
 			return DataType.USER;
+		case "CLIENT":
+			return DataType.CLIENT;
 		case "SINGLE_TEXT_STRING":
 			return DataType.SINGLE_TEXT_STRING;
 		case "ERROR_MESSAGE":
 			return DataType.ERROR_MESSAGE;
+
 		case "RESTAURANTS_LIST":
 			return DataType.RESTAURANTS_LIST;
+
 		default:
 			//TODO: ADD error handling for this case;
 			return DataType.UNKNOWN;

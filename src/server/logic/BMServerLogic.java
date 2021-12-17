@@ -5,19 +5,26 @@ import java.util.ArrayList;
 
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
+
+import server.db_logic.ClientDBController;
 import server.db_logic.DBController;
 import server.db_logic.OrderDBController;
-import server.db_logic.RestaurantDBController;
+import server.db_logic.SupplierDBController;
 import server.db_logic.UserDBController;
 import server.exceptions.BMServerException;
 import server.gui.ServerMainWindowController;
-import utility.entity.Restaurant;
+import utility.entity.Client;
+import utility.entity.Supplier;
 import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
+import utility.message_parsers.MessageParserBranchManager;
 import utility.message_parsers.MessageParserError;
 import utility.message_parsers.MessageParserUser;
+import server.db_logic.RestaurantDBController;
+import utility.entity.Restaurant;
 import utility.message_parsers.MessegeParserRestaurants;
+
 
 public class BMServerLogic extends AbstractServer{
 	
@@ -26,7 +33,11 @@ public class BMServerLogic extends AbstractServer{
 	DBController dbController;
 	OrderDBController orderDBController;
 	UserDBController userDBController; 
-	RestaurantDBController restaurantDBController; 
+
+	ClientDBController clientDBController; 
+	SupplierDBController supplierDBController;
+  RestaurantDBController restaurantDBController; 
+
 	 
 	public BMServerLogic(int port, String dbName, String dbUser, String dbPassword) throws Exception {
 		super(port);
@@ -41,15 +52,14 @@ public class BMServerLogic extends AbstractServer{
 		}
 		this.orderDBController = new OrderDBController(dbController);
 		this.userDBController = new UserDBController(dbController);
-		this.restaurantDBController = new RestaurantDBController(dbController); 
+    this.clientDBController = new ClientDBController(dbController);
+    this.restaurantDBController = new RestaurantDBController(dbController); 
 	}
 	
 	public void handleMessageFromClient (Object msg, ConnectionToClient client) {
 //		serverPrintToGuiLog("Message From Client Recieved, client:" + client.toString(), true);
 		//we are assuming message is ArrayList<String>
 		RequestType actionRequired = MessageParser.parseMessageFromClient_RequestType(msg);
-		serverPrintToGuiLog("Message From Client Handled, action: " + actionRequired.toString(), true);
-
 		if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA) {
 			//if client requests data - we call the request function to handle
 			handleGetRequest(actionRequired, msg, client);
@@ -67,9 +77,14 @@ public class BMServerLogic extends AbstractServer{
 			handleLoginRequest(actionRequired, msg, client);
 		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_W4C_REQUEST ) {
 			handleW4CRequest(actionRequired, msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_REGISTER_CLIENT) {
+			handleRegisterClientRequest(actionRequired,msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_REGISTER_SUPPLIER) {
+			handleRegisterSupplierRequest(actionRequired,msg, client);
 		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_SEARCH_RESTAURANT_REQUEST) {
 			handleSearchRequest(actionRequired, msg, client);
 		}
+		serverPrintToGuiLog("Message From Client Handled, action: " + actionRequired.toString(), true);
 	}
 	
 	public void sendMessageToGivenClient(Object msg, ConnectionToClient client) {
@@ -206,6 +221,33 @@ public class BMServerLogic extends AbstractServer{
 		}
 	}
 	
+
+	private void handleRegisterClientRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		Client newClient = MessageParserBranchManager.handleMessageExtractDataType_Client(msg);
+		if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_REGISTER_CLIENT) {
+			Object response;
+    		try {
+    			//newClient
+    			clientDBController.setNewClient(newClient);
+    			response = MessageParserBranchManager.prepareMessageWithResultOfRegisterion_Client(RequestType.SERVER_MESSAGE_TO_CLIENT_REGISTER_SUCCESS);
+    			sendMessageToGivenClient(response,client);
+            }catch(BMServerException e) {
+                response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(), e.getMessage());
+                sendMessageToGivenClient(response,client);
+            }
+		}
+	}
+	
+	private void handleRegisterSupplierRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		Supplier newSupplier = MessageParserBranchManager.handleMessageExtractDataType_Supplier(msg);
+		if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_REGISTER_SUPPLIER) {
+			Object response;
+    		try {
+    			//newClient
+    			supplierDBController.setNewSupplier(newSupplier);
+    			response = MessageParserBranchManager.prepareMessageWithResultOfRegisterion_Supplier(RequestType.SERVER_MESSAGE_TO_CLIENT_SUPPLIER_REGISTER_SUCCESS);
+    			sendMessageToGivenClient(response,client);
+
 	private void handleSearchRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
 		String searchText = MessageParser.parseMessageDataType_SingleTextString(msg);
 		
@@ -215,15 +257,13 @@ public class BMServerLogic extends AbstractServer{
     			ArrayList<Restaurant> result =  restaurantDBController.GetRestaurantsListFromSearchData(searchText);
             	response = MessegeParserRestaurants.prepareMessageWithDataType_Restaurants(result, RequestType.SERVER_MESSAGE_TO_CLIENT_DATA_PROVIDED);
             	sendMessageToGivenClient(response,client);
+
             }catch(BMServerException e) {
                 response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(), e.getMessage());
                 sendMessageToGivenClient(response,client);
             }
 		}
 	}
-		
-
-	
 	
 	//-------------------------DEBUG FUNCTIONS
 	private void handleDebugRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
