@@ -2,17 +2,19 @@ package utility.entity;
 
 public class Restaurant {
 	
-	private String dish_ID, resName, category, branch;
 
-	public Restaurant(String dish_ID, String resName, String category, String branch) {
-		this.dish_ID = dish_ID;
+	private String res_ID, resName, category, branch;
+
+	public Restaurant(String res_ID, String resName, String category, String branch) {
+		this.res_ID = res_ID;
 		this.resName = resName;
 		this.category = category;
 		this.branch = branch;
 	}
 
-	public String getDish_ID() {
-		return dish_ID;
+
+	public String getRes_ID() {
+		return res_ID;
 	}
 
 	public String getResName() {
