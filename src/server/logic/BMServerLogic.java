@@ -5,26 +5,13 @@ import java.util.ArrayList;
 
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
-import server.db_logic.ClientDBController;
-import server.db_logic.DBController;
-import server.db_logic.HRDBController;
-import server.db_logic.OrderDBController;
-import server.db_logic.RestaurantDBController;
-import server.db_logic.SupplierDBController;
-import server.db_logic.UserDBController;
+import server.db_logic.*;
 import server.exceptions.BMServerException;
 import server.gui.ServerMainWindowController;
-import utility.entity.Client;
-import utility.entity.Restaurant;
-import utility.entity.Supplier;
-import utility.entity.User;
-import utility.enums.DataType;
-import utility.enums.RequestType;
-import utility.message_parsers.MessageParserBranchManager;
-import utility.message_parsers.MessageParserError;
-import utility.message_parsers.MessageParserHR;
-import utility.message_parsers.MessageParserUser;
-import utility.message_parsers.MessegeParserRestaurants;
+import utility.entity.*;
+import utility.enums.*;
+import utility.message_parsers.*;
+
 
 public class BMServerLogic extends AbstractServer {
 
@@ -70,7 +57,7 @@ public class BMServerLogic extends AbstractServer {
 //		//-*------------------
 		
 		// we are assuming message is ArrayList<String>
-		RequestType actionRequired = MessageParser.parseMessageFromClient_RequestType(msg);
+		RequestType actionRequired = MessageParser.parseMessage_RequestType(msg);
 		if (actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA) {
 			// if client requests data - we call the request function to handle
 			handleGetRequest(actionRequired, msg, client);
@@ -138,7 +125,7 @@ public class BMServerLogic extends AbstractServer {
 	// ---------------------- HELPER FUNCTIONS --------------------------
 
 	private void handleWriteRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
-		DataType messageDataType = MessageParser.parseMessageFromClient_DataType(msg);
+		DataType messageDataType = MessageParser.parseMessage_DataType(msg);
 		switch (messageDataType) {
 		case ORDER:
 //				Order orderData = MessageParser.parseMessageDataType_Order(msg);
@@ -156,7 +143,7 @@ public class BMServerLogic extends AbstractServer {
 	}
 
 	private void handleGetRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
-		DataType messageDataType = MessageParser.parseMessageFromClient_DataType(msg);
+		DataType messageDataType = MessageParser.parseMessage_DataType(msg);
 		switch (messageDataType) {
 		case ORDER:
 //				String requestedOrder = MessageParser.parseMessageDataType_Order_GetRequestOrderID(msg);
@@ -184,7 +171,7 @@ public class BMServerLogic extends AbstractServer {
 	}
 
 	private void handleConnectionRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
-		DataType messageDataType = MessageParser.parseMessageFromClient_DataType(msg);
+		DataType messageDataType = MessageParser.parseMessage_DataType(msg);
 		switch (messageDataType) {
 		case SINGLE_TEXT_STRING:
 			String message = MessageParser.parseMessageDataType_SingleTextString(msg);
@@ -304,7 +291,7 @@ public class BMServerLogic extends AbstractServer {
 
 	// -------------------------DEBUG FUNCTIONS
 	private void handleDebugRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
-		DataType messageDataType = MessageParser.parseMessageFromClient_DataType(msg);
+		DataType messageDataType = MessageParser.parseMessage_DataType(msg);
 		if (messageDataType == DataType.SINGLE_TEXT_STRING) {
 			ArrayList<String> message = (ArrayList<String>) msg;
 			System.out.println(actionRequired.toString() + " " + messageDataType.toString() + " " + message.get(2));
