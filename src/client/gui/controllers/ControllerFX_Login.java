@@ -82,16 +82,23 @@ public class ControllerFX_Login implements IClientFxController {
     		ClientUI.historyStack.pushFxController(this);
     		nextScreen.start(ClientUI.parentWindow);
     	}
-    	if(userType == UserType.HR_MANAGER)
+    	if(userType == UserType.HR_MANAGER) {
+    		nextScreen = new ControllerFX_HRScreen();
+    		ClientUI.historyStack.pushFxController(this);
     		nextScreen.start(ClientUI.parentWindow);
-    	if(userType == UserType.BM_BRANCH_MANAGER)
+    	}
+    	if(userType == UserType.BM_BRANCH_MANAGER) {
             nextScreen = new ControllerFX_BranchManagerScreen();
             ClientUI.historyStack.pushFxController(this);
             nextScreen.start(ClientUI.parentWindow);
-    	if(userType == UserType.BM_CEO)
+    	}
+    	if(userType == UserType.BM_CEO) {
     		nextScreen.start(ClientUI.parentWindow);
-    	if(userType == UserType.RESTAURANT_OWNER)
+    	}
+    	if(userType == UserType.RESTAURANT_OWNER) {
     		nextScreen.start(ClientUI.parentWindow);
+    	}
+    		
     }
     
     private boolean checkValidInput(String userEmail, String password) {

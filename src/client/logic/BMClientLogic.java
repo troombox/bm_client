@@ -1,8 +1,7 @@
-package client.logic.logic;
+package client.logic;
 
 import java.io.IOException;
 
-import client.logic.message_parsers.MessageParser;
 import ocsf.client.AbstractClient;
 import utility.entity.Client;
 import utility.entity.Supplier;
@@ -10,11 +9,8 @@ import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 import utility.enums.UserType;
-import utility.message_parsers.MessageParserBranchManager;
-import utility.message_parsers.MessageParserError;
-import utility.message_parsers.MessageParserHR;
-import utility.message_parsers.MessageParserUser;
-import utility.message_parsers.MessegeParserRestaurants;
+import utility.message_parsers.*;
+
 
 public class BMClientLogic extends AbstractClient{
 	
@@ -31,8 +27,8 @@ public class BMClientLogic extends AbstractClient{
 
 	@Override
 	protected void handleMessageFromServer(Object messageFromServerToClient) {
-		RequestType messageRequestType = MessageParser.parseMessageFromServer_RequestType(messageFromServerToClient);
-		DataType messageDataType = MessageParser.parseMessageFromServer_DataType(messageFromServerToClient);
+		RequestType messageRequestType = MessageParser.parseMessage_RequestType(messageFromServerToClient);
+		DataType messageDataType = MessageParser.parseMessage_DataType(messageFromServerToClient);
 		typeOfLastDataRecieved = messageDataType;
 		typeOfLastRequestRecieved = messageRequestType;
 		switch(messageDataType) {
@@ -72,7 +68,7 @@ public class BMClientLogic extends AbstractClient{
 			message = MessageParserBranchManager.prepareMessageWithDataType_Supplier((Supplier)dataToSendToServer, requestType);
 			break;
 		case SINGLE_TEXT_STRING:
-			message = MessageParser.prepareMessageToServerDataType_SingleTextString((String)dataToSendToServer, requestType);
+			message = MessageParserSingleTextString.prepareMessageWithDataType_SingleTextString((String)dataToSendToServer, requestType);
 			break;	
 		case HR_MANAGER:
 			if(requestType == RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA) {
