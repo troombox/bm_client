@@ -41,6 +41,10 @@ public class MessageParser {
 			return RequestType.CLIENT_REQUEST_TO_SERVER_INCOMING_FILE;
 		case "CLIENT_REQUEST_TO_SERVER_REGISTER_SUPPLIER":
 			return RequestType.CLIENT_REQUEST_TO_SERVER_REGISTER_SUPPLIER;
+		case "CLIENT_REQUEST_TO_SERVER_CATEGORY_RESTAURANT_REQUEST":
+			return RequestType.CLIENT_REQUEST_TO_SERVER_CATEGORY_RESTAURANT_REQUEST;
+		case "CLIENT_REQUEST_TO_SERVER_MENU_REQUEST":
+			return RequestType.CLIENT_REQUEST_TO_SERVER_MENU_REQUEST;
 		default:
 			// TODO: ADD error handling for this case;
 			return RequestType.CLIENT_REQUEST_TO_SERVER_UNKNOWN_REQUEST;
@@ -63,6 +67,12 @@ public class MessageParser {
 			return DataType.RESTAURANTS_LIST;
 		case "HR_MANAGER":
 			return DataType.HR_MANAGER;
+		case "DISHES_LIST":
+			return DataType.DISHES_LIST;
+		case "ARRAYLIST_STRING":
+			return DataType.ARRAYLIST_STRING;
+		case "ERROR_MESSAGE":
+			return DataType.ERROR_MESSAGE;
 		default:
 			// TODO: ADD error handling for this case;
 			return DataType.UNKNOWN;

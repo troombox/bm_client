@@ -1,6 +1,7 @@
 package client.logic;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import ocsf.client.AbstractClient;
 import utility.entity.Client;
@@ -36,11 +37,11 @@ public class BMClientLogic extends AbstractClient{
 				lastDataRecieved = MessageParserUser.handleMessageExtractDataType_User(messageFromServerToClient);
 				break;
 			case CLIENT:
-				//need to received back client object??
 				lastDataRecieved = MessageParserBranchManager.handleMessageExtractDataTypeResultRegistretion_Client(messageFromServerToClient);
 				break;
 			case SUPPLIER:
 				lastDataRecieved = MessageParserBranchManager.handleMessageExtractDataTypeResultRegistretion_Supplier(messageFromServerToClient);
+				break;
 			case RESTAURANTS_LIST:
 				lastDataRecieved = MessegeParserRestaurants.handleMessageExtractDataType_Restaurants(messageFromServerToClient);
 				break;
@@ -49,6 +50,9 @@ public class BMClientLogic extends AbstractClient{
 				break;
 			case ERROR_MESSAGE:
 				lastDataRecieved = MessageParserError.handleMessageExtractDataType__ErrorType(messageFromServerToClient);
+				break;
+			case DISHES_LIST:
+				lastDataRecieved = MessegeParserDishes.handleMessageExtractDataType_Dishes(messageFromServerToClient);
 				break;
 			default:
 				System.out.println("ERROR, UNKNOWN DATA TYPE");
@@ -68,7 +72,7 @@ public class BMClientLogic extends AbstractClient{
 			message = MessageParserBranchManager.prepareMessageWithDataType_Supplier((Supplier)dataToSendToServer, requestType);
 			break;
 		case SINGLE_TEXT_STRING:
-			message = MessageParserSingleTextString.prepareMessageWithDataType_SingleTextString((String)dataToSendToServer, requestType);
+			message = MessageParserTextString.prepareMessageWithDataType_SingleTextString((String)dataToSendToServer, requestType);
 			break;	
 		case HR_MANAGER:
 			if(requestType == RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA) {
@@ -78,6 +82,10 @@ public class BMClientLogic extends AbstractClient{
 				/*TODO: the option where we want to update the data base*/
 				return;
 			}
+		case ARRAYLIST_STRING:
+			ArrayList<String> arraylist = (ArrayList<String>)dataToSendToServer;
+			message = MessageParserTextString.prepareMessageToServerDataType_ArrayListString(arraylist, requestType);
+			break;
 		default:
 			System.out.println("sendMessageToServer: unknown dataType");
 			return;
