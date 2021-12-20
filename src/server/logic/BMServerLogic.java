@@ -174,7 +174,7 @@ public class BMServerLogic extends AbstractServer {
 		DataType messageDataType = MessageParser.parseMessage_DataType(msg);
 		switch (messageDataType) {
 		case SINGLE_TEXT_STRING:
-			String message = MessageParser.parseMessageDataType_SingleTextString(msg);
+			String message = MessageParserSingleTextString.handleMessageExtractDataType_SingleTextString(msg);
 			if (message.equals("disconnected")) {
 				try {
 					clientDisconnectedNonAbstract(client);
@@ -264,7 +264,7 @@ public class BMServerLogic extends AbstractServer {
 	}
 
 	private void handleSearchRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
-		String searchText = MessageParser.parseMessageDataType_SingleTextString(msg);
+		String searchText = MessageParserSingleTextString.handleMessageExtractDataType_SingleTextString(msg);
 
 		if (actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_SEARCH_RESTAURANT_REQUEST) {
 			Object response;
@@ -283,7 +283,7 @@ public class BMServerLogic extends AbstractServer {
 	}
 	
 	private void handleFileIncomingRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
-		String fileName = MessageParser.parseMessageDataType_SingleTextString(msg);
+		String fileName = MessageParserSingleTextString.handleMessageExtractDataType_SingleTextString(msg);
 		flagFileIncoming = true;
 		fileSenderClient = client;
 		System.out.println(fileName +"  "+ flagFileIncoming +"  "+ client.toString());

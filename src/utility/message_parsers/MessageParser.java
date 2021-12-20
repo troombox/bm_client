@@ -77,15 +77,4 @@ public class MessageParser {
 	 * RequestTypes defined in utility.RequestType
 	 */
 
-	public static String parseMessageDataType_SingleTextString(Object message) {
-		ArrayList<String> msg = (ArrayList<String>) message;
-		if (!msg.get(1).equals("SINGLE_TEXT_STRING")) {
-			// TODO: ADD error handling for this case;
-			System.out.println("Error parseMessageDataType_SingleTextString not string");
-			return null;
-		}
-		String string = msg.get(2);
-		return string;
-	}
-
 }
