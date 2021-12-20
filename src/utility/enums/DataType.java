@@ -6,7 +6,9 @@ public enum DataType {
 	USER("USER"),								//used for User Messages
 	RESTAURANTS_LIST("RESTAURANTS_LIST"),
 	ERROR_MESSAGE("ERROR_MESSAGE"),				//used for Error Messages
-	UNKNOWN("UNKNOWN");							//used internally, should not be sent as a type
+	UNKNOWN("UNKNOWN"), 						//used internally, should not be sent as a type
+	ARRAYLIST_STRING("ARRAYLIST_STRING"), 
+	DISHES_LIST("DISHES_LIST");							
 	
 	private String dataType;
 	

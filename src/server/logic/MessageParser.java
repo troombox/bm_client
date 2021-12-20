@@ -35,6 +35,10 @@ public class MessageParser {
 			return RequestType.CLIENT_REQUEST_TO_SERVER_W4C_REQUEST;
 		case "CLIENT_REQUEST_TO_SERVER_SEARCH_RESTAURANT_REQUEST":
 			return RequestType.CLIENT_REQUEST_TO_SERVER_SEARCH_RESTAURANT_REQUEST;
+		case "CLIENT_REQUEST_TO_SERVER_CATEGORY_RESTAURANT_REQUEST":
+			return RequestType.CLIENT_REQUEST_TO_SERVER_CATEGORY_RESTAURANT_REQUEST;
+		case "CLIENT_REQUEST_TO_SERVER_MENU_REQUEST":
+			return RequestType.CLIENT_REQUEST_TO_SERVER_MENU_REQUEST;
 		default:
 			// TODO: ADD error handling for this case;
 			return RequestType.CLIENT_REQUEST_TO_SERVER_UNKNOWN_REQUEST;
@@ -110,6 +114,20 @@ public class MessageParser {
 		}
 		String string = msg.get(2);
 		return string;
+	}
+
+	public static ArrayList<String> parseMessageDataType_ArrayListString(Object message) {
+		ArrayList<String> msg = (ArrayList<String>)message;
+		System.out.println(msg.get(1));
+		if (!msg.get(1).equals("ARRAYLIST_STRING")) {
+			// TODO: ADD error handling for this case;
+			System.out.println("Error parseMessageDataType_ArrayListString not arraylist");
+			return null;
+		}
+		ArrayList<String> arraylist = new ArrayList<>();
+		arraylist.add(msg.get(2));
+		arraylist.add(msg.get(3));
+		return arraylist;
 	}
 
 	// -------------------------------------------------Entity wrapping functions

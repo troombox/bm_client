@@ -6,17 +6,20 @@ import java.util.ArrayList;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 import server.db_logic.DBController;
+import server.db_logic.DishesDBController;
 import server.db_logic.OrderDBController;
 import server.db_logic.RestaurantDBController;
 import server.db_logic.UserDBController;
 import server.exceptions.BMServerException;
 import server.gui.ServerMainWindowController;
+import utility.entity.Dish;
 import utility.entity.Restaurant;
 import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 import utility.message_parsers.MessageParserError;
 import utility.message_parsers.MessageParserUser;
+import utility.message_parsers.MessegeParserDishes;
 import utility.message_parsers.MessegeParserRestaurants;
 
 public class BMServerLogic extends AbstractServer{
@@ -27,6 +30,7 @@ public class BMServerLogic extends AbstractServer{
 	OrderDBController orderDBController;
 	UserDBController userDBController; 
 	RestaurantDBController restaurantDBController; 
+	DishesDBController dishesDBController; 
 	 
 	public BMServerLogic(int port, String dbName, String dbUser, String dbPassword) throws Exception {
 		super(port);
@@ -42,6 +46,7 @@ public class BMServerLogic extends AbstractServer{
 		this.orderDBController = new OrderDBController(dbController);
 		this.userDBController = new UserDBController(dbController);
 		this.restaurantDBController = new RestaurantDBController(dbController); 
+		this.dishesDBController = new DishesDBController(dbController);
 	}
 	
 	public void handleMessageFromClient (Object msg, ConnectionToClient client) {
@@ -69,9 +74,15 @@ public class BMServerLogic extends AbstractServer{
 			handleW4CRequest(actionRequired, msg, client);
 		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_SEARCH_RESTAURANT_REQUEST) {
 			handleSearchRequest(actionRequired, msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_CATEGORY_RESTAURANT_REQUEST) {
+			handleGetRestaurantsByCategoryRequest(actionRequired, msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_MENU_REQUEST) {
+			handleGetMenuRequest(actionRequired, msg, client);
 		}
+		
 	}
 	
+
 	public void sendMessageToGivenClient(Object msg, ConnectionToClient client) {
 		try {
 			client.sendToClient(msg);
@@ -206,13 +217,12 @@ public class BMServerLogic extends AbstractServer{
 		}
 	}
 	
-	private void handleSearchRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
-		String searchText = MessageParser.parseMessageDataType_SingleTextString(msg);
-		
+	private void handleSearchRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {		
 		if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_SEARCH_RESTAURANT_REQUEST) {
 			Object response;
     		try {
-    			ArrayList<Restaurant> result =  restaurantDBController.GetRestaurantsListFromSearchData(searchText);
+    			ArrayList<String> searchBranch = MessageParser.parseMessageDataType_ArrayListString(msg);
+    			ArrayList<Restaurant> result =  restaurantDBController.GetRestaurantsListFromSearchData(searchBranch);
             	response = MessegeParserRestaurants.prepareMessageWithDataType_Restaurants(result, RequestType.SERVER_MESSAGE_TO_CLIENT_DATA_PROVIDED);
             	sendMessageToGivenClient(response,client);
             }catch(BMServerException e) {
@@ -222,7 +232,40 @@ public class BMServerLogic extends AbstractServer{
 		}
 	}
 		
-
+	private void handleGetRestaurantsByCategoryRequest(RequestType actionRequired, Object msg,
+			ConnectionToClient client) {
+		ArrayList<String> category = MessageParser.parseMessageDataType_ArrayListString(msg);
+		
+		if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_CATEGORY_RESTAURANT_REQUEST) {
+			Object response;
+    		try {
+    			ArrayList<Restaurant> result =  restaurantDBController.GetRestaurantsListFromCategoriesData(category);
+            	response = MessegeParserRestaurants.prepareMessageWithDataType_Restaurants(result, RequestType.SERVER_MESSAGE_TO_CLIENT_DATA_PROVIDED);
+            	sendMessageToGivenClient(response,client);
+            }catch(BMServerException e) {
+                response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(), e.getMessage());
+                sendMessageToGivenClient(response,client);
+            }
+		}
+		
+	}
+	
+	private void handleGetMenuRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		String ResID = MessageParser.parseMessageDataType_SingleTextString(msg);
+		
+		if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_MENU_REQUEST) {
+			Object response;
+    		try {
+    			ArrayList<Dish> result =  dishesDBController.GetDishesListFromResIDData(ResID);
+            	response = MessegeParserDishes.prepareMessageWithDataType_Dishes(result, RequestType.SERVER_MESSAGE_TO_CLIENT_DATA_PROVIDED);
+            	sendMessageToGivenClient(response,client);
+            }catch(BMServerException e) {
+                response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(), e.getMessage());
+                sendMessageToGivenClient(response,client);
+            }
+		}
+		
+	}
 	
 	
 	//-------------------------DEBUG FUNCTIONS

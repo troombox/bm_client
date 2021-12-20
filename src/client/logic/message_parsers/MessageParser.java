@@ -41,6 +41,8 @@ public class MessageParser {
 			return DataType.ERROR_MESSAGE;
 		case "RESTAURANTS_LIST":
 			return DataType.RESTAURANTS_LIST;
+		case "DISHES_LIST":
+			return DataType.DISHES_LIST;
 		default:
 			//TODO: ADD error handling for this case;
 			return DataType.UNKNOWN;
@@ -59,5 +61,15 @@ public class MessageParser {
 		
 		return messageToServer;
 	}
+
+	public static Object prepareMessageToServerDataType_ArrayListString(ArrayList<String> dataToSendToServer, RequestType requestType) {
+		ArrayList<String> messageToServer = new ArrayList<String>();	
+		messageToServer.add(requestType.toString());
+		messageToServer.add(DataType.ARRAYLIST_STRING.toString());
+		messageToServer.add(dataToSendToServer.get(0));
+		messageToServer.add(dataToSendToServer.get(1));
+		return messageToServer;
+	}
+
 
 }

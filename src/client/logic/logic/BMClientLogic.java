@@ -1,6 +1,7 @@
 package client.logic.logic;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import client.logic.message_parsers.MessageParser;
 import ocsf.client.AbstractClient;
@@ -10,6 +11,7 @@ import utility.enums.RequestType;
 import utility.enums.UserType;
 import utility.message_parsers.MessageParserError;
 import utility.message_parsers.MessageParserUser;
+import utility.message_parsers.MessegeParserDishes;
 import utility.message_parsers.MessegeParserRestaurants;
 
 public class BMClientLogic extends AbstractClient{
@@ -38,6 +40,9 @@ public class BMClientLogic extends AbstractClient{
 			case RESTAURANTS_LIST:
 				lastDataRecieved = MessegeParserRestaurants.handleMessageExtractDataType_Restaurants(messageFromServerToClient);
 				break;
+			case DISHES_LIST:
+				lastDataRecieved = MessegeParserDishes.handleMessageExtractDataType_Dishes(messageFromServerToClient);
+				break;
 			case ERROR_MESSAGE:
 				lastDataRecieved = MessageParserError.handleMessageExtractDataType__ErrorType(messageFromServerToClient);
 				break;
@@ -54,7 +59,11 @@ public class BMClientLogic extends AbstractClient{
 			break;
 		case SINGLE_TEXT_STRING:
 			message = MessageParser.prepareMessageToServerDataType_SingleTextString((String)dataToSendToServer, requestType);
-			break;	
+			break;
+		case ARRAYLIST_STRING:
+			ArrayList<String> arraylist = (ArrayList<String>)dataToSendToServer;
+			message = MessageParser.prepareMessageToServerDataType_ArrayListString(arraylist, requestType);
+			break;
 		default:
 			System.out.println("sendMessageToServer: unknown dataType");
 			return;

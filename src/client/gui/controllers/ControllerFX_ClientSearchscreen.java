@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import client.gui.logic.ClientUI;
 import client.interfaces.IClientFxController;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,16 +17,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import utility.entity.Restaurant;
-import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.ErrorType;
 import utility.enums.RequestType;
@@ -73,13 +68,17 @@ public class ControllerFX_ClientSearchscreen implements IClientFxController{
 	    void search(ActionEvent event) {
 	    	String searchText = searchTextBox.getText();
 	    	
+	    	 ArrayList<String> SearchBranch = new ArrayList<>();
+	    	 SearchBranch.add(searchText);
+	    	 SearchBranch.add(ClientUI.clientLogic.getLoggedUser().getPersonalBranch());
+			 
 	    	if((searchText.trim().isEmpty())){
 				ErrorMsg.setVisible(true);
 				ErrorMsg.setText("Please enter a restaurant to search");
 				return;
 			}
-			ClientUI.clientLogic.sendMessageToServer(searchText,
-					DataType.SINGLE_TEXT_STRING, RequestType.CLIENT_REQUEST_TO_SERVER_SEARCH_RESTAURANT_REQUEST);
+			ClientUI.clientLogic.sendMessageToServer(SearchBranch,
+					DataType.ARRAYLIST_STRING, RequestType.CLIENT_REQUEST_TO_SERVER_SEARCH_RESTAURANT_REQUEST);
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
@@ -124,6 +123,14 @@ public class ControllerFX_ClientSearchscreen implements IClientFxController{
 				vboxRestaurants.getChildren().add(hboxRestaurant);
 				hboxRestaurant.getChildren().add(new Label(r.getResName()));
 				Button b = new Button("menu");
+				b.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+		            @Override
+		            public void handle(ActionEvent event) {
+		            	IClientFxController nextScreen = new ControllerFX_MenuScreen();
+		            	ControllerFX_MenuScreen.res = r;
+		            	nextScreen.start(ClientUI.parentWindow);
+		            }
+		        });
 				b.setEffect(new DropShadow());
 				b.setStyle("-fx-background-color: #ffca28; -fx-background-radius: 100px;");
 				hboxRestaurant.getChildren().add(b);
