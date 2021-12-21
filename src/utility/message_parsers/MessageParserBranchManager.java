@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import utility.entity.Client;
 import utility.entity.Supplier;
-import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 import utility.enums.UserType;
@@ -73,17 +72,18 @@ public class MessageParserBranchManager {
 			// TODO:ADD ERROR HANDLING
 			return null;
 		}
-		return new Supplier(msg.get(2), msg.get(3), msg.get(4), msg.get(5));
+		return new Supplier(msg.get(2), msg.get(3), msg.get(4), msg.get(5), msg.get(6));
 	}
 	
 	public static Object prepareMessageWithDataType_Supplier(Supplier supplier, RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
 		messageToPrepare.add(requestType.toString());
 		messageToPrepare.add(DataType.SUPPLIER.toString());
-		messageToPrepare.add(String.valueOf(supplier.getRestaurantName()));
+		messageToPrepare.add(supplier.getRestaurantName());
 		messageToPrepare.add(supplier.getImagePath());
 		messageToPrepare.add(supplier.getCategories());
 		messageToPrepare.add(supplier.getPersonalBranch());
+		messageToPrepare.add(supplier.getWorkerID());
 		
 		return messageToPrepare;
 	}

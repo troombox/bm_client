@@ -13,7 +13,7 @@ public class ServerUI extends Application {
 	final public static int DEFAULT_PORT = 5555;
 	final public static String DB_NAME = "bm-db"; //name of the schema in MYSQL
 	final public static String DB_USER = "root";
-	final public static String DB_PASS = "789852";
+	final public static String DB_PASS = "Tzachi1234!";
 
 	public static void main(String[] args) {
 		 launch(args);

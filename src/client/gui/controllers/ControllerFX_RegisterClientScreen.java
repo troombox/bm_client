@@ -130,6 +130,7 @@ public class ControllerFX_RegisterClientScreen implements IClientFxController {
 	    @FXML
 	    void doSignOut(ActionEvent event) {
 	    	ClientUI.clientLogic.logOutUser();
+	    	ClientUI.historyStack.clearControllerHistory();
 	    	ClientUI.loginScreen.start(ClientUI.parentWindow);
 	    }
 	    

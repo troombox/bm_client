@@ -2,7 +2,6 @@ package client.gui.controllers;
 
 import java.io.IOException;
 
-import client.debug.TempScreenControllerFx;
 import client.gui.logic.ClientUI;
 import client.interfaces.IClientFxController;
 import javafx.event.ActionEvent;
@@ -55,6 +54,7 @@ public class ControllerFX_ClientW4Cscreen implements IClientFxController {
 
     @FXML
     void doGoBack(ActionEvent event) {
+    	ClientUI.clientLogic.logOutUser();
     	ClientUI.historyStack.popFxController().start(ClientUI.parentWindow);
     }
 
@@ -70,6 +70,7 @@ public class ControllerFX_ClientW4Cscreen implements IClientFxController {
     @FXML
     void doSignOut(ActionEvent event) {
     	ClientUI.clientLogic.logOutUser();
+    	ClientUI.historyStack.clearControllerHistory();
     	ClientUI.loginScreen.start(ClientUI.parentWindow);
     }
 

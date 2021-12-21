@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import client.gui.logic.ClientUI;
 import client.interfaces.IClientFxController;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,11 +35,13 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController{
     @FXML
     private Button viewRepBtn;
     
+    @FXML
+    private Button approveEmployer;
+    
     
 
     @FXML
     void moveToRegisterClientWin(ActionEvent event) {
-    	System.out.println(ClientUI.clientLogic.getLoggedUser().toString());
     	IClientFxController nextScreen = new ControllerFX_RegisterClientScreen();
     	ClientUI.historyStack.pushFxController(this);
     	nextScreen.start(ClientUI.parentWindow);
@@ -48,17 +49,21 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController{
 
     @FXML
     void moveToRegisterSupWin(ActionEvent event) {
-    	System.out.println(ClientUI.clientLogic.getLoggedUser().toString());
-    	IClientFxController nextScreen = new ControllerFX_RegisterSupplyerScreen();
+    	IClientFxController nextScreen = new ControllerFX_RegisterSupplierScreen();
     	ClientUI.historyStack.pushFxController(this);
     	nextScreen.start(ClientUI.parentWindow);
     }
 
     @FXML
     void moveToViewReportWin(ActionEvent event) {
-//    	System.out.println(ClientUI.clientLogic.getLoggedUser().toString());
 //    	IClientFxController nextScreen = new ControllerFX_CategoriesScreen();
 //    	nextScreen.start(ClientUI.parentWindow);
+    }
+    
+
+    @FXML
+    void doApproveEmployer(ActionEvent event) {
+
     }
 
 	@Override
@@ -80,9 +85,6 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController{
 	}
 	
 	
-		
-	
-	
 	public void setWelcomeMessage() {
 		String name = ClientUI.clientLogic.getLoggedUser().getFirstName();
 		String last = ClientUI.clientLogic.getLoggedUser().getLastName();
@@ -99,6 +101,7 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController{
 	    @FXML
 	    void doSignOut(ActionEvent event) {
 	    	ClientUI.clientLogic.logOutUser();
+	    	ClientUI.historyStack.clearControllerHistory();
 	    	ClientUI.loginScreen.start(ClientUI.parentWindow);
 	    }
 

@@ -6,8 +6,11 @@ public enum DataType {
 	USER("USER"),								//used for User Messages
 	CLIENT("CLIENT"),							//used for branch manager messages
 	SUPPLIER("SUPPLIER"),
+	HR_MANAGER("HR_MANAGER"),
 	RESTAURANTS_LIST("RESTAURANTS_LIST"),
 	ERROR_MESSAGE("ERROR_MESSAGE"),				//used for Error Messages
+	ARRAYLIST_STRING("ARRAYLIST_STRING"),
+	DISHES_LIST("DISHES_LIST"),
 	UNKNOWN("UNKNOWN");							//used internally, should not be sent as a type
 	
 	private String dataType;

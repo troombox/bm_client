@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import server.exceptions.BMServerException;
 import utility.entity.Client;
@@ -14,6 +15,7 @@ public class ClientDBController {
 	
 	private final String personalClientTableInDB = "personal_client";
 	private final String businesslClientTableInDB = "business_client";
+	private final String businessesTableInDB = "businesses";
 	private final String userTableNameInDB = "users";
 	Connection dbConnection;
 	String dbName;
@@ -42,7 +44,7 @@ public class ClientDBController {
 			query = "UPDATE `" + dbName + "`." + userTableNameInDB + " SET userType = ?  , personalBranch = ?  WHERE email = ?";
 			ps = dbConnection.prepareStatement(query);
 			ps.setString(1, userType.toString());
-			ps.setString(2, client.getPersonalBranch());
+			ps.setString(2, personalBranch);
 			ps.setString(3, userEmail);
 			ps.executeUpdate();
 			if(userType == UserType.CLIENT_PERSONAL) {
@@ -53,9 +55,32 @@ public class ClientDBController {
 				ps.setInt(3, 0);
 				ps.setInt(4, client.getPersonalCreditNumber());
 				ps.executeUpdate();
+				rs.close();
 				ps.close();
 				
 			}else if(userType == UserType.CLIENT_BUSINESS) {
+				query = "SELECT * FROM  `"+ dbName + "`." + personalClientTableInDB + " WHERE userID = ?";
+				PreparedStatement  ps1 = dbConnection.prepareStatement(query);
+				ps1.setInt(1, client.getUser_ID());
+				ResultSet rs1 = ps1.executeQuery();
+				if(rs1.next()) {//if user exist, delete him 
+					query = "DELETE FROM `" + dbName + "`." + personalClientTableInDB + " WHERE userID = ?";
+					ps1 = dbConnection.prepareStatement(query);
+					ps1.setInt(1, client.getUser_ID());
+					ps1.execute();
+				}
+				//check if the business is approved
+				query = "SELECT * FROM  `"+ dbName + "`." + businessesTableInDB + " WHERE businessID = ?";
+				ps1 = dbConnection.prepareStatement(query);
+				ps1.setInt(1, client.getBusinessId());
+				rs1 = ps1.executeQuery();
+				if(!rs1.next()) { //business not in the table 
+					throw new BMServerException(ErrorType.BUSINESS_DOESNT_EXIST, "BUSINESS_DOESNT_EXIST");
+				}
+				if(rs1.getInt(3) != 1) {
+					throw new BMServerException(ErrorType.BUSINESS_NOT_APPROVE, "BUSINESS_NOT_APPROVE");
+				}
+				
 				query = "INSERT INTO `" + dbName + "`." + businesslClientTableInDB + "(businessCode,personalCode,balanceInApp,userID,budget,isApproved,businessId,personalCreditNumber) VALUES(?,?,?,?,?,?,?,?)";
 				PreparedStatement ps2 = dbConnection.prepareStatement(query);
 				ps2.setInt(1,client.getUser_ID()*3);
