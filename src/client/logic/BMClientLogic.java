@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import ocsf.client.AbstractClient;
 import utility.entity.Client;
+import utility.entity.Dish;
+import utility.entity.Order;
 import utility.entity.Supplier;
 import utility.entity.User;
 import utility.enums.DataType;
@@ -20,6 +22,8 @@ public class BMClientLogic extends AbstractClient{
 	private RequestType typeOfLastRequestRecieved;
 	
 	private User loggedInUser;
+	
+	private Order currentOrder;
 	
 	public BMClientLogic(String host, int port) throws IOException {
 	    super(host, port); //Call the superclass constructor
@@ -124,6 +128,7 @@ public class BMClientLogic extends AbstractClient{
 		}
 		sendMessageToServer(loggedInUser, DataType.USER, RequestType.CLIENT_REQUEST_TO_SERVER_LOGOUT_REQUEST);
 		loggedInUser = new User(-1, "", "", "", "", "", UserType.USER, "", "", false, "");
+		currentOrder = null;
 	}
 	
 	public User getLoggedUser() {
@@ -133,8 +138,49 @@ public class BMClientLogic extends AbstractClient{
 			return loggedInUser;
 		}
 	}
-
 	
+	//--------------CURRENT ORDER METHODS
+	
+	public void createOrder(int restaurantID) {
+		if(currentOrder == null) {
+			currentOrder = new Order(loggedInUser, restaurantID);
+		}
+		return;
+	}
+	
+	public void addToOrder(Dish dishToAdd) {
+		createOrder(Integer.parseInt(dishToAdd.getRes_ID()));
+		currentOrder.addDish(dishToAdd);
+	}
+	
+	public void removeFromOrder(Dish dishToRemove) {
+		if(currentOrder == null) {
+			return;
+		}
+		if(currentOrder.checkIfDishInOrderByDish(dishToRemove)) {
+			currentOrder.removeDish(dishToRemove);
+		}
+	}
+	
+	public boolean isOrderListEmpty() {
+		if(currentOrder == null) {
+			return true;
+		}
+		if(currentOrder.getAmountOfDishes() != 0) {
+			return false;
+		}
+		return true;
+	}
+	
+	public ArrayList<Dish> getOrderDishes(){
+		if(currentOrder == null) {
+			return null;
+		}
+		return currentOrder.getDishesInOrder();
+	}
+	
+	
+
 	//----------------TO BE CHANGED WHEN MESSAGE HISTORY ADDED (POSSIBLY)
 	public Object getLastDataRecieved() {
 		return lastDataRecieved;

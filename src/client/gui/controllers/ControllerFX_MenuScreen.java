@@ -23,6 +23,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -53,6 +54,15 @@ public class ControllerFX_MenuScreen implements IClientFxController, Initializab
 
     @FXML
     private Button exitCartButton1;
+
+    @FXML
+    private VBox cartVBox;
+
+    @FXML
+    private GridPane cartDishesGrid;
+
+    @FXML
+    private Label labelTotalPrice;
 
     @FXML
     private Label emptyCartLabel1;
@@ -194,8 +204,30 @@ public class ControllerFX_MenuScreen implements IClientFxController, Initializab
 			mainDishTab.setContent(mainVbox);
 			dessertsTab.setContent(dessertsVbox);
 			drinksTab.setContent(drinksVbox);
-		
+			
+			updateCart();
 	}
+	
+	private void updateCart() {
+		if(ClientUI.clientLogic.isOrderListEmpty()) {
+			return;
+		}
+		int cartPrice = 0;
+		emptyCartLabel1.setVisible(false);
+		cartVBox.setVisible(true);
+		cartDishesGrid.getChildren().clear();
+		//for each dish in order we update the cart to show it
+		for(int i = 0; i < ClientUI.clientLogic.getOrderDishes().size(); i++) {
+			Dish dish = ClientUI.clientLogic.getOrderDishes().get(i);
+			Label dishName = new Label(dish.getName());
+			Label dishPrice = new Label(dish.getPrice());
+			cartDishesGrid.add(dishName, 0, i);
+			cartDishesGrid.add(dishPrice, 1, i);
+			cartPrice += Integer.parseInt(dish.getPrice());
+		}
+		labelTotalPrice.setText(String.valueOf(cartPrice));
+	}
+	
 
 }
 

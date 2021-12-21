@@ -1,13 +1,16 @@
 package client.gui.controllers;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import client.gui.logic.ClientUI;
 import client.interfaces.IClientFxController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -15,13 +18,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import utility.entity.Dish;
 import utility.entity.Restaurant;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
-public class ControllerFX_CategoriesScreen implements IClientFxController {
+public class ControllerFX_CategoriesScreen implements IClientFxController, Initializable {
 	
     @FXML
     private Button searchButton;
@@ -33,7 +39,16 @@ public class ControllerFX_CategoriesScreen implements IClientFxController {
     private Button exitCartButton;
 
     @FXML
-    private Label emptyCartLabel;
+    private VBox cartVBox;
+
+    @FXML
+    private GridPane cartDishesGrid;
+
+    @FXML
+    private Label labelTotalPrice;
+
+    @FXML
+    private Label emptyCartLabel1;
     
     @FXML
     private Pane mainPane;
@@ -73,6 +88,7 @@ public class ControllerFX_CategoriesScreen implements IClientFxController {
 	 @FXML
 	void searchGui(ActionEvent event) {
 		IClientFxController nextScreen = new ControllerFX_ClientSearchscreen();
+		ClientUI.historyStack.pushFxController(this);
 	    nextScreen.start(ClientUI.parentWindow);
 
 	}
@@ -164,6 +180,31 @@ public class ControllerFX_CategoriesScreen implements IClientFxController {
 	    	ClientUI.clientLogic.logOutUser();
 	    	ClientUI.loginScreen.start(ClientUI.parentWindow);
 	    }
+	    
+	    @Override
+		public void initialize(URL location, ResourceBundle resources) {
+	    	updateCart();
+	    }
+	    
+		private void updateCart() {
+			if(ClientUI.clientLogic.isOrderListEmpty()) {
+				return;
+			}
+			int cartPrice = 0;
+			emptyCartLabel1.setVisible(false);
+			cartVBox.setVisible(true);
+			cartDishesGrid.getChildren().clear();
+			//for each dish in order we update the cart to show it
+			for(int i = 0; i < ClientUI.clientLogic.getOrderDishes().size(); i++) {
+				Dish dish = ClientUI.clientLogic.getOrderDishes().get(i);
+				Label dishName = new Label(dish.getName());
+				Label dishPrice = new Label(dish.getPrice());
+				cartDishesGrid.add(dishName, 0, i);
+				cartDishesGrid.add(dishPrice, 1, i);
+				cartPrice += Integer.parseInt(dish.getPrice());
+			}
+			labelTotalPrice.setText(String.valueOf(cartPrice));
+		}
 	
 
 }
