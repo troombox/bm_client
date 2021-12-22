@@ -2,6 +2,7 @@ package utility.entity;
 
 public class Restaurant {
 	
+
 	private String res_ID, resName, category, branch;
 
 	public Restaurant(String res_ID, String resName, String category, String branch) {
@@ -10,6 +11,7 @@ public class Restaurant {
 		this.category = category;
 		this.branch = branch;
 	}
+
 
 	public String getRes_ID() {
 		return res_ID;

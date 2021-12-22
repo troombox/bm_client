@@ -123,11 +123,13 @@ public class ControllerFX_ClientSearchscreen implements IClientFxController{
 				vboxRestaurants.getChildren().add(hboxRestaurant);
 				hboxRestaurant.getChildren().add(new Label(r.getResName()));
 				Button b = new Button("menu");
+				ControllerFX_ClientSearchscreen searchscreen = this;
 				b.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
 		            @Override
 		            public void handle(ActionEvent event) {
 		            	IClientFxController nextScreen = new ControllerFX_MenuScreen();
 		            	ControllerFX_MenuScreen.res = r;
+		            	ClientUI.historyStack.pushFxController(searchscreen);
 		            	nextScreen.start(ClientUI.parentWindow);
 		            }
 		        });

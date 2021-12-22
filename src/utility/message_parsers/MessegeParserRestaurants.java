@@ -41,4 +41,27 @@ public class MessegeParserRestaurants {
 		return messageToPrepare;
 	}
 
+	public static Restaurant handleMessageExtractDataType_singleRestaurant(Object message) {
+		ArrayList<String> msg = (ArrayList<String>) message;
+		if (!msg.get(1).equals("RESTAURANT")) {
+			// TODO:ADD ERROR HANDLING
+			return null;
+		}
+		return new Restaurant(msg.get(2),msg.get(3),msg.get(4),msg.get(5));
+	}
+
+	public static Object prepareMessageWithDataType_singleRestaurant(Restaurant result, RequestType requestType) {
+			
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.RESTAURANT.toString());
+		
+		messageToPrepare.add(String.valueOf(result.getRes_ID()));
+		messageToPrepare.add(result.getResName());
+		messageToPrepare.add(result.getCategory());
+		messageToPrepare.add(result.getBranch());
+
+		return messageToPrepare;
+	}
+
 }

@@ -50,6 +50,66 @@ public class DishesDBController {
 			return null;
 		}
 	}
+
+	public Dish  AddDishToMenu(Dish dish) throws BMServerException{
+		ResultSet rs;
+		PreparedStatement ps = null;
+		try {
+				String query = "SELECT COUNT(*) AS rowcount FROM `"+ dbName + "`." + dishesTableNameInDB;
+				ps = dbConnection.prepareStatement(query);
+				rs = ps.executeQuery();
+				rs.next();
+				int count = rs.getInt("rowcount");
+				rs.close();
+				int id = count+1;
+				String query2 = "INSERT INTO `" + dbName + "`." + dishesTableNameInDB + "(dishId,resId,type,name,description,"
+						+	"size,CookingLevel,price)" + " VALUES(?,?,?,?,?,?,?,?)";
+				PreparedStatement ps2 = dbConnection.prepareStatement(query2);
+				ps2.setInt(1,id);
+				ps2.setString(2, dish.getRes_ID());
+				ps2.setString(3, dish.getType());
+				ps2.setString(4, dish.getName());
+				ps2.setString(5, dish.getDescription());
+				ps2.setString(6, dish.getSize());
+				ps2.setString(7, dish.getCooking_level());
+				ps2.setString(8, dish.getPrice());
+				ps2.executeUpdate();
+				ps2.close();
+				
+			return new Dish(String.valueOf(id), dish.getRes_ID(), dish.getType(), dish.getName(), dish.getDescription(), 
+					dish.getSize(), dish.getCooking_level(), dish.getPrice());
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public void UpdateDishInMenu(Dish dish) throws BMServerException{
+		try {
+//				String query2 = "UPDATE `" + dbName + "`." + dishesTableNameInDB
+//						+ " SET type = '"+ dish.getType() +"', name = '"+ dish.getName() +"', description = '"+ dish.getDescription() +"',"
+//						+ " size = '"+ dish.getSize() +"', cookingLevel = "+ dish.getCooking_level() +","
+//						+ " price = '"+ dish.getPrice() +"' WHERE dishId = '"+ Integer.parseInt(dish.getDish_ID()) +"'";
+			String query2 = "UPDATE `" + dbName + "`." + dishesTableNameInDB
+					+ " SET type = ?, name = ?, description = ?, size = ?, cookingLevel = ?,"
+					+ " price = ? WHERE dishId = ?";
+				PreparedStatement ps2 = dbConnection.prepareStatement(query2);
+				ps2.setString(1,dish.getType());
+				ps2.setString(2, dish.getName());
+				ps2.setString(3, dish.getDescription());
+				ps2.setString(4, dish.getSize());
+				ps2.setString(5, dish.getDescription());
+				ps2.setString(6, dish.getCooking_level());
+				ps2.setInt(7, Integer.parseInt(dish.getDish_ID()));
+				
+				ps2.executeUpdate();
+				ps2.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	
 
 }
