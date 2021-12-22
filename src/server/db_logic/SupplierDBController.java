@@ -15,7 +15,7 @@ public class SupplierDBController {
 	
 	private final String supplierTableInDB = "restaurant";
 	private final String userTableNameInDB = "users";
-	private final String resWorkerTableInDB  = "res_worker";
+	private final String resWorkerTableInDB  = "res_workers";
 	Connection dbConnection;
 	String dbName;
 	
@@ -27,7 +27,7 @@ public class SupplierDBController {
 	public void setNewSupplier(Supplier supplier)  throws BMServerException{
 		ResultSet rs = null;
 		PreparedStatement ps;
-		System.out.println("before try");
+		System.out.println(supplier.getWorkerID() +"!!!!!!!!!!1");
 		try {
 			String query = "SELECT * FROM  `"+ dbName + "`." + userTableNameInDB + " WHERE userID = ?";
 			ps = dbConnection.prepareStatement(query);
@@ -38,13 +38,15 @@ public class SupplierDBController {
 			}
 			System.out.println("im here");
 			System.out.println(rs.getString(7));
-			if(rs.getString(7) != "RESTAURANT_OWNER") { //the user isnt RESTAURANT_OWNER
+			if(!rs.getString(7).equals("RESTAURANT_OWNER")) { //the user isnt RESTAURANT_OWNER
 				throw new BMServerException(ErrorType.WORKER_DOSENT_RESTAURANT_OWNER, "WORKER_DOSENT_RESTAURANT_OWNER");
 			}
 			//change the status of RESTAURANT_OWNER
-			query = "UPDATE `" + dbName + "`." + userTableNameInDB + " SET status = active WHERE userID = ?";
+			query = "UPDATE `" + dbName + "`." + userTableNameInDB + " SET status = ?, personalBranch = ? WHERE userID = ?";
 			ps = dbConnection.prepareStatement(query);
-			ps.setString(1, supplier.getWorkerID());
+			ps.setString(1, "active");
+			ps.setString(2, supplier.getPersonalBranch());
+			ps.setInt(3, Integer.parseInt(supplier.getWorkerID()));
 			ps.executeUpdate();
 			
 			Statement stmt = dbConnection.createStatement(); 

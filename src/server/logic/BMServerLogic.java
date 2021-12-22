@@ -254,11 +254,12 @@ public class BMServerLogic extends AbstractServer {
 
 	private void handleRegisterSupplierRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
 		Supplier newSupplier = MessageParserBranchManager.handleMessageExtractDataType_Supplier(msg);
+		System.out.println(newSupplier.getPersonalBranch() +" "+newSupplier.getWorkerID()  + "  before query");
 		if (actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_REGISTER_SUPPLIER) {
 			Object response;
 			try {
 				// newClient
-				System.out.println(newSupplier.getPersonalBranch()  + "before query");
+				
 				supplierDBController.setNewSupplier(newSupplier);
 				response = MessageParserBranchManager.prepareMessageWithResultOfRegisterion_Supplier(
 						RequestType.SERVER_MESSAGE_TO_CLIENT_SUPPLIER_REGISTER_SUCCESS);

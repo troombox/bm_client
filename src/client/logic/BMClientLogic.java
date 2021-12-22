@@ -70,8 +70,6 @@ public class BMClientLogic extends AbstractClient{
 			break;
 		case SUPPLIER:
 			message = MessageParserBranchManager.prepareMessageWithDataType_Supplier((Supplier)dataToSendToServer, requestType);
-			ArrayList<String> ms = (ArrayList<String>)message;
-			System.out.println(ms.get(0) + ms.get(1) + ms.get(2) + ms.get(3));
 			break;
 		case SINGLE_TEXT_STRING:
 			message = MessageParserTextString.prepareMessageWithDataType_SingleTextString((String)dataToSendToServer, requestType);
