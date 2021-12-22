@@ -39,7 +39,7 @@
                         <DropShadow />
                      </effect>
                   </Button>
-                  <Button id="approveEmployer" fx:id="approveEmployer" layoutX="30.0" layoutY="74.0" mnemonicParsing="false" onAction="#doApproveEmployer" prefHeight="34.0" prefWidth="140.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="approve new employer">
+                  <Button id="approveBusiness" fx:id="approveBusiness" layoutX="30.0" layoutY="74.0" mnemonicParsing="false" onAction="#doApproveBusiness" prefHeight="34.0" prefWidth="140.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="approve new business">
                      <effect>
                         <DropShadow />
                      </effect>

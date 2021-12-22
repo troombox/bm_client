@@ -2,6 +2,7 @@ package utility.message_parsers;
 
 import java.util.ArrayList;
 
+import utility.entity.Business;
 import utility.entity.Client;
 import utility.entity.Supplier;
 import utility.enums.DataType;
@@ -100,7 +101,61 @@ public class MessageParserBranchManager {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		return msg.get(0);
 	}
+	//------------------------------------------------>approve_business
 	
+	public static Object prepareMessageWithDataType_GET_DATA_OF_BUSINESS(String branchName ,RequestType requestType) {
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.GET_DATA_OF_BUSINESS.toString());
+		messageToPrepare.add(branchName);
+		return messageToPrepare;
+	}
 	
+	public static Object prepareMessageWithResultOfGettingData_Business(RequestType requestType,Object message) {
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+		ArrayList<String> msg = (ArrayList<String>)message;
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.GET_DATA_OF_BUSINESS.toString());
+		messageToPrepare.addAll(msg);
+		
+		return messageToPrepare;
+	}
+	
+	public static Business handleMessageExtractDataType_Business(Object message) {
+		ArrayList<String> msg = (ArrayList<String>) message;
+		if (!msg.get(1).equals("APPROVE_BUSINESS")) {
+			// TODO:ADD ERROR HANDLING
+			return null;
+		}
+		return new Business(Integer.parseInt(msg.get(2)),msg.get(3),Integer.parseInt(msg.get(4)),Integer.parseInt(msg.get(5)),msg.get(6));
+	}
+
+	public static Object prepareMessageWithDataType_Client(Business business, RequestType requestType) {
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.CLIENT.toString());
+		messageToPrepare.add(String.valueOf(business.getBusinessId()));
+		messageToPrepare.add(business.getBusinessName());
+		messageToPrepare.add(String.valueOf(business.getIsApproved()));
+		messageToPrepare.add(String.valueOf(business.getHr_id()));
+		messageToPrepare.add(business.getBranch());
+		
+		
+		return messageToPrepare;
+	}
+	
+	public static Object prepareMessageWithResultOfApproveBusiness(RequestType requestType) {
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.APPROVE_BUSINESS.toString());
+		
+		return messageToPrepare;
+	}
+	
+	public static String handleMessageExtractDataTypeResultOfApproveBusiness(Object message) {
+		ArrayList<String> msg = (ArrayList<String>) message;
+		return msg.get(0);
+	}
 	
 }

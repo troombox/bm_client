@@ -20,7 +20,7 @@ public class BMServerLogic extends AbstractServer {
 	DBController dbController;
 	OrderDBController orderDBController;
 	UserDBController userDBController;
-
+	BusinessDBController businessDBConteroller;
 	ClientDBController clientDBController;
 	SupplierDBController supplierDBController;
 	RestaurantDBController restaurantDBController;
@@ -48,6 +48,7 @@ public class BMServerLogic extends AbstractServer {
 		this.restaurantDBController = new RestaurantDBController(dbController);
 		this.hrDBController = new HRDBController(dbController);
 		this.dishesDBController = new DishesDBController(dbController);
+		this.businessDBConteroller = new BusinessDBController(dbController);
 	}
 
 	public void handleMessageFromClient(Object msg, ConnectionToClient client) {
@@ -90,10 +91,16 @@ public class BMServerLogic extends AbstractServer {
 			handleGetRestaurantsByCategoryRequest(actionRequired, msg, client);
 		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_MENU_REQUEST) {
 			handleGetMenuRequest(actionRequired, msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA_BUSINESSES_NAMES) {
+			handleGetDataOfBusiness(actionRequired, msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_APPROVE_BUSINESS) {
+			handleApproveBusiness(actionRequired, msg, client);
 		}
 		serverPrintToGuiLog("Message From Client Handled, action: " + actionRequired.toString(), true);
 	}
 
+	
+	
 	public void sendMessageToGivenClient(Object msg, ConnectionToClient client) {
 		try {
 			client.sendToClient(msg);
@@ -169,7 +176,7 @@ public class BMServerLogic extends AbstractServer {
 			ArrayList<String> gotFromClient = MessageParserHR.handleMessageFromClient_HRGetData(msg);
 			Object response = HRDBController.getUsersToApproveFromDB(Integer.parseInt(gotFromClient.get(2)));
 			sendMessageToGivenClient(response,client);
-			break;
+			break; 
 		case UNKNOWN:
 			// TODO: HANDLE ERROR - UNKNOWN DATA TYPE?
 		default:
@@ -254,12 +261,9 @@ public class BMServerLogic extends AbstractServer {
 
 	private void handleRegisterSupplierRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
 		Supplier newSupplier = MessageParserBranchManager.handleMessageExtractDataType_Supplier(msg);
-		System.out.println(newSupplier.getPersonalBranch() +" "+newSupplier.getWorkerID()  + "  before query");
 		if (actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_REGISTER_SUPPLIER) {
 			Object response;
 			try {
-				// newClient
-				
 				supplierDBController.setNewSupplier(newSupplier);
 				response = MessageParserBranchManager.prepareMessageWithResultOfRegisterion_Supplier(
 						RequestType.SERVER_MESSAGE_TO_CLIENT_SUPPLIER_REGISTER_SUCCESS);
@@ -271,6 +275,38 @@ public class BMServerLogic extends AbstractServer {
 			}
 		}
 	}
+	private void handleGetDataOfBusiness(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		ArrayList<String> message = (ArrayList<String>)msg;
+		String branch = message.get(2);
+		Object response;
+			message = businessDBConteroller.getBusinessesNames(branch);
+			if(message != null) {
+			for(String i :message) {
+				System.out.println(i);
+			}
+			response = MessageParserBranchManager.prepareMessageWithResultOfGettingData_Business(RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA_BUSINESSES_NAMES,message);
+			sendMessageToGivenClient(response, client);
+	
+			}
+		}
+	
+	private void handleApproveBusiness(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		Business business = MessageParserBranchManager.handleMessageExtractDataType_Business(msg);
+		Object response;
+		try {
+			businessDBConteroller.approveBusiness(business);
+			response = MessageParserBranchManager.prepareMessageWithResultOfApproveBusiness(
+					RequestType.SERVER_MESSAGE_TO_CLIENT_APPROVE_BUSINESS_SUCCESS);
+			sendMessageToGivenClient(response, client);
+		} catch (BMServerException e) {
+			response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(),
+					e.getMessage());
+			sendMessageToGivenClient(response, client);
+		}
+		
+	}
+
+
 
 
 	private void handleSearchRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {		

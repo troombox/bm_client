@@ -45,6 +45,8 @@ public class MessageParser {
 			return RequestType.CLIENT_REQUEST_TO_SERVER_CATEGORY_RESTAURANT_REQUEST;
 		case "CLIENT_REQUEST_TO_SERVER_MENU_REQUEST":
 			return RequestType.CLIENT_REQUEST_TO_SERVER_MENU_REQUEST;
+		case "CLIENT_REQUEST_TO_SERVER_GET_DATA_BUSINESSES_NAMES":
+			return RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA_BUSINESSES_NAMES;
 		default:
 			// TODO: ADD error handling for this case;
 			return RequestType.CLIENT_REQUEST_TO_SERVER_UNKNOWN_REQUEST;
@@ -75,6 +77,8 @@ public class MessageParser {
 			return DataType.ARRAYLIST_STRING;
 		case "ERROR_MESSAGE":
 			return DataType.ERROR_MESSAGE;
+		case "GET_DATA_OF_BUSINESS":
+			return DataType.GET_DATA_OF_BUSINESS;
 		default:
 			// TODO: ADD error handling for this case;
 			return DataType.UNKNOWN;

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import ocsf.client.AbstractClient;
+import utility.entity.Business;
 import utility.entity.Client;
 import utility.entity.Supplier;
 import utility.entity.User;
@@ -54,6 +55,17 @@ public class BMClientLogic extends AbstractClient{
 			case DISHES_LIST:
 				lastDataRecieved = MessegeParserDishes.handleMessageExtractDataType_Dishes(messageFromServerToClient);
 				break;
+			case GET_DATA_OF_BUSINESS:
+				lastDataRecieved = messageFromServerToClient;
+				ArrayList<String> res =  (ArrayList<String>) messageFromServerToClient;
+				for(String i : res) {
+					System.out.println(i);
+				}
+				break;
+			case APPROVE_BUSINESS:
+				lastDataRecieved = MessageParserBranchManager.handleMessageExtractDataTypeResultOfApproveBusiness(messageFromServerToClient);
+				break;
+				
 			default:
 				System.out.println("ERROR, UNKNOWN DATA TYPE");
 		}	
@@ -82,6 +94,12 @@ public class BMClientLogic extends AbstractClient{
 				/*TODO: the option where we want to update the data base*/
 				return;
 			}
+		case GET_DATA_OF_BUSINESS:
+			message = MessageParserBranchManager.prepareMessageWithDataType_GET_DATA_OF_BUSINESS((String)dataToSendToServer, requestType);
+			break;
+		case APPROVE_BUSINESS:
+			message = MessageParserBranchManager.prepareMessageWithDataType_Client((Business)dataToSendToServer,requestType);
+			break;
 		case ARRAYLIST_STRING:
 			ArrayList<String> arraylist = (ArrayList<String>)dataToSendToServer;
 			message = MessageParserTextString.prepareMessageToServerDataType_ArrayListString(arraylist, requestType);

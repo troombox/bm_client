@@ -35,8 +35,9 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController{
     @FXML
     private Button viewRepBtn;
     
+
     @FXML
-    private Button approveEmployer;
+    private Button approveBusiness;
     
     
 
@@ -62,8 +63,10 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController{
     
 
     @FXML
-    void doApproveEmployer(ActionEvent event) {
-
+    void doApproveBusiness(ActionEvent event) {
+    	IClientFxController nextScreen = new ControllerFX_ApproveBusinesses();
+    	ClientUI.historyStack.pushFxController(this);
+    	nextScreen.start(ClientUI.parentWindow);
     }
 
 	@Override
