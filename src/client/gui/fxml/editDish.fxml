@@ -35,7 +35,7 @@
       </Pane>
       <Pane prefHeight="414.0" prefWidth="606.0">
          <children>
-            <VBox alignment="TOP_CENTER" layoutX="11.0" layoutY="14.0" prefHeight="391.0" prefWidth="584.0" spacing="20.0">
+            <VBox alignment="TOP_CENTER" layoutX="11.0" layoutY="14.0" prefHeight="397.0" prefWidth="584.0" spacing="20.0">
                <children>
                   <Label style="-fx-font-size: 16;" text="insert the details of your dish here:" />
                   <HBox spacing="20.0">
@@ -103,11 +103,30 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#updateDish" prefHeight="42.0" prefWidth="119.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="save dish in menu">
-                     <effect>
-                        <DropShadow />
-                     </effect>
-                  </Button>
+                  <HBox spacing="170.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#deleteDish" style="-fx-background-color: #f44336;">
+                           <HBox.margin>
+                              <Insets left="30.0" />
+                           </HBox.margin>
+                           <graphic>
+                              <ImageView fitHeight="33.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../images/delete.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <effect>
+                              <DropShadow />
+                           </effect>
+                        </Button>
+                        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#updateDish" prefHeight="34.0" prefWidth="119.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="save dish in menu">
+                           <effect>
+                              <DropShadow />
+                           </effect>
+                        </Button>
+                     </children>
+                  </HBox>
                </children>
             </VBox>
          </children>

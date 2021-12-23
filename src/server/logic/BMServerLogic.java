@@ -95,6 +95,8 @@ public class BMServerLogic extends AbstractServer {
 			handleAddDishToMenuRequest(actionRequired, msg, client);
 		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_UPDATE_DISH_IN_MENU_REQUEST) {
 			handleUpdateDishInMenuRequest(actionRequired, msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_DELETE_DISH_FROM_MENU_REQUEST) {
+			handleDeleteDishFromMenuRequest(actionRequired, msg, client);
 		}
 		
 		serverPrintToGuiLog("Message From Client Handled, action: " + actionRequired.toString(), true);
@@ -382,6 +384,24 @@ public class BMServerLogic extends AbstractServer {
     		try {
     			dishesDBController.UpdateDishInMenu(dish);
     			response = MessageParserTextString.prepareMessageWithDataType_SingleTextString("your dish updated", 
+						RequestType.SERVER_MESSAGE_TO_CLIENT_UPDATED_DISH_SUCCESS);
+    			sendMessageToGivenClient(response,client);
+            }catch(BMServerException e) {
+                response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(), e.getMessage());
+                sendMessageToGivenClient(response,client);
+            }
+		}
+		
+	}
+	
+	private void handleDeleteDishFromMenuRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		Dish dish = MessegeParserDishes.handleMessageExtractDataType_SingleDish(msg);
+
+		if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_DELETE_DISH_FROM_MENU_REQUEST) {
+			Object response;
+    		try {
+    			dishesDBController.DeleteDishFromMenu(dish);
+    			response = MessageParserTextString.prepareMessageWithDataType_SingleTextString("your dish deleted", 
 						RequestType.SERVER_MESSAGE_TO_CLIENT_UPDATED_DISH_SUCCESS);
     			sendMessageToGivenClient(response,client);
             }catch(BMServerException e) {

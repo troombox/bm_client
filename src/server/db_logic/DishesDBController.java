@@ -87,10 +87,6 @@ public class DishesDBController {
 
 	public void UpdateDishInMenu(Dish dish) throws BMServerException{
 		try {
-//				String query2 = "UPDATE `" + dbName + "`." + dishesTableNameInDB
-//						+ " SET type = '"+ dish.getType() +"', name = '"+ dish.getName() +"', description = '"+ dish.getDescription() +"',"
-//						+ " size = '"+ dish.getSize() +"', cookingLevel = "+ dish.getCooking_level() +","
-//						+ " price = '"+ dish.getPrice() +"' WHERE dishId = '"+ Integer.parseInt(dish.getDish_ID()) +"'";
 			String query2 = "UPDATE `" + dbName + "`." + dishesTableNameInDB
 					+ " SET type = ?, name = ?, description = ?, size = ?, cookingLevel = ?,"
 					+ " price = ? WHERE dishId = ?";
@@ -99,8 +95,8 @@ public class DishesDBController {
 				ps2.setString(2, dish.getName());
 				ps2.setString(3, dish.getDescription());
 				ps2.setString(4, dish.getSize());
-				ps2.setString(5, dish.getDescription());
-				ps2.setString(6, dish.getCooking_level());
+				ps2.setString(5, dish.getCooking_level());
+				ps2.setString(6, dish.getPrice());
 				ps2.setInt(7, Integer.parseInt(dish.getDish_ID()));
 				
 				ps2.executeUpdate();
@@ -109,6 +105,21 @@ public class DishesDBController {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void DeleteDishFromMenu(Dish dish) throws BMServerException{
+		try {
+			String query2 = "DELETE FROM `" + dbName + "`." + dishesTableNameInDB
+					+ " WHERE dishId = ?";
+				PreparedStatement ps2 = dbConnection.prepareStatement(query2);
+				ps2.setInt(1, Integer.parseInt(dish.getDish_ID()));
+				ps2.executeUpdate();
+				ps2.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 

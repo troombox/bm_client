@@ -18,6 +18,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import utility.entity.Dish;
 import utility.entity.Restaurant;
@@ -133,6 +134,35 @@ public class ControllerFX_EditDishScreen implements IClientFxController, Initial
     void signOut(ActionEvent event) {
     	ClientUI.clientLogic.logOutUser();
     	ClientUI.loginScreen.start(ClientUI.parentWindow);
+    }
+    
+    @FXML
+    void deleteDish(ActionEvent event) {
+    	
+    	Alert alert = new Alert(AlertType.CONFIRMATION, "Are you sure you want to remove " + dish.getName() + " off your menu?",
+    			ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+    	alert.showAndWait();
+
+    	if (alert.getResult() == ButtonType.YES) {
+    		ClientUI.clientLogic.sendMessageToServer(dish,
+    				DataType.DISH, RequestType.CLIENT_REQUEST_TO_SERVER_DELETE_DISH_FROM_MENU_REQUEST);
+    		try {
+    			Thread.sleep(500);
+    		} catch (InterruptedException e) {
+    			e.printStackTrace();
+    		}
+    		if(ClientUI.clientLogic.getTypeOfLastDataRecieved() == DataType.ERROR_MESSAGE) {
+    			System.out.println(ClientUI.clientLogic.getLastDataRecieved());
+    			return;
+    		}
+    		if(ClientUI.clientLogic.getTypeOfLastDataRecieved() != DataType.SINGLE_TEXT_STRING) {
+    			System.out.println("Houston, we got a problem!");
+    			return;
+    		}
+    		
+    		System.out.println(dish.getName() + " removed from your menu");
+    		ClientUI.historyStack.popFxController().start(ClientUI.parentWindow);
+    	}
     }
 
     @FXML
