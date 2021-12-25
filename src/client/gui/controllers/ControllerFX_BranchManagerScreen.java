@@ -1,19 +1,22 @@
 package client.gui.controllers;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import client.gui.logic.ClientUI;
 import client.interfaces.IClientFxController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
-public class ControllerFX_BranchManagerScreen implements IClientFxController{
+public class ControllerFX_BranchManagerScreen implements IClientFxController, Initializable{
 
 	IClientFxController previous;
 	
@@ -39,6 +42,10 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController{
     @FXML
     private Button approveBusiness;
     
+
+    @FXML
+    private Button permissionBtn;
+    
     
 
     @FXML
@@ -59,6 +66,13 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController{
     void moveToViewReportWin(ActionEvent event) {
 //    	IClientFxController nextScreen = new ControllerFX_CategoriesScreen();
 //    	nextScreen.start(ClientUI.parentWindow);
+    }
+    
+    @FXML
+    void moveToChangePermissionWin(ActionEvent event) {
+    	IClientFxController nextScreen = new ControllerFX_ChangePermission();
+    	ClientUI.historyStack.pushFxController(this);
+    	nextScreen.start(ClientUI.parentWindow);
     }
     
 
@@ -107,6 +121,11 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController{
 	    	ClientUI.historyStack.clearControllerHistory();
 	    	ClientUI.loginScreen.start(ClientUI.parentWindow);
 	    }
+
+		@Override
+		public void initialize(URL location, ResourceBundle resources) {	
+			setWelcomeMessage();
+		}
 
 		
 	

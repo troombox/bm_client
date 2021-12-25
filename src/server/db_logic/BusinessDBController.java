@@ -57,4 +57,6 @@ public class BusinessDBController {
 					throw new BMServerException(ErrorType.BUSINESS_DOESNT_EXIST, "BUSINESS_DOESNT_EXIST");
 				}
 	}
+	
+	
 }

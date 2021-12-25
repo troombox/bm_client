@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import utility.entity.Business;
 import utility.entity.Client;
+import utility.entity.ClientChangePermission;
 import utility.entity.Supplier;
 import utility.enums.DataType;
 import utility.enums.RequestType;
@@ -130,11 +131,11 @@ public class MessageParserBranchManager {
 		return new Business(Integer.parseInt(msg.get(2)),msg.get(3),Integer.parseInt(msg.get(4)),Integer.parseInt(msg.get(5)),msg.get(6));
 	}
 
-	public static Object prepareMessageWithDataType_Client(Business business, RequestType requestType) {
+	public static Object prepareMessageWithDataType_Business(Business business, RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
 
 		messageToPrepare.add(requestType.toString());
-		messageToPrepare.add(DataType.CLIENT.toString());
+		messageToPrepare.add(DataType.APPROVE_BUSINESS.toString());
 		messageToPrepare.add(String.valueOf(business.getBusinessId()));
 		messageToPrepare.add(business.getBusinessName());
 		messageToPrepare.add(String.valueOf(business.getIsApproved()));
@@ -157,5 +158,64 @@ public class MessageParserBranchManager {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		return msg.get(0);
 	}
+
 	
+	//-------------------------------------------------------->user
+	public static Object prepareMessageWithDataType_getDataOfClient(String branchName,RequestType requestType) {
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.GET_DATA_OF_CLIENT.toString());
+		messageToPrepare.add(branchName);
+		return messageToPrepare;
+	}	
+	
+	public static Object prepareMessageWithDataType_GetDataOfClient(ArrayList<String> clientList, RequestType requestType) {
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.GET_DATA_OF_CLIENT.toString());
+		messageToPrepare.addAll(clientList);
+		return messageToPrepare;
+	}
+	
+	public static ArrayList<ClientChangePermission> handleMessageExtractDataType_GetDataOfClient(Object message) {
+		ArrayList<String> msg = (ArrayList<String>) message;
+		ArrayList<ClientChangePermission> parsedData = new ArrayList<ClientChangePermission>();
+		if (!msg.get(1).equals("GET_DATA_OF_CLIENT")) {
+			// TODO:ADD ERROR HANDLING
+			return null;
+		}
+		for(int i = 2 ; i+4 < msg.size() ; i+=5) {
+			ClientChangePermission client = new ClientChangePermission(msg.get(i), msg.get(i+1),msg.get(i+2), msg.get(i+3),msg.get(i+4));
+			parsedData.add(client);
+		}
+		return parsedData;
+	}
+	
+	public static Object prepareMessageWithDataType_changePermission(ClientChangePermission client,RequestType requestType) {
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.CHANGE_PERMISSION.toString());
+		messageToPrepare.add(client.getFirstName());
+		messageToPrepare.add(client.getLastName());
+		messageToPrepare.add(client.getBranch());
+		messageToPrepare.add(client.getStatus());
+		messageToPrepare.add(client.getId());
+		return messageToPrepare;
+	}
+	
+	public static Object prepareMessageWithResultOfChangePermission(RequestType requestType) {
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.CHANGE_PERMISSION.toString());
+		
+		return messageToPrepare;
+	}
+	
+	public static String handleMessageExtractDataTypeResultOfChangePermission(Object message) {
+		ArrayList<String> msg = (ArrayList<String>) message;
+		return msg.get(0);
+	}
 }

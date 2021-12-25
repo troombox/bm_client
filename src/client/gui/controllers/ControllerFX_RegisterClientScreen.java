@@ -77,15 +77,20 @@ public class ControllerFX_RegisterClientScreen implements IClientFxController {
     	String employerCode = employerCodTxt.getText(),budget = monthlyBalanceTxt.getText();
     	Client client = null;
     	String personalBranch = ClientUI.clientLogic.getLoggedUser().getPersonalBranch();
+    	boolean flag = false;
     	UserType type;
     	if(businessCheckBox.isSelected() &&checkValidInputForBusiness(id,first,last,email,phone,cradit,employerCode,budget)) {
+    		flag = true;
     		type = UserType.CLIENT_BUSINESS;
     		client = new Client(Integer.parseInt(id),first,last,personalBranch,email,phone,
     									Integer.parseInt(cradit),Integer.parseInt(employerCode),Integer.parseInt(budget),type);
     	}
     	else if(checkValidInputForPersonal(id,first,last,email,phone,cradit)) {
+    		flag = true;
     		type = UserType.CLIENT_PERSONAL;
     		client = new Client(Integer.parseInt(id),first,last,personalBranch,email,phone,Integer.parseInt(cradit),-1,-1,type);
+    	}else if(!flag){
+    		return;
     	}
     		ClientUI.clientLogic.sendMessageToServer(client,DataType.CLIENT, RequestType.CLIENT_REQUEST_TO_SERVER_REGISTER_CLIENT);
     		try {
@@ -136,7 +141,7 @@ public class ControllerFX_RegisterClientScreen implements IClientFxController {
 	    
 	    private boolean checkValidInputForBusiness(String id, String first ,String last, String email,String phone,String cradit,String employerCode,String monthlyBalance) {
 	    	 if (id.trim().isEmpty()) {
-	    		 messageLabelTxt.setText("You must enter an Email");
+	    		 messageLabelTxt.setText("must enter all fields");
 				return false;
 	    	 }
 	    	 if (first.trim().isEmpty()) {
@@ -171,7 +176,7 @@ public class ControllerFX_RegisterClientScreen implements IClientFxController {
 	    }
 	    private boolean checkValidInputForPersonal(String id, String first ,String last, String email,String phone,String cradit) {
 	    	 if (id.trim().isEmpty()) {
-	    		 messageLabelTxt.setText("You must enter an Email");
+	    		 messageLabelTxt.setText("must enter all fields");
 				return false;
 	    	 }
 	    	 if (first.trim().isEmpty()) {

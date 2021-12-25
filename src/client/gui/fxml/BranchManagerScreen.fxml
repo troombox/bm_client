@@ -10,7 +10,7 @@
    <children>
       <Pane prefHeight="89.0" prefWidth="606.0" style="-fx-background-color: #FF5700;">
          <children>
-            <Label id="titleTxt" fx:id="titleTxt" layoutX="161.0" layoutY="42.0" prefHeight="34.0" prefWidth="285.0" style="-fx-font-size: 20; -fx-text-fill: white; -fx-font-weight: bold;" text="EmptyText" />
+            <Label id="titleTxt" fx:id="titleTxt" layoutX="120.0" layoutY="42.0" prefHeight="34.0" prefWidth="394.0" style="-fx-font-size: 20; -fx-text-fill: white; -fx-font-weight: bold;" />
             <Pane layoutY="-3.0" prefHeight="33.0" prefWidth="606.0" style="-fx-background-color: #E64A19;">
                <effect>
                   <DropShadow />
@@ -27,7 +27,7 @@
       </Pane>
       <Pane prefHeight="414.0" prefWidth="606.0">
          <children>
-            <VBox alignment="TOP_CENTER" layoutX="213.0" layoutY="84.0" prefHeight="239.0" prefWidth="180.0" spacing="30.0">
+            <VBox alignment="TOP_CENTER" layoutX="183.0" layoutY="77.0" prefHeight="295.0" prefWidth="241.0" spacing="30.0">
                <children>
                   <Button id="registerClentBtn" fx:id="registerClientBtn" mnemonicParsing="false" onAction="#moveToRegisterClientWin" prefHeight="34.0" prefWidth="140.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="register new client">
                      <effect>
@@ -45,6 +45,11 @@
                      </effect>
                   </Button>
                   <Button fx:id="viewRepBtn" mnemonicParsing="false" onAction="#moveToViewReportWin" prefHeight="34.0" prefWidth="140.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="view report">
+                     <effect>
+                        <DropShadow />
+                     </effect>
+                  </Button>
+                  <Button id="permissionBtn" fx:id="permissionBtn" mnemonicParsing="false" onAction="#moveToChangePermissionWin" prefHeight="34.0" prefWidth="140.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="change permission">
                      <effect>
                         <DropShadow />
                      </effect>

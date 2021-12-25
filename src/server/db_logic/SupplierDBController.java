@@ -70,8 +70,8 @@ public class SupplierDBController {
 			rs.close();
 		
 		}catch (SQLException e) {
-			e.printStackTrace();
-			throw new BMServerException(ErrorType.CLIENT_ALREADY_EXIST, "CLIENT_ALREADY_EXIST");
+			//e.printStackTrace();
+			throw new BMServerException(ErrorType.SUPPLIER_ALREADY_EXIST, "SUPPLIER_ALREADY_EXIST");
 		}
 	}
 	

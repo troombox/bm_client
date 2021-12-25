@@ -116,12 +116,12 @@ public class ControllerFX_RegisterSupplierScreen implements IClientFxController,
 			resultTxt.setText("You must enter a restaurant name");
 			return false;
    	 	}
-		if(categoryCmbo.trim().isEmpty()) {
-			resultTxt.setText("You must enter a restaurant name");
+		if(categoryCmbo == null) {
+			resultTxt.setText("You must enter a category");
 			return false;
 		}
 		if(workerID.trim().isEmpty()) {
-			resultTxt.setText("You must enter a restaurant name");
+			resultTxt.setText("You must enter a worker id");
 			return false;
 		}
 		

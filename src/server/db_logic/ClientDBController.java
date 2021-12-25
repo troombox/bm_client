@@ -5,9 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import server.exceptions.BMServerException;
 import utility.entity.Client;
+import utility.entity.ClientChangePermission;
 import utility.enums.ErrorType;
 import utility.enums.UserType;
 
@@ -101,6 +103,77 @@ public class ClientDBController {
 			e.printStackTrace();
 			throw new BMServerException(ErrorType.CLIENT_ALREADY_EXIST, "CLIENT_ALREADY_EXIST");
 		}
+		
+	}
+	
+	public ArrayList<String> getClientInfo(String branchName) throws BMServerException {
+		ResultSet rs = null;
+		PreparedStatement ps;
+		ArrayList<String> clientList = new ArrayList<>();
+		try
+			{
+			String query = "SELECT * FROM  `"+ dbName + "`." + userTableNameInDB + " WHERE personalBranch = ? AND (userType = ? OR userType = ?) AND (status = ? OR status = ?)";
+			ps = dbConnection.prepareStatement(query);
+			ps.setString(1, branchName);
+			ps.setString(2, "CLIENT_PERSONAL");
+			ps.setString(3, "CLIENT_BUSINESS");
+			ps.setString(4,"frozen");
+			ps.setString(5,"active");
+			rs = ps.executeQuery();
+			if(!rs.next()) {
+				throw new BMServerException(ErrorType.NO_CLIENTS_IN_THIS_BRANCH, "NO_CLIENTS_IN_THIS_BRANCH");
+			}
+			clientList.add(rs.getString(2));
+			clientList.add(rs.getString(3));
+			clientList.add(branchName);
+			clientList.add(rs.getString(8));
+			clientList.add(rs.getString(1));
+			while(rs.next()) {
+			clientList.add(rs.getString(2));
+			clientList.add(rs.getString(3));
+			clientList.add(branchName);
+			clientList.add(rs.getString(8));
+			clientList.add(rs.getString(1));
+			}
+			return clientList;
+			}catch(SQLException e) {
+				e.printStackTrace();
+				throw new BMServerException(ErrorType.NO_CLIENTS_IN_THIS_BRANCH, "NO_CLIENTS_IN_THIS_BRANCH");
+			}
+	}
+
+
+	public void changePermissionRequest(String newStatus, String id) throws BMServerException {
+		ResultSet rs = null;
+		PreparedStatement ps;
+		try {
+			String query = "UPDATE `" + dbName + "`." + userTableNameInDB + " SET status = ? WHERE userId = ?";
+			ps = dbConnection.prepareStatement(query);
+			ps.setString(1, newStatus);
+			ps.setInt(2, Integer.parseInt(id));
+			ps.executeUpdate();
+			if(newStatus.equals("unregistered")) {
+				query = "SELECT userType FROM  `"+ dbName + "`." + userTableNameInDB + " WHERE userId = ?";
+				ps = dbConnection.prepareStatement(query);
+				ps.setInt(1, Integer.parseInt(id));
+				rs = ps.executeQuery();
+				rs.next();
+				if(rs.getString(1).equals("CLIENT_PERSONAL")) {
+					query = "DELETE FROM `"+ dbName + "`." + personalClientTableInDB + " WHERE userId = ?";
+					ps = dbConnection.prepareStatement(query);
+					ps.setInt(1, Integer.parseInt(id));
+					ps.execute();
+				}else {
+					query = "DELETE FROM `"+ dbName + "`." + businesslClientTableInDB + " WHERE userId = ?";
+					PreparedStatement ps2 = dbConnection.prepareStatement(query);
+					ps2.setInt(1, Integer.parseInt(id));
+					ps2.execute();
+				}
+			}
+		} catch (SQLException e) {
+			throw new BMServerException(ErrorType.UNKNOWN,"somthing went wrong");
+		}
+	
 		
 	}
 

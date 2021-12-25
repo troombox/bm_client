@@ -16,6 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import utility.entity.Business;
@@ -42,23 +43,54 @@ public class ControllerFX_ApproveBusinesses  implements  IClientFxController, In
 
     @FXML
     private ListView<String> listView;
+    
+    @FXML
+    private Label resultLabel;
+
+    
 
     @FXML
     void aproveRequest(ActionEvent event) {
     	User user = ClientUI.clientLogic.getLoggedUser();
     	ObservableList<String> item  = listView.getSelectionModel().getSelectedItems();
+    	if(item.isEmpty()) {
+    		resultLabel.setText("you must choose business");
+    		return;
+    	}
     	String selected = item.get(0);
     	Business business = new Business(selected,2,user.getPersonalBranch());
     	ClientUI.clientLogic.sendMessageToServer(business, DataType.APPROVE_BUSINESS,
 				RequestType.CLIENT_REQUEST_TO_SERVER_APPROVE_BUSINESS);
+    	
+    	if(ClientUI.clientLogic.getTypeOfLastDataRecieved() == DataType.ERROR_MESSAGE) {
+    		resultLabel.setText(ClientUI.clientLogic.getLastDataRecieved().toString());
+    		
+    	}else{
+    		resultLabel.setText(RequestType.SERVER_MESSAGE_TO_CLIENT_APPROVE_BUSINESS_SUCCESS.toString());
+    	}
+    	populateTable();
     }
 
     @FXML
     void declineRequest(ActionEvent event) {
+    	User user = ClientUI.clientLogic.getLoggedUser();
     	ObservableList<String> item  = listView.getSelectionModel().getSelectedItems();
+    	if(item.isEmpty()) {
+    		resultLabel.setText("you must choose business");
+    		return;
+    	}
     	String selected = item.get(0);
-    	ClientUI.clientLogic.sendMessageToServer(selected, DataType.APPROVE_BUSINESS,
-				RequestType.CLIENT_REQUEST_TO_SERVER_DECLINE_BUSINESS);
+    	Business business = new Business(selected,0,user.getPersonalBranch());
+    	ClientUI.clientLogic.sendMessageToServer(business, DataType.APPROVE_BUSINESS,
+				RequestType.CLIENT_REQUEST_TO_SERVER_APPROVE_BUSINESS);
+    	
+    	if(ClientUI.clientLogic.getTypeOfLastDataRecieved() == DataType.ERROR_MESSAGE) {
+    		resultLabel.setText(ClientUI.clientLogic.getLastDataRecieved().toString());
+    		
+    	}else{
+    		resultLabel.setText(RequestType.SERVER_MESSAGE_TO_CLIENT_DECLINE_BUSINESS_SUCCESS.toString());
+    	}
+    	populateTable();
     }
 
 
@@ -86,6 +118,13 @@ public class ControllerFX_ApproveBusinesses  implements  IClientFxController, In
 		ArrayList<String> recievedData = (ArrayList<String>) ClientUI.clientLogic.getLastDataRecieved();
 		List<String> recievedData1 = recievedData.subList(2, recievedData.size());
 		listView.getItems().setAll(recievedData1);
+		if(recievedData.size() == 2) { //if there is nothing in the list, disable the btn
+			ApproveBtn.setDisable(true);
+			DeclineBtn.setDisable(true);
+		}else {
+			ApproveBtn.setDisable(false);
+			DeclineBtn.setDisable(false);
+		}
 	}
     
 	@Override

@@ -1,6 +1,7 @@
 package server.logic;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import ocsf.server.AbstractServer;
@@ -95,6 +96,10 @@ public class BMServerLogic extends AbstractServer {
 			handleGetDataOfBusiness(actionRequired, msg, client);
 		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_APPROVE_BUSINESS) {
 			handleApproveBusiness(actionRequired, msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA_CLIENT_INFO) {
+			handleGetDataOfClient(actionRequired, msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_CHANGE_PERMISSION) {
+			handleChangePermission(actionRequired, msg, client);
 		}
 		serverPrintToGuiLog("Message From Client Handled, action: " + actionRequired.toString(), true);
 	}
@@ -281,9 +286,6 @@ public class BMServerLogic extends AbstractServer {
 		Object response;
 			message = businessDBConteroller.getBusinessesNames(branch);
 			if(message != null) {
-			for(String i :message) {
-				System.out.println(i);
-			}
 			response = MessageParserBranchManager.prepareMessageWithResultOfGettingData_Business(RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA_BUSINESSES_NAMES,message);
 			sendMessageToGivenClient(response, client);
 	
@@ -305,6 +307,41 @@ public class BMServerLogic extends AbstractServer {
 		}
 		
 	}
+	private void handleGetDataOfClient(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		ArrayList<String> message = (ArrayList<String>)msg;
+		ArrayList<String> result;
+		Object response;
+		try {
+			result = clientDBController.getClientInfo(message.get(2));
+			response = MessageParserBranchManager.prepareMessageWithDataType_GetDataOfClient(result,actionRequired);
+			sendMessageToGivenClient(response, client);
+			
+		} catch (BMServerException e) {
+			response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(),
+					e.getMessage());
+			sendMessageToGivenClient(response, client);
+		}
+		
+	}
+	
+	private void handleChangePermission(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		ArrayList<String> message = (ArrayList<String>)msg;
+		Object response;
+		
+		try {
+			clientDBController.changePermissionRequest(message.get(5),message.get(6));
+			response = MessageParserBranchManager.prepareMessageWithResultOfChangePermission(
+					RequestType.SERVER_MESSAGE_TO_CLIENT_CHANGE_PERMISSION_SUCCESS);
+			sendMessageToGivenClient(response, client);
+		} catch (BMServerException e) {
+			response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(),
+					e.getMessage());
+			sendMessageToGivenClient(response, client);
+		}
+		
+		
+	}
+
 
 
 

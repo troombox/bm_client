@@ -44,6 +44,7 @@
                   <ListView id="listView" fx:id="listView" layoutX="103.0" layoutY="20.0" prefHeight="240.0" prefWidth="410.0" />
                </children>
             </AnchorPane>
+            <Label id="resultLabel" fx:id="resultLabel" layoutX="155.0" layoutY="381.0" prefHeight="17.0" prefWidth="352.0" />
          </children>
       </Pane>
    </children>

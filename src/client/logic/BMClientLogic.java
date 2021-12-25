@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import ocsf.client.AbstractClient;
 import utility.entity.Business;
 import utility.entity.Client;
+import utility.entity.ClientChangePermission;
 import utility.entity.Supplier;
 import utility.entity.User;
 import utility.enums.DataType;
@@ -57,15 +58,16 @@ public class BMClientLogic extends AbstractClient{
 				break;
 			case GET_DATA_OF_BUSINESS:
 				lastDataRecieved = messageFromServerToClient;
-				ArrayList<String> res =  (ArrayList<String>) messageFromServerToClient;
-				for(String i : res) {
-					System.out.println(i);
-				}
 				break;
 			case APPROVE_BUSINESS:
 				lastDataRecieved = MessageParserBranchManager.handleMessageExtractDataTypeResultOfApproveBusiness(messageFromServerToClient);
 				break;
-				
+			case GET_DATA_OF_CLIENT:
+				lastDataRecieved = MessageParserBranchManager.handleMessageExtractDataType_GetDataOfClient(messageFromServerToClient);
+				break;
+			case CHANGE_PERMISSION:
+				lastDataRecieved = MessageParserBranchManager.handleMessageExtractDataTypeResultOfChangePermission(messageFromServerToClient);
+				break;
 			default:
 				System.out.println("ERROR, UNKNOWN DATA TYPE");
 		}	
@@ -98,7 +100,13 @@ public class BMClientLogic extends AbstractClient{
 			message = MessageParserBranchManager.prepareMessageWithDataType_GET_DATA_OF_BUSINESS((String)dataToSendToServer, requestType);
 			break;
 		case APPROVE_BUSINESS:
-			message = MessageParserBranchManager.prepareMessageWithDataType_Client((Business)dataToSendToServer,requestType);
+			message = MessageParserBranchManager.prepareMessageWithDataType_Business((Business)dataToSendToServer,requestType);
+			break;
+		case GET_DATA_OF_CLIENT:
+			message = MessageParserBranchManager.prepareMessageWithDataType_getDataOfClient((String)dataToSendToServer,requestType);
+			break;
+		case CHANGE_PERMISSION:
+			message = MessageParserBranchManager.prepareMessageWithDataType_changePermission((ClientChangePermission)dataToSendToServer, requestType);
 			break;
 		case ARRAYLIST_STRING:
 			ArrayList<String> arraylist = (ArrayList<String>)dataToSendToServer;
