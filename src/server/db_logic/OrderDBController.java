@@ -28,23 +28,53 @@ public class OrderDBController {
 		PreparedStatement ps;
 		try {
 			String query = "SELECT * FROM  `"+ dbName + "`." + ordersTableNameInDB +
-					" WHERE resID = '" + resId + "'";
+					" WHERE resID = '" + resId + "'"; //get list of all orders in this specific restaurant
 			ps = dbConnection.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			
-			if(!rs.next()) {//if restaurant doesn't exist 
+			if(!rs.next()) {//if there are no orders
 				throw new BMServerException(ErrorType.ORDERS_NOT_FOUND, "no orders found");
 			}
 			
-			//DB holds: a list of:[dish_ID|description|size|cooking_level|res_ID|price|name
-			//we don't want to return some fields back to client side after authentication, so we leave them blank
-			while(true) {
-//				result.add(new Order(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-//						rs.getString(6), rs.getString(7), rs.getString(8)));
+		
+			while(true) { //for each order
+				String query2 = "SELECT dishId FROM  `"+ dbName + "`." + "dish_in_order" +
+						" WHERE orderId = '" + rs.getInt(1) + "'"; //get list of all dishes in this order
+				PreparedStatement ps2 = dbConnection.prepareStatement(query2);
+				ResultSet rs2 = ps2.executeQuery();
+				
+				Order order = new Order(rs.getInt(1), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6),
+						rs.getString(7), rs.getString(9), rs.getString(10));
+				
+				if(!rs2.next()) {//if there are no dishes in this order 
+					rs2.close();
+					break;
+				}
+				
+				
+				while(true) {//for each dish in this order
+					String query3 = "SELECT * FROM  `"+ dbName + "`." + "dishes" +
+						" WHERE dishId = '" + rs2.getInt(3) + "'"; //get details for this dish
+					PreparedStatement ps3 = dbConnection.prepareStatement(query3);
+					ResultSet rs3 = ps3.executeQuery();
+					if(rs3.next()) { 
+						order.getDishesInOrder().add(new Dish(rs3.getString(1), rs3.getString(2), rs3.getString(3), rs3.getString(4),
+						rs3.getString(5), rs3.getString(6), rs3.getString(7), rs3.getString(8)));
+					} else rs3.close();
+					if(rs2.next()) break;
+					
+				}
+				
+				
+				result.add(order);
 				if(!rs.next()) break;
 			}
 			
+			
+			
 			rs.close();
+			
+			
 			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();

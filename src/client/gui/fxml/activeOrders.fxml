@@ -40,11 +40,11 @@
                            <children>
                               <TableView fx:id="waitForApprovalTable" prefHeight="294.0" prefWidth="606.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                 <columns>
-                                  <TableColumn prefWidth="75.0" text="order ID" />
-                                  <TableColumn prefWidth="75.0" text="order time" />
-                                    <TableColumn prefWidth="97.59996032714844" text="type of order" />
-                                    <TableColumn prefWidth="101.5999755859375" text="phone number" />
-                                    <TableColumn prefWidth="75.0" text="address" />
+                                  <TableColumn fx:id="orderIDwaitForApproval" prefWidth="75.0" text="order ID" />
+                                  <TableColumn fx:id="orderTimeWaitForApproval" prefWidth="75.0" text="order time" />
+                                    <TableColumn fx:id="typeOfOrderWaitForApproval" prefWidth="97.59996032714844" text="type of order" />
+                                    <TableColumn fx:id="phoneWaitForApproval" prefWidth="101.5999755859375" text="phone number" />
+                                    <TableColumn fx:id="addressWaitForApproval" prefWidth="75.0" text="address" />
                                 </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

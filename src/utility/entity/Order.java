@@ -16,6 +16,10 @@ public class Order {
 	
 	private int restaurantID;
 	private String typeOfOrder;
+	
+	private int totalPrice;
+	private String timeOfOrder;
+	private String timeOfArrival;
 
 	private ArrayList<Dish> dishesInOrder;
 	
@@ -37,16 +41,19 @@ public class Order {
 		this.typeOfOrder = typeOfOrder;
 	}
 	
-	public Order( int orderID, String typeOfOrder, String deliveryAddress, String status, String fullName, 
-			String userPhone, int restaurantID) {
+	public Order( int orderID, String typeOfOrder, String deliveryAddress, String status, int totalPrice,
+			String timeOfOrder, String fullName, String userPhone) {
+		
 		dishesInOrder = new ArrayList<Dish>();
 		this.orderID = orderID;
+		this.typeOfOrder = typeOfOrder;
 		this.deliveryAddress = deliveryAddress;
 		this.status = status;
+		this.totalPrice = totalPrice;
+		this.timeOfOrder = timeOfOrder;		
 		this.fullName = fullName;
 		this.userPhone = userPhone;
-		this.restaurantID = restaurantID;
-		this.typeOfOrder = typeOfOrder;
+		
 	}
 	
 	

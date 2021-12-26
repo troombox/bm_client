@@ -25,6 +25,7 @@ public class BMServerLogic extends AbstractServer {
 	RestaurantDBController restaurantDBController;
 	HRDBController hrDBController;
 	DishesDBController dishesDBController;
+	OrderDBController orderDBController;
 	
 	boolean flagFileIncoming = false;
 	ConnectionToClient fileSenderClient = null;
@@ -417,7 +418,7 @@ public class BMServerLogic extends AbstractServer {
 		if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_ORDERS_BY_RESTAURANT_ID_REQUEST) {
 			Object response;
     		try {
-    			OrderDBController.getOrdersByResId(resId);
+    			orderDBController.getOrdersByResId(resId);
     			response = MessageParserTextString.prepareMessageWithDataType_SingleTextString("your dish deleted", 
 						RequestType.SERVER_MESSAGE_TO_CLIENT_UPDATED_DISH_SUCCESS);
     			sendMessageToGivenClient(response,client);
