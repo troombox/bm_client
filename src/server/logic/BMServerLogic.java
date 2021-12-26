@@ -26,6 +26,7 @@ public class BMServerLogic extends AbstractServer {
 	RestaurantDBController restaurantDBController;
 	HRDBController hrDBController;
 	DishesDBController dishesDBController;
+
 	
 	boolean flagFileIncoming = false;
 	ConnectionToClient fileSenderClient = null;
@@ -90,6 +91,15 @@ public class BMServerLogic extends AbstractServer {
 		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_MENU_REQUEST) {
 			handleGetMenuRequest(actionRequired, msg, client);
 		}
+		else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_APRROVE_BUSINESS) {
+			handleApproveBusinessRequest(actionRequired,msg,client);
+		}
+		else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_CHECK_APRROVE_BUSINESS) {
+			handleCheckApproveBusinessRequest(actionRequired,msg,client);
+		}
+		else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_APPROVED_BUSINESS_CLIENTS) {
+			handleGetRequest(actionRequired, msg, client);
+		}
 		serverPrintToGuiLog("Message From Client Handled, action: " + actionRequired.toString(), true);
 	}
 
@@ -129,6 +139,31 @@ public class BMServerLogic extends AbstractServer {
 	}
 
 	// ---------------------- HELPER FUNCTIONS --------------------------
+	
+	private void handleApproveBusinessRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		DataType messageDataType = MessageParser.parseMessage_DataType(msg);
+		switch (messageDataType) {
+			case HR_MANAGER:
+				int hr_id = MessageParserHR.handleMessageFromClient_ApproveBusinessClient((ArrayList<String>) msg);
+				HRDBController.approveBusiness(hr_id);
+				break;
+		}
+	}
+	
+	private void handleCheckApproveBusinessRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		int isBusinessApproved = 0;
+		ArrayList<String> message;
+		DataType messageDataType = MessageParser.parseMessage_DataType(msg);
+		switch (messageDataType) {
+			case HR_MANAGER:
+				int hr_id = MessageParserHR.handleMessageFromClient_ApproveBusinessClient((ArrayList<String>) msg);
+				isBusinessApproved = HRDBController.CheckApproveBusiness(hr_id);
+				message = MessageParserHR.prepareMessageToServer_HRCheckApproveBusiness(isBusinessApproved,messageDataType,actionRequired);
+				sendMessageToGivenClient(message,client);
+				break;
+			
+		}		
+	}
 
 	private void handleWriteRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
 		DataType messageDataType = MessageParser.parseMessage_DataType(msg);
@@ -140,6 +175,10 @@ public class BMServerLogic extends AbstractServer {
 //					Object response = MessageParser.createMessageToClientDataType_Error(error);
 //					sendMessageToGivenClient(response,client);
 //				}
+			break;
+		case HR_MANAGER:
+			boolean response = HRDBController.updateUsersInDB((ArrayList<String>)msg);
+			//sendMessageToGivenClient(response,client);
 			break;
 		case UNKNOWN:
 			// TODO: HANDLE ERROR - UNKNOWN DATA TYPE?
@@ -165,9 +204,16 @@ public class BMServerLogic extends AbstractServer {
 //				sendMessageToGivenClient(response,client);
 			break;
 		case HR_MANAGER:
-			ArrayList<String> gotFromClient = MessageParserHR.handleMessageFromClient_HRGetData(msg);
-			Object response = HRDBController.getUsersToApproveFromDB(Integer.parseInt(gotFromClient.get(2)));
-			sendMessageToGivenClient(response,client);
+			if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_APPROVED_BUSINESS_CLIENTS) {
+				ArrayList<String> gotFromClient = MessageParserHR.handleMessageFromClient_HRGetData(msg);
+				Object response = HRDBController.getApprovedUsers(Integer.parseInt(gotFromClient.get(2)));
+				sendMessageToGivenClient(response,client);
+			}
+			else {
+				ArrayList<String> gotFromClient = MessageParserHR.handleMessageFromClient_HRGetData(msg);
+				Object response = HRDBController.getUsersToApproveFromDB(Integer.parseInt(gotFromClient.get(2)));
+				sendMessageToGivenClient(response,client);
+			}
 			break;
 		case UNKNOWN:
 			// TODO: HANDLE ERROR - UNKNOWN DATA TYPE?

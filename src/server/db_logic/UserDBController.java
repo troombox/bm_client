@@ -44,6 +44,12 @@ public class UserDBController {
 			if(rs.getBoolean(10) == true) {
 				throw new BMServerException(ErrorType.INVALID_CREDENTIALS_USER_ALREADY_LOGGED_IN, "user currently logged");
 			}
+			if(rs.getString(8).equals("unregistered")) {
+				throw new BMServerException(ErrorType.USER_STATUS_UNREGISTERED, "user account is not registered");
+			}
+			if(rs.getString(8).equals("frozen")) {
+				throw new BMServerException(ErrorType.USER_STATUS_FROZEN, "user account is frozen");
+			}
 			UserType userType = UserType.fromString(rs.getString(7)); 
 			//DB holds:[user_ID|firstName|lastName|personalBranch|email|phone|userType|status|w4c(!)|isSignedIn|password]
 			//we don't want to return some fields back to client side after authentication, so we leave them blank
