@@ -55,6 +55,8 @@ public class MessageParser {
 			return RequestType.CLIENT_REQUEST_TO_SERVER_UPDATE_DISH_IN_MENU_REQUEST;
 		case "CLIENT_REQUEST_TO_SERVER_DELETE_DISH_FROM_MENU_REQUEST":
 			return RequestType.CLIENT_REQUEST_TO_SERVER_DELETE_DISH_FROM_MENU_REQUEST;
+		case "CLIENT_REQUEST_TO_SERVER_GET_ORDERS_BY_RESTAURANT_ID_REQUEST":
+			return RequestType.CLIENT_REQUEST_TO_SERVER_GET_ORDERS_BY_RESTAURANT_ID_REQUEST;
 		default:
 			// TODO: ADD error handling for this case;
 			return RequestType.CLIENT_REQUEST_TO_SERVER_UNKNOWN_REQUEST;
@@ -67,6 +69,8 @@ public class MessageParser {
 		switch (msg.get(1)) {
 		case "ORDER":
 			return DataType.ORDER;
+		case "ORDERS_LIST":
+			return DataType.ORDERS_LIST;
 		case "USER":
 			return DataType.USER;
 		case "CLIENT":

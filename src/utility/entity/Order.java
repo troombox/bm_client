@@ -128,4 +128,40 @@ public class Order {
 	public int getAmountOfDishes() {
 		return dishesInOrder.size();
 	}
+
+	public int getOrderID() {
+		return orderID;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public int getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(int totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
+	public String getTimeOfOrder() {
+		return timeOfOrder;
+	}
+
+	public String getTimeOfArrival() {
+		return timeOfArrival;
+	}
+
+	public void setTimeOfArrival(String timeOfArrival) {
+		this.timeOfArrival = timeOfArrival;
+	}
 }

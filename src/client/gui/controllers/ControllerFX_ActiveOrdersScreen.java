@@ -135,6 +135,35 @@ public class ControllerFX_ActiveOrdersScreen implements IClientFxController, Ini
         stage.show();
 
 	}
+	
+	private void populateTable() {
+		
+		ClientUI.clientLogic.sendMessageToServer(res.getRes_ID(),
+				DataType.SINGLE_TEXT_STRING, RequestType.CLIENT_REQUEST_TO_SERVER_GET_ORDERS_BY_RESTAURANT_ID_REQUEST);
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		if(ClientUI.clientLogic.getTypeOfLastDataRecieved() == DataType.ERROR_MESSAGE)
+			{
+				Alert alert = new Alert(AlertType.INFORMATION);
+		    	alert.setTitle("Error");
+		    	alert.setHeaderText(null);
+		    	alert.setContentText(ClientUI.clientLogic.getLastDataRecieved().toString());
+		    	alert.showAndWait();
+		    	return;
+			}
+			if(ClientUI.clientLogic.getTypeOfLastDataRecieved() != DataType.ORDERS_LIST) {
+				System.out.println("Houston, we got a problem!");
+				return;
+			}	
+		ArrayList<Order> recievedData = (ArrayList<Order>) ClientUI.clientLogic.getLastDataRecieved();
+		waitForApprovalTable.getItems().setAll(recievedData);
+
+	}
+	
+	
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -144,6 +173,7 @@ public class ControllerFX_ActiveOrdersScreen implements IClientFxController, Ini
 		phoneWaitForApproval.setCellValueFactory(new PropertyValueFactory<Order, String>("userPhone"));
 		addressWaitForApproval.setCellValueFactory(new PropertyValueFactory<Order, String>("deliveryAddress"));
 
+		populateTable();
 		
 //		ClientUI.clientLogic.sendMessageToServer(res.getRes_ID(),
 //				DataType.SINGLE_TEXT_STRING, RequestType.CLIENT_REQUEST_TO_SERVER_GET_ORDERS_BY_RESTAURANT_ID_REQUEST);

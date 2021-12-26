@@ -63,6 +63,9 @@ public class BMClientLogic extends AbstractClient{
 			case SINGLE_TEXT_STRING:
 				lastDataRecieved = MessageParserTextString.handleMessageExtractDataType_SingleTextString(messageFromServerToClient);
 				break;
+			case ORDERS_LIST:
+				lastDataRecieved = MessageParserOrder.handleMessageExtractDataType_orders(messageFromServerToClient);
+				break;
 			default:
 				System.out.println("ERROR, UNKNOWN DATA TYPE");
 		}	

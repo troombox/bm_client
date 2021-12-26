@@ -46,6 +46,7 @@ public class BMServerLogic extends AbstractServer {
 		this.restaurantDBController = new RestaurantDBController(dbController);
 		this.hrDBController = new HRDBController(dbController);
 		this.dishesDBController = new DishesDBController(dbController);
+		this.orderDBController = new OrderDBController(dbController);
 	}
 
 	public void handleMessageFromClient(Object msg, ConnectionToClient client) {
@@ -56,7 +57,6 @@ public class BMServerLogic extends AbstractServer {
 //				//return;
 //			}
 //		//-*------------------
-		
 		// we are assuming message is ArrayList<String>
 		RequestType actionRequired = MessageParser.parseMessage_RequestType(msg);
 		if (actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA) {
@@ -418,9 +418,9 @@ public class BMServerLogic extends AbstractServer {
 		if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_ORDERS_BY_RESTAURANT_ID_REQUEST) {
 			Object response;
     		try {
-    			orderDBController.getOrdersByResId(resId);
-    			response = MessageParserTextString.prepareMessageWithDataType_SingleTextString("your dish deleted", 
-						RequestType.SERVER_MESSAGE_TO_CLIENT_UPDATED_DISH_SUCCESS);
+    			ArrayList<Order> orders = orderDBController.getOrdersByResId(resId);
+    			response = MessageParserOrder.prepareMessageWithDataType_Orders(orders, 
+						RequestType.SERVER_MESSAGE_TO_CLIENT_DATA_PROVIDED);
     			sendMessageToGivenClient(response,client);
             }catch(BMServerException e) {
                 response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(), e.getMessage());

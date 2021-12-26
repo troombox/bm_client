@@ -54,26 +54,29 @@ public class OrderDBController {
 				
 				while(true) {//for each dish in this order
 					String query3 = "SELECT * FROM  `"+ dbName + "`." + "dishes" +
-						" WHERE dishId = '" + rs2.getInt(3) + "'"; //get details for this dish
+						" WHERE dishId = '" + rs2.getInt(1) + "'"; //get details for this dish
 					PreparedStatement ps3 = dbConnection.prepareStatement(query3);
 					ResultSet rs3 = ps3.executeQuery();
 					if(rs3.next()) { 
 						order.getDishesInOrder().add(new Dish(rs3.getString(1), rs3.getString(2), rs3.getString(3), rs3.getString(4),
 						rs3.getString(5), rs3.getString(6), rs3.getString(7), rs3.getString(8)));
-					} else rs3.close();
-					if(rs2.next()) break;
+					} 
+					rs3.close();
+					if(!rs2.next()) {
+						rs2.close();
+						break;
+					}
 					
 				}
 				
 				
 				result.add(order);
-				if(!rs.next()) break;
+				if(!rs.next()) {
+					rs.close();
+					break;
+				}
 			}
-			
-			
-			
-			rs.close();
-			
+						
 			
 			return result;
 		} catch (SQLException e) {
