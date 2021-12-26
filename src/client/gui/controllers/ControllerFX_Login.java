@@ -96,7 +96,7 @@ public class ControllerFX_Login implements IClientFxController {
     		nextScreen.start(ClientUI.parentWindow);
     	}
     	if(userType == UserType.RESTAURANT_OWNER) {
-    		nextScreen = new ControllerFX_WelcomeSupplierScreen();
+    		nextScreen = new ControllerFX_SupplierScreen();
     		ClientUI.historyStack.pushFxController(this);
     		nextScreen.start(ClientUI.parentWindow);
     	}

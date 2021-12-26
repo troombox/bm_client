@@ -55,11 +55,12 @@ public class DishesDBController {
 		ResultSet rs;
 		PreparedStatement ps = null;
 		try {
-				String query = "SELECT COUNT(*) AS rowcount FROM `"+ dbName + "`." + dishesTableNameInDB;
+				String query = "SELECT * FROM `"+ dbName + "`." + dishesTableNameInDB
+						+ " WHERE dishId = (SELECT MAX(dishId) From `"+ dbName + "`." + dishesTableNameInDB +")";
 				ps = dbConnection.prepareStatement(query);
 				rs = ps.executeQuery();
 				rs.next();
-				int count = rs.getInt("rowcount");
+				int count = rs.getInt(1);
 				rs.close();
 				int id = count+1;
 				String query2 = "INSERT INTO `" + dbName + "`." + dishesTableNameInDB + "(dishId,resId,type,name,description,"

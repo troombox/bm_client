@@ -18,7 +18,6 @@ public class BMServerLogic extends AbstractServer {
 	ServerMainWindowController guiController;
 
 	DBController dbController;
-	OrderDBController orderDBController;
 	UserDBController userDBController;
 
 	ClientDBController clientDBController;
@@ -41,7 +40,6 @@ public class BMServerLogic extends AbstractServer {
 			System.out.println("Error Connecting to DB, can't init Server logic");
 			throw new Exception("Can't Connect To DB, Server not started");
 		}
-		this.orderDBController = new OrderDBController(dbController);
 		this.userDBController = new UserDBController(dbController);
 		this.clientDBController = new ClientDBController(dbController);
 		this.restaurantDBController = new RestaurantDBController(dbController);
@@ -97,13 +95,14 @@ public class BMServerLogic extends AbstractServer {
 			handleUpdateDishInMenuRequest(actionRequired, msg, client);
 		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_DELETE_DISH_FROM_MENU_REQUEST) {
 			handleDeleteDishFromMenuRequest(actionRequired, msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_ORDERS_BY_RESTAURANT_ID_REQUEST) {
+			handleGetOrdersFromSupplierRequest(actionRequired, msg, client);
 		}
 		
 		serverPrintToGuiLog("Message From Client Handled, action: " + actionRequired.toString(), true);
 	}
 
 	
-
 
 
 	public void sendMessageToGivenClient(Object msg, ConnectionToClient client) {
@@ -401,6 +400,24 @@ public class BMServerLogic extends AbstractServer {
 			Object response;
     		try {
     			dishesDBController.DeleteDishFromMenu(dish);
+    			response = MessageParserTextString.prepareMessageWithDataType_SingleTextString("your dish deleted", 
+						RequestType.SERVER_MESSAGE_TO_CLIENT_UPDATED_DISH_SUCCESS);
+    			sendMessageToGivenClient(response,client);
+            }catch(BMServerException e) {
+                response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(), e.getMessage());
+                sendMessageToGivenClient(response,client);
+            }
+		}
+		
+	}
+	
+	private void handleGetOrdersFromSupplierRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		String resId = MessageParserTextString.handleMessageExtractDataType_SingleTextString(msg);
+
+		if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_ORDERS_BY_RESTAURANT_ID_REQUEST) {
+			Object response;
+    		try {
+    			OrderDBController.getOrdersByResId(resId);
     			response = MessageParserTextString.prepareMessageWithDataType_SingleTextString("your dish deleted", 
 						RequestType.SERVER_MESSAGE_TO_CLIENT_UPDATED_DISH_SUCCESS);
     			sendMessageToGivenClient(response,client);

@@ -9,7 +9,8 @@ public enum ErrorType {
 	INVALID_CREDENTIALS_RESTAURANT_NOT_FOUND("INVALID_CREDENTIALS_RESTAURANT_NOT_FOUND"),
 	CLIENT_ALREADY_EXIST("CLIENT_ALREADY_EXIST"),
 	DISHES_NOT_FOUND("DISHES_NOT_FOUND"),
-	UNKNOWN("UNKNOWN_ERROR_TYPE");																//used internally, should not be sent as a type
+	UNKNOWN("UNKNOWN_ERROR_TYPE"),  			//used internally, should not be sent as a type
+	ORDERS_NOT_FOUND("ORDERS_NOT_FOUND");			
 	
 	private String errorType;
 	

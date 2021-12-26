@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="510.0" prefWidth="606.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="510.0" prefWidth="606.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.controllers.ControllerFX_ActiveOrdersScreen">
    <children>
       <Pane prefHeight="89.0" prefWidth="606.0" style="-fx-background-color: #FF5700;">
          <children>
@@ -21,8 +21,8 @@
                   <DropShadow />
                </effect>
                <children>
-                  <Button layoutX="525.0" layoutY="2.0" mnemonicParsing="false" prefHeight="19.0" prefWidth="75.0" style="-fx-background-color: #E64A19; -fx-font-weight: bold; -fx-font-size: 14;" text="sign out" />
-                  <Button layoutY="2.0" mnemonicParsing="false" prefHeight="19.0" prefWidth="75.0" style="-fx-background-color: #E64A19; -fx-font-weight: bold; -fx-font-size: 14;" text="back" />
+                  <Button layoutX="525.0" layoutY="2.0" mnemonicParsing="false" onAction="#signOut" prefHeight="19.0" prefWidth="75.0" style="-fx-background-color: #E64A19; -fx-font-weight: bold; -fx-font-size: 14;" text="sign out" />
+                  <Button layoutY="2.0" mnemonicParsing="false" onAction="#goBack" prefHeight="19.0" prefWidth="75.0" style="-fx-background-color: #E64A19; -fx-font-weight: bold; -fx-font-size: 14;" text="back" />
                </children>
             </Pane>
          </children>
@@ -32,13 +32,13 @@
       </Pane>
       <Pane prefHeight="414.0" prefWidth="606.0">
          <children>
-            <TabPane layoutX="19.0" layoutY="14.0" prefHeight="384.0" prefWidth="556.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane layoutY="-1.0" prefHeight="399.0" prefWidth="606.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="wait for approval">
                      <content>
-                        <AnchorPane prefHeight="328.0" prefWidth="546.0">
+                        <AnchorPane prefHeight="387.0" prefWidth="606.0">
                            <children>
-                              <TableView prefHeight="263.0" prefWidth="556.0">
+                              <TableView fx:id="waitForApprovalTable" prefHeight="294.0" prefWidth="606.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                 <columns>
                                   <TableColumn prefWidth="75.0" text="order ID" />
                                   <TableColumn prefWidth="75.0" text="order time" />
@@ -50,17 +50,17 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                               </TableView>
-                              <Button alignment="CENTER" contentDisplay="CENTER" layoutX="348.0" layoutY="288.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="95.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28; -fx-text-fill: #33691e;" text="approve order">
+                              <Button alignment="CENTER" contentDisplay="CENTER" layoutX="388.0" layoutY="315.0" mnemonicParsing="false" onAction="#approveOrder" prefHeight="35.0" prefWidth="95.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28; -fx-text-fill: #33691e;" text="approve order" AnchorPane.bottomAnchor="20.19999999999999">
                                  <effect>
                                     <DropShadow />
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="288.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="134.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="show dishes in order">
+                              <Button alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="288.0" mnemonicParsing="false" onAction="#showDishesInOrderWaitForApproval" prefHeight="35.0" prefWidth="134.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="show dishes in order" AnchorPane.bottomAnchor="20.0">
                                  <effect>
                                     <DropShadow />
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" contentDisplay="CENTER" layoutX="456.0" layoutY="288.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="85.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28; -fx-text-fill: #d50000;" text="cancel order">
+                              <Button alignment="CENTER" contentDisplay="CENTER" layoutX="456.0" layoutY="288.0" mnemonicParsing="false" onAction="#cancelOrder" prefHeight="35.0" prefWidth="85.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28; -fx-text-fill: #d50000;" text="cancel order" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0">
                                  <effect>
                                     <DropShadow />
                                  </effect>
@@ -71,17 +71,84 @@
                 </Tab>
                   <Tab text="in the kitchen">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="inTheKitchenTable" prefHeight="295.0" prefWidth="606.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                 <columns>
+                                    <TableColumn prefWidth="75.0" text="order ID" />
+                                    <TableColumn prefWidth="75.0" text="order time" />
+                                    <TableColumn prefWidth="97.59996032714844" text="type of order" />
+                                    <TableColumn prefWidth="101.5999755859375" text="phone number" />
+                                    <TableColumn prefWidth="75.0" text="address" />
+                                 </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                              <Button alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="288.0" mnemonicParsing="false" onAction="#inThekitchenShowDishesInOrder" prefHeight="35.0" prefWidth="134.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="show dishes in order" AnchorPane.bottomAnchor="20.0">
+                                 <effect>
+                                    <DropShadow />
+                                 </effect>
+                              </Button>
+                              <Button alignment="CENTER" contentDisplay="CENTER" layoutX="478.0" layoutY="288.0" mnemonicParsing="false" onAction="#orderReady" prefHeight="35.0" prefWidth="64.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28; -fx-text-fill: #33691e;" text="ready" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0">
+                                 <effect>
+                                    <DropShadow />
+                                 </effect>
+                              </Button>
+                           </children></AnchorPane>
                     </content>
                   </Tab>
                 <Tab text="ready">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="readyTable" prefHeight="296.0" prefWidth="606.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                 <columns>
+                                    <TableColumn prefWidth="75.0" text="order ID" />
+                                    <TableColumn prefWidth="75.0" text="order time" />
+                                    <TableColumn prefWidth="97.59996032714844" text="type of order" />
+                                    <TableColumn prefWidth="101.5999755859375" text="phone number" />
+                                    <TableColumn prefWidth="75.0" text="address" />
+                                 </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                              <Button alignment="CENTER" contentDisplay="CENTER" layoutX="455.0" layoutY="286.0" mnemonicParsing="false" onAction="#orderCompleted" prefHeight="35.0" prefWidth="86.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28; -fx-text-fill: #33691e;" text="completed" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0">
+                                 <effect>
+                                    <DropShadow />
+                                 </effect>
+                              </Button>
+                              <Button alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="286.0" mnemonicParsing="false" onAction="#readyShowDishesInOrder" prefHeight="35.0" prefWidth="134.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="show dishes in order" AnchorPane.bottomAnchor="20.0">
+                                 <effect>
+                                    <DropShadow />
+                                 </effect>
+                              </Button>
+                           </children></AnchorPane>
                   </content>
                 </Tab>
                   <Tab text="completed">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="completedTable" prefHeight="293.0" prefWidth="606.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                 <columns>
+                                    <TableColumn prefWidth="75.0" text="order ID" />
+                                    <TableColumn prefWidth="75.0" text="order time" />
+                                    <TableColumn prefWidth="97.59996032714844" text="type of order" />
+                                    <TableColumn prefWidth="101.5999755859375" text="phone number" />
+                                    <TableColumn prefWidth="75.0" text="address" />
+                                 </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                              <Button alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="290.0" mnemonicParsing="false" onAction="#completedShowDishesInOrder" prefHeight="35.0" prefWidth="134.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="show dishes in order" AnchorPane.bottomAnchor="20.0">
+                                 <effect>
+                                    <DropShadow />
+                                 </effect>
+                              </Button>
+                           </children></AnchorPane>
                     </content>
                   </Tab>
               </tabs>

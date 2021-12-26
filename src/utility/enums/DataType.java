@@ -13,7 +13,8 @@ public enum DataType {
 	DISHES_LIST("DISHES_LIST"),
 	RESTAURANT("RESTAURANT"),
 	UNKNOWN("UNKNOWN"), 						//used internally, should not be sent as a type
-	DISH("DISH");							
+	DISH("DISH"),
+	ORDERS_LIST("ORDERS_LIST");							
 	
 	private String dataType;
 	

@@ -44,7 +44,7 @@
                         <ComboBox fx:id="dishTypeComboBox" prefHeight="26.0" prefWidth="228.0" promptText="type of dish" />
                      </children>
                   </HBox>
-                  <TextArea fx:id="dishDescriptionTextBox" prefHeight="66.0" prefWidth="538.0" promptText="description" />
+                  <TextArea fx:id="dishDescriptionTextBox" prefHeight="66.0" prefWidth="538.0" promptText="description" wrapText="true" />
                   <HBox alignment="CENTER" prefHeight="146.0" prefWidth="538.0" spacing="20.0">
                      <children>
                         <VBox alignment="CENTER" prefHeight="36.0" prefWidth="374.0" spacing="5.0">
@@ -105,14 +105,14 @@
                   </HBox>
                   <HBox spacing="170.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#deleteDish" style="-fx-background-color: #f44336;">
+                        <Button mnemonicParsing="false" onAction="#deleteDish">
                            <HBox.margin>
                               <Insets left="30.0" />
                            </HBox.margin>
                            <graphic>
                               <ImageView fitHeight="33.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../../../images/delete.png" />
+                                    <Image url="@../../../../images/delete_red.png" />
                                  </image>
                               </ImageView>
                            </graphic>

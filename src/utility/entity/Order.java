@@ -1,94 +1,124 @@
 package utility.entity;
 
+import java.util.ArrayList;
+
 public class Order {
+	private int orderingUserID;
+	private int orderID;
 	
-	private final String orderNumber;
-	private String restaurantName,PhoneNumber,TypeOfOrder,orderAddress,orderTime;
-	private String orderState;
+	private String userFirstName;
+	private String userLastName;
+	private String fullName;
+	private String userPhone;
+	private String status;
 	
-	public Order(String orderNumber,String restaurantName,String orderTime,String PhoneNumber,String TypeOfOrder,String orderAddress ) {
-		this.restaurantName = restaurantName;
-		this.PhoneNumber = PhoneNumber;
-		this.TypeOfOrder = TypeOfOrder;
-		this.orderAddress = orderAddress;
-		this.orderNumber  = orderNumber;
-		this.orderTime = orderTime;
-		this.orderState = "COMPLETE";
+	private String deliveryAddress;
+	
+	private int restaurantID;
+	private String typeOfOrder;
+
+	private ArrayList<Dish> dishesInOrder;
+	
+	public Order(User user,  int restaurantID) {
+		this(user.getFirstName(), user.getLastName(), user.getPhone(), "", restaurantID, "");
 	}
 	
-	public Order(String orderNumber) {
-		this(orderNumber, "", "", "", "", "");
-		this.orderState = "INCOMPLETE";
+	public Order(User user, String deliveryAddress,  int restaurantID, String typeOfOrder) {
+		this(user.getFirstName(), user.getLastName(), user.getPhone(), deliveryAddress, restaurantID, typeOfOrder);
 	}
 	
-	public boolean setOrderToComplete() {
-		if(restaurantName.equals("") || PhoneNumber.equals("") || TypeOfOrder.equals("") || orderAddress.equals("") || orderTime.equals("")) {
-			return false;
+	public Order( String userFirstName, String userLastName, String userPhone, String deliveryAddress, int restaurantID, String typeOfOrder) {
+		dishesInOrder = new ArrayList<Dish>();
+		this.deliveryAddress = deliveryAddress;
+		this.userFirstName = userFirstName;
+		this.userLastName = userLastName;
+		this.userPhone = userPhone;
+		this.restaurantID = restaurantID;
+		this.typeOfOrder = typeOfOrder;
+	}
+	
+	public Order( int orderID, String typeOfOrder, String deliveryAddress, String status, String fullName, 
+			String userPhone, int restaurantID) {
+		dishesInOrder = new ArrayList<Dish>();
+		this.orderID = orderID;
+		this.deliveryAddress = deliveryAddress;
+		this.status = status;
+		this.fullName = fullName;
+		this.userPhone = userPhone;
+		this.restaurantID = restaurantID;
+		this.typeOfOrder = typeOfOrder;
+	}
+	
+	
+	public void addDish(Dish dish) {
+		dishesInOrder.add(dish);
+	}
+	
+	public void removeDish(Dish dish) {
+		dishesInOrder.remove(dish);
+	}
+	
+	public Dish getDishByDishID(String dishID) {
+		for (Dish d : dishesInOrder) {
+			if(d.getDish_ID().equals(dishID))
+				return d;
 		}
-		this.orderState = "COMPLETE";
-		return true;
+		return null;
+	}
+	
+	public boolean checkIfDishInOrderByDish(Dish dish) {
+		return checkIfDishInOrderByDishID(dish.getDish_ID());
+	}
+	
+	public boolean checkIfDishInOrderByDishID(String dishID) {
+		for (Dish d : dishesInOrder) {
+			if(d.getDish_ID().equals(dishID))
+				return true;
+		}
+		return false;
 	}
 
-	public String getRestaurantName() {
-		return restaurantName;
+	public int getOrderingUserID() {
+		return orderingUserID;
 	}
 
-	public String getPhoneNumber() {
-		return PhoneNumber;
+	public String getUserFirstName() {
+		return userFirstName;
+	}
+
+	public String getUserLastName() {
+		return userLastName;
+	}
+
+	public String getUserPhone() {
+		return userPhone;
+	}
+
+	public String getDeliveryAddress() {
+		return deliveryAddress;
+	}
+
+	public int getRestaurantID() {
+		return restaurantID;
 	}
 
 	public String getTypeOfOrder() {
-		return TypeOfOrder;
+		return typeOfOrder;
 	}
 
-	public String getOrderAddress() {
-		return orderAddress;
+	public ArrayList<Dish> getDishesInOrder() {
+		return dishesInOrder;
 	}
 
-	public String getOrderTime() {
-		return orderTime;
-	}
-
-	public String getOrderNumber() {
-		return orderNumber;
-	}
-
-	public String getOrderState() {
-		return orderState;
-	}
-
-	public void setRestaurantName(String restaurantName) {
-		if(restaurantName == null || restaurantName.equals("")) {
-			throw new IllegalArgumentException("Setting restaurantName to empty value");
-		}
-		this.restaurantName = restaurantName;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		if(phoneNumber == null || phoneNumber.equals("")) {
-			throw new IllegalArgumentException("Setting phoneNumber to empty value");
-		}
-		PhoneNumber = phoneNumber;
+	public void setDeliveryAddress(String deliveryAddress) {
+		this.deliveryAddress = deliveryAddress;
 	}
 
 	public void setTypeOfOrder(String typeOfOrder) {
-		if(typeOfOrder == null || typeOfOrder.equals("")) {
-			throw new IllegalArgumentException("Setting typeOfOrder to empty value");
-		}
-		TypeOfOrder = typeOfOrder;
+		this.typeOfOrder = typeOfOrder;
 	}
 
-	public void setOrderAddress(String orderAddress) {
-		if(orderAddress == null || orderAddress.equals("")) {
-			throw new IllegalArgumentException("Setting orderAddress to empty value");
-		}
-		this.orderAddress = orderAddress;
-	}
-
-	public void setOrderTime(String orderTime) {
-		if(orderTime == null || orderTime.equals("")) {
-			throw new IllegalArgumentException("Setting orderTime to empty value");
-		}
-		this.orderTime = orderTime;
+	public int getAmountOfDishes() {
+		return dishesInOrder.size();
 	}
 }
