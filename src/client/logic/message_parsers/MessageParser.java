@@ -23,7 +23,6 @@ public class MessageParser {
 			return RequestType.SERVER_MESSAGE_TO_CLIENT_ERROR;
 		case "SERVER_MESSAGE_TO_CLIENT_REGISTER_SUCCESS":
 			return RequestType.SERVER_MESSAGE_TO_CLIENT_REGISTER_SUCCESS;
-
 		default:
 			//TODO: ADD error handling for this case;
 			return RequestType.CLIENT_REQUEST_TO_SERVER_UNKNOWN_REQUEST;
@@ -44,10 +43,6 @@ public class MessageParser {
 			return DataType.SINGLE_TEXT_STRING;
 		case "ERROR_MESSAGE":
 			return DataType.ERROR_MESSAGE;
-
-		case "RESTAURANTS_LIST":
-			return DataType.RESTAURANTS_LIST;
-
 		default:
 			//TODO: ADD error handling for this case;
 			return DataType.UNKNOWN;

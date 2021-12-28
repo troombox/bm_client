@@ -2,6 +2,7 @@ package client.gui.controllers;
 
 import java.io.IOException;
 
+import client.debug.TempScreenControllerFx;
 import client.gui.logic.ClientUI;
 import client.interfaces.IClientFxController;
 import javafx.event.ActionEvent;
@@ -47,14 +48,13 @@ public class ControllerFX_ClientW4Cscreen implements IClientFxController {
     	if(!checkW4CInputText(w4cText)) {
     		return;
     	}
-    	//System.out.println(ClientUI.clientLogic.getLoggedUser().toString());
+    	System.out.println(ClientUI.clientLogic.getLoggedUser().toString());
     	IClientFxController nextScreen = new ControllerFX_CategoriesScreen();
     	nextScreen.start(ClientUI.parentWindow);
     }
 
     @FXML
     void doGoBack(ActionEvent event) {
-    	ClientUI.clientLogic.logOutUser();
     	ClientUI.historyStack.popFxController().start(ClientUI.parentWindow);
     }
 
@@ -70,7 +70,6 @@ public class ControllerFX_ClientW4Cscreen implements IClientFxController {
     @FXML
     void doSignOut(ActionEvent event) {
     	ClientUI.clientLogic.logOutUser();
-    	ClientUI.historyStack.clearControllerHistory();
     	ClientUI.loginScreen.start(ClientUI.parentWindow);
     }
 
@@ -92,13 +91,11 @@ public class ControllerFX_ClientW4Cscreen implements IClientFxController {
 	
 	private boolean checkW4CInputText(String w4cInput) {
 		if((w4cInput.trim().isEmpty())){
-			ErrorMsg.setVisible(true);
-			ErrorMsg.setText("You must enter a code");
+			ErrorMsg.setText("Error: no code entered");
 			return false;
 		}
 		if(!ClientUI.clientLogic.getLoggedUser().getW4c().equals(w4cInput)) {
-			ErrorMsg.setVisible(true);
-			ErrorMsg.setText("The code does't match your user");
+			ErrorMsg.setText("Error: the code does't match user");
 			return false;
 		}
 		ClientUI.clientLogic.sendMessageToServer(ClientUI.clientLogic.getLoggedUser(),

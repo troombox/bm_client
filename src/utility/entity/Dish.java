@@ -3,12 +3,10 @@ package utility.entity;
 public class Dish {
 
 	private String dish_ID, description,size,cooking_level;
-	private String res_ID, price, name, type;
+	private String res_ID, price, name;
 	
 	
-	public Dish(String dish_ID,String res_ID, String type, String name, String description, String size,
-			String cooking_level, String price) {
-			
+	public Dish(String dish_ID, String description, String size, String cooking_level, String res_ID, String price,String name) {
 
 		this.dish_ID = dish_ID;
 		this.description = description;
@@ -17,7 +15,6 @@ public class Dish {
 		this.res_ID = res_ID;
 		this.price = price;
 		this.name = name;
-		this.type = type;
 	}
 	
 	public String getDish_ID() {
@@ -40,13 +37,6 @@ public class Dish {
 	}
 	public String getName() {
 		return name;
-	}
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
 	}
 
 	public void setSize(String size) {

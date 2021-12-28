@@ -24,8 +24,4 @@ public class FxControllerHistory {
 		}
 		return history.pop();
 	}
-	
-	public void clearControllerHistory() {
-		history.clear();
-	}
 }

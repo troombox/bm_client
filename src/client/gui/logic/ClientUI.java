@@ -2,10 +2,10 @@ package client.gui.logic;
 
 import java.io.IOException;
 
+import client.logic.logic.BMClientLogic;
 import client.gui.controllers.ControllerFX_Login;
 import client.gui.history.FxControllerHistory;
 import client.interfaces.IClientFxController;
-import client.logic.BMClientLogic;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

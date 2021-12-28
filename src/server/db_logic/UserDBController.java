@@ -47,9 +47,10 @@ public class UserDBController {
 			UserType userType = UserType.fromString(rs.getString(7)); 
 			//DB holds:[user_ID|firstName|lastName|personalBranch|email|phone|userType|status|w4c(!)|isSignedIn|password]
 			//we don't want to return some fields back to client side after authentication, so we leave them blank
-			result = new User(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)
+			result = new User(0,rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)
 					,userType,rs.getString(8),rs.getString(9),rs.getBoolean(10),"");
 			
+//			result = new User(0,"","","","","",userType,"","",rs.getBoolean(10),"");
 			rs.close();
 			return result;
 		} catch (SQLException e) {
