@@ -1,42 +1,33 @@
 package utility.entity;
 
+import javafx.beans.property.SimpleStringProperty;
 
 public class BusinessClient {
-	private final String workerID;
-	private final String workerName;
-	private final String workerPhone;
-	private final String workerEmail;
-	
-	private boolean isApproved = false;
+	private final SimpleStringProperty workerID;
+	private final SimpleStringProperty workerName;
+	private final SimpleStringProperty workerPhone;
+	private final SimpleStringProperty workerEmail;
 
 	public BusinessClient(String userId, String firstName, String phoneNumber, String email) {
-		this.workerID = userId;
-		this.workerName = firstName;
-		this.workerPhone = phoneNumber;
-		this.workerEmail = email;
-	}
-	
-	public void setIsApproved(boolean isApproved) {
-		this.isApproved = isApproved;
-	}
-	
-	public boolean getIsApproved() {
-		return isApproved;
+		this.workerID = new SimpleStringProperty(userId);
+		this.workerName = new SimpleStringProperty(firstName);
+		this.workerPhone = new SimpleStringProperty(phoneNumber);
+		this.workerEmail = new SimpleStringProperty(email);
 	}
 
-	public String getWorkerID() {
+	public SimpleStringProperty getWorkerID() {
 		return workerID;
 	}
 
-	public String getWorkerName() {
+	public SimpleStringProperty getWorkerName() {
 		return workerName;
 	}
 
-	public String getWorkerPhone() {
+	public SimpleStringProperty getWorkerPhone() {
 		return workerPhone;
 	}
 
-	public String getWorkerEmail() {
+	public SimpleStringProperty getWorkerEmail() {
 		return workerEmail;
 	}
 

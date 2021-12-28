@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="510.0" prefWidth="606.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.controllers.ControllerFX_SupplierScreen">
+<VBox prefHeight="510.0" prefWidth="606.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.controllers.ControllerFX_WelcomeSupplierScreen">
    <children>
       <Pane prefHeight="89.0" prefWidth="606.0" style="-fx-background-color: #FF5700;">
          <children>

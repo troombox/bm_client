@@ -11,7 +11,10 @@ public enum DataType {
 	ERROR_MESSAGE("ERROR_MESSAGE"),				//used for Error Messages
 	ARRAYLIST_STRING("ARRAYLIST_STRING"),
 	DISHES_LIST("DISHES_LIST"),
-	UNKNOWN("UNKNOWN");							//used internally, should not be sent as a type
+	RESTAURANT("RESTAURANT"),
+	UNKNOWN("UNKNOWN"), 						//used internally, should not be sent as a type
+	DISH("DISH"),
+	ORDERS_LIST("ORDERS_LIST");							
 	
 	private String dataType;
 	
