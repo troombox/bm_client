@@ -32,9 +32,9 @@
       </Pane>
       <Pane prefHeight="414.0" prefWidth="606.0">
          <children>
-            <TabPane layoutY="-1.0" prefHeight="399.0" prefWidth="606.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="tabPane" layoutY="-1.0" prefHeight="399.0" prefWidth="606.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
-                <Tab text="wait for approval">
+                <Tab fx:id="tabWaitForApproval" text="wait for approval">
                      <content>
                         <AnchorPane prefHeight="387.0" prefWidth="606.0">
                            <children>
@@ -50,7 +50,7 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                               </TableView>
-                              <Button alignment="CENTER" contentDisplay="CENTER" layoutX="388.0" layoutY="315.0" mnemonicParsing="false" onAction="#approveOrder" prefHeight="35.0" prefWidth="95.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28; -fx-text-fill: #33691e;" text="approve order" AnchorPane.bottomAnchor="20.19999999999999">
+                              <Button fx:id="approveOrderBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="388.0" layoutY="315.0" mnemonicParsing="false" onAction="#approveOrderInWaitingForApprovalTable" prefHeight="35.0" prefWidth="95.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28; -fx-text-fill: #33691e;" text="approve order" AnchorPane.bottomAnchor="20.19999999999999">
                                  <effect>
                                     <DropShadow />
                                  </effect>
@@ -60,7 +60,7 @@
                                     <DropShadow />
                                  </effect>
                               </Button>
-                              <Button alignment="CENTER" contentDisplay="CENTER" layoutX="456.0" layoutY="288.0" mnemonicParsing="false" onAction="#cancelOrder" prefHeight="35.0" prefWidth="85.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28; -fx-text-fill: #d50000;" text="cancel order" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0">
+                              <Button alignment="CENTER" contentDisplay="CENTER" layoutX="456.0" layoutY="288.0" mnemonicParsing="false" onAction="#cancelOrderInWaitingForApprovalTable" prefHeight="35.0" prefWidth="85.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28; -fx-text-fill: #d50000;" text="cancel order" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0">
                                  <effect>
                                     <DropShadow />
                                  </effect>
@@ -69,17 +69,17 @@
                         </AnchorPane>
                      </content>
                 </Tab>
-                  <Tab text="in the kitchen">
+                  <Tab fx:id="tabWaitInTheKitchen" text="in the kitchen">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <TableView fx:id="inTheKitchenTable" prefHeight="295.0" prefWidth="606.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                  <columns>
-                                    <TableColumn prefWidth="75.0" text="order ID" />
-                                    <TableColumn prefWidth="75.0" text="order time" />
-                                    <TableColumn prefWidth="97.59996032714844" text="type of order" />
-                                    <TableColumn prefWidth="101.5999755859375" text="phone number" />
-                                    <TableColumn prefWidth="75.0" text="address" />
+                                    <TableColumn fx:id="orderIDInTheKitchen" prefWidth="75.0" text="order ID" />
+                                    <TableColumn fx:id="orderTimeInTheKitchen" prefWidth="75.0" text="order time" />
+                                    <TableColumn fx:id="typeOfOrderInTheKitchen" prefWidth="97.59996032714844" text="type of order" />
+                                    <TableColumn fx:id="phoneNumberInTheKitchen" prefWidth="101.5999755859375" text="phone number" />
+                                    <TableColumn fx:id="addressInTheKitchen" prefWidth="75.0" text="address" />
                                  </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -98,17 +98,17 @@
                            </children></AnchorPane>
                     </content>
                   </Tab>
-                <Tab text="ready">
+                <Tab fx:id="tabReady" text="ready">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <TableView fx:id="readyTable" prefHeight="296.0" prefWidth="606.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                  <columns>
-                                    <TableColumn prefWidth="75.0" text="order ID" />
-                                    <TableColumn prefWidth="75.0" text="order time" />
-                                    <TableColumn prefWidth="97.59996032714844" text="type of order" />
-                                    <TableColumn prefWidth="101.5999755859375" text="phone number" />
-                                    <TableColumn prefWidth="75.0" text="address" />
+                                    <TableColumn fx:id="orderIDReady" prefWidth="75.0" text="order ID" />
+                                    <TableColumn fx:id="orderTimeReady" prefWidth="75.0" text="order time" />
+                                    <TableColumn fx:id="typeOfOrderReady" prefWidth="97.59996032714844" text="type of order" />
+                                    <TableColumn fx:id="phoneNumberReady" prefWidth="101.5999755859375" text="phone number" />
+                                    <TableColumn fx:id="addressReady" prefWidth="75.0" text="address" />
                                  </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -127,17 +127,17 @@
                            </children></AnchorPane>
                   </content>
                 </Tab>
-                  <Tab text="completed">
+                  <Tab fx:id="tabCompleted" text="completed">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <TableView fx:id="completedTable" prefHeight="293.0" prefWidth="606.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                  <columns>
-                                    <TableColumn prefWidth="75.0" text="order ID" />
-                                    <TableColumn prefWidth="75.0" text="order time" />
-                                    <TableColumn prefWidth="97.59996032714844" text="type of order" />
-                                    <TableColumn prefWidth="101.5999755859375" text="phone number" />
-                                    <TableColumn prefWidth="75.0" text="address" />
+                                    <TableColumn fx:id="orderIDCompleted" prefWidth="75.0" text="order ID" />
+                                    <TableColumn fx:id="orderTimeCompleted" prefWidth="75.0" text="order time" />
+                                    <TableColumn fx:id="typeOfOrderCompleted" prefWidth="97.59996032714844" text="type of order" />
+                                    <TableColumn fx:id="phoneNumberCompleted" prefWidth="101.5999755859375" text="phone number" />
+                                    <TableColumn fx:id="addressCompleted" prefWidth="75.0" text="address" />
                                  </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

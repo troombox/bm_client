@@ -159,8 +159,12 @@ public class ControllerFX_EditDishScreen implements IClientFxController, Initial
     			System.out.println("Houston, we got a problem!");
     			return;
     		}
-    		
-    		System.out.println(dish.getName() + " removed from your menu");
+    		Alert alertSuccess = new Alert(AlertType.INFORMATION);
+    		alertSuccess.setTitle("successful update");
+    		alertSuccess.setHeaderText(null);
+    		alertSuccess.setContentText(dish.getName() + " removed from your menu");
+    		alertSuccess.showAndWait();
+        	
     		ClientUI.historyStack.popFxController().start(ClientUI.parentWindow);
     	}
     }
@@ -218,8 +222,12 @@ public class ControllerFX_EditDishScreen implements IClientFxController, Initial
 			System.out.println("Houston, we got a problem!");
 			return;
 		}
-		
-		System.out.println(dish.getName() + " updated in your menu");
+		Alert alert = new Alert(AlertType.INFORMATION);
+    	alert.setTitle("successful update");
+    	alert.setHeaderText(null);
+    	alert.setContentText(dish.getName() + " updated in your menu");
+    	alert.showAndWait();
+    	
     }
 
 	@Override

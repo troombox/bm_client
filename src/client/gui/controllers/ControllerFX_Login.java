@@ -41,7 +41,7 @@ public class ControllerFX_Login implements IClientFxController {
     		User user = new User(-1, "", "", "", userEmail, "", UserType.USER,"", "", false,password);
     		ClientUI.clientLogic.sendMessageToServer(user, DataType.USER, RequestType.CLIENT_REQUEST_TO_SERVER_LOGIN_REQUEST);
 	    	try {
-				Thread.sleep(500);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				// TODO error handling
 				e.printStackTrace();

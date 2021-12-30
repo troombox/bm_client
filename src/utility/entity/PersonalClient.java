@@ -4,11 +4,11 @@ import utility.enums.UserType;
 
 public class PersonalClient extends User {
 
-	String personalCode;
+	int personalCode;
 	int balance;
 	
 	PersonalClient(int user_ID, String firstName, String lastName, String personalBranch, String email, String phone,
-			String status, String w4c, String password, boolean isSignedIn, String personalCode, int balance) {
+			String status, String w4c, String password, boolean isSignedIn, int personalCode, int balance) {
 		super(user_ID, firstName, lastName, personalBranch, email, phone, UserType.CLIENT_PERSONAL,
 				status, w4c, isSignedIn, password);
 		this.personalCode = personalCode;
@@ -16,10 +16,10 @@ public class PersonalClient extends User {
 	}
 	
 	PersonalClient(int user_ID) {
-		this(user_ID, "","","","","","", "", "", false, "", 0);
+		this(user_ID, "","","","","","", "", "", false, 0, 0);
 	}
 	
-	public String getPersonalCode() {
+	public int getPersonalCode() {
 		return personalCode;
 	}
 

@@ -25,11 +25,14 @@ public class MessageParserOrder {
 			int cntDishes = Integer.valueOf(msg.get(j+9));
 			j+=9;
 			for(k=0; k < cntDishes; k++) {
-			order.getDishesInOrder().add(new Dish(msg.get(j),msg.get(j+1),msg.get(j+2),msg.get(j+3), 
-					msg.get(j+4),msg.get(j+5), msg.get(j+6), msg.get(j+7)));
+				Dish dish = new Dish(msg.get(j+1),msg.get(j+2),msg.get(j+3),msg.get(j+4), 
+					msg.get(j+5),msg.get(j+6), msg.get(j+7), msg.get(j+8));
+				dish.setExceptions(msg.get(j+9));
+			order.getDishesInOrder().add(dish);
+			j+=9;
+			}
 			result.add(order);
-			j+=8;
-		}}
+		}
 		return result;
 	}
 	
@@ -39,7 +42,7 @@ public class MessageParserOrder {
 		messageToPrepare.add(requestType.toString());
 		messageToPrepare.add(DataType.ORDERS_LIST.toString());
 		messageToPrepare.add(String.valueOf(ordersList.size())); //count of orders to a restaurant
-		
+				
 		for(Order order: ordersList) {
 			messageToPrepare.add(String.valueOf(order.getOrderID()));
 			messageToPrepare.add(order.getTypeOfOrder());
@@ -50,6 +53,7 @@ public class MessageParserOrder {
 			messageToPrepare.add(order.getFullName());
 			messageToPrepare.add(order.getUserPhone());
 			messageToPrepare.add(String.valueOf(order.getDishesInOrder().size()));
+
 			
 			for(Dish dish: order.getDishesInOrder()) {
 				messageToPrepare.add(String.valueOf(dish.getDish_ID()));
@@ -61,8 +65,11 @@ public class MessageParserOrder {
 				messageToPrepare.add(dish.getSize());
 				messageToPrepare.add(dish.getCooking_level());
 				messageToPrepare.add(String.valueOf(dish.getPrice()));
+				messageToPrepare.add(dish.getExceptions());
+				System.out.println(dish);
 			}
 		}
+		
 
 		return messageToPrepare;
 	}

@@ -30,6 +30,8 @@ public class BMServerLogic extends AbstractServer {
 	boolean flagFileIncoming = false;
 	ConnectionToClient fileSenderClient = null;
 
+	private Object system;
+
 	public BMServerLogic(int port, String dbName, String dbUser, String dbPassword) throws Exception {
 		super(port);
 
@@ -58,7 +60,7 @@ public class BMServerLogic extends AbstractServer {
 //			}
 //		//-*------------------
 		// we are assuming message is ArrayList<String>
-		RequestType actionRequired = MessageParser.parseMessage_RequestType(msg);
+		RequestType actionRequired = MessageParser.parseMessageFromClient_RequestType(msg);
 		if (actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA) {
 			// if client requests data - we call the request function to handle
 			handleGetRequest(actionRequired, msg, client);
@@ -98,12 +100,13 @@ public class BMServerLogic extends AbstractServer {
 			handleDeleteDishFromMenuRequest(actionRequired, msg, client);
 		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_ORDERS_BY_RESTAURANT_ID_REQUEST) {
 			handleGetOrdersFromSupplierRequest(actionRequired, msg, client);
+		} else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_SUPPLIER_CANCEL_ORDER) {
+			handleCancelOrder(actionRequired, msg, client);
+		} else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_SUPPLIER_UPDATE_ORDER) {
+			handleOrdersStatus(actionRequired, msg, client);
 		}
-		
 		serverPrintToGuiLog("Message From Client Handled, action: " + actionRequired.toString(), true);
 	}
-
-	
 
 
 	public void sendMessageToGivenClient(Object msg, ConnectionToClient client) {
@@ -142,9 +145,34 @@ public class BMServerLogic extends AbstractServer {
 	}
 
 	// ---------------------- HELPER FUNCTIONS --------------------------
+	
+//	private void handleOrderCompleted(RequestType actionRequired, Object msg, ConnectionToClient client) {
+//		ArrayList<String> array = (ArrayList<String>) msg;
+//		Boolean response = orderDBController.moveOrder(array.get(2), array.get(3));
+//		if(response == false) {
+//			sendMessageToGivenClient(ErrorType.COULD_NOT_UPDATE_ORDER,client);
+//		}
+//	}
+	
+	private void handleOrdersStatus(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		ArrayList<String> array = (ArrayList<String>) msg;
+		Boolean response = orderDBController.moveOrder(array.get(2), array.get(3));
+		if(response == false) {
+			sendMessageToGivenClient(ErrorType.COULD_NOT_UPDATE_ORDER,client);
+		}
+	}
+	
+	private void handleCancelOrder(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		ArrayList<String> array = (ArrayList<String>) msg;
+		Boolean response = orderDBController.cancelOrder(array.get(2));
+		if(response == false) {
+			sendMessageToGivenClient(ErrorType.COULD_NOT_CANCEL_ORDER,client);
+		}
+	}
+	
 
 	private void handleWriteRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
-		DataType messageDataType = MessageParser.parseMessage_DataType(msg);
+		DataType messageDataType = MessageParser.parseMessageFromClient_DataType(msg);
 		switch (messageDataType) {
 		case ORDER:
 //				Order orderData = MessageParser.parseMessageDataType_Order(msg);
@@ -162,7 +190,7 @@ public class BMServerLogic extends AbstractServer {
 	}
 
 	private void handleGetRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
-		DataType messageDataType = MessageParser.parseMessage_DataType(msg);
+		DataType messageDataType = MessageParser.parseMessageFromClient_DataType(msg);
 		switch (messageDataType) {
 		case ORDER:
 //				String requestedOrder = MessageParser.parseMessageDataType_Order_GetRequestOrderID(msg);
@@ -190,7 +218,7 @@ public class BMServerLogic extends AbstractServer {
 	}
 
 	private void handleConnectionRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
-		DataType messageDataType = MessageParser.parseMessage_DataType(msg);
+		DataType messageDataType = MessageParser.parseMessageFromClient_DataType(msg);
 		switch (messageDataType) {
 		case SINGLE_TEXT_STRING:
 			String message = MessageParserTextString.handleMessageExtractDataType_SingleTextString(msg);
@@ -413,12 +441,12 @@ public class BMServerLogic extends AbstractServer {
 	}
 	
 	private void handleGetOrdersFromSupplierRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
-		String resId = MessageParserTextString.handleMessageExtractDataType_SingleTextString(msg);
+		ArrayList<String> data = (ArrayList<String>)msg;
 
 		if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_ORDERS_BY_RESTAURANT_ID_REQUEST) {
 			Object response;
     		try {
-    			ArrayList<Order> orders = orderDBController.getOrdersByResId(resId);
+    			ArrayList<Order> orders = orderDBController.getOrdersByResId(data.get(2), data.get(3));
     			response = MessageParserOrder.prepareMessageWithDataType_Orders(orders, 
 						RequestType.SERVER_MESSAGE_TO_CLIENT_DATA_PROVIDED);
     			sendMessageToGivenClient(response,client);
@@ -432,7 +460,7 @@ public class BMServerLogic extends AbstractServer {
 
 	// -------------------------DEBUG FUNCTIONS
 	private void handleDebugRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
-		DataType messageDataType = MessageParser.parseMessage_DataType(msg);
+		DataType messageDataType = MessageParser.parseMessageFromClient_DataType(msg);
 		if (messageDataType == DataType.SINGLE_TEXT_STRING) {
 			ArrayList<String> message = (ArrayList<String>) msg;
 			System.out.println(actionRequired.toString() + " " + messageDataType.toString() + " " + message.get(2));

@@ -37,7 +37,7 @@ public class ControllerFX_WelcomeSupplierScreen implements IClientFxController, 
     @FXML
     void showActiveOrders(ActionEvent event) {
     	ClientUI.historyStack.pushFxController(this);
-    	IClientFxController nextScreen = new ControllerFX_ActiveOrdersscreen();
+    	IClientFxController nextScreen = new ControllerFX_ActiveOrdersScreen();
 	    nextScreen.start(ClientUI.parentWindow);
     }
 

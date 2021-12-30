@@ -17,16 +17,16 @@ public class MessageParserOrder extends MessageParser{
 		
 		messageToServer.add(requestType.toString());
 		messageToServer.add(DataType.ORDER.toString());
-		messageToServer.add(order.getOrderNumber());
+		messageToServer.add(String.valueOf(order.getOrderID()));
 		if(requestType == RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA) {
 			//if we are requesting Order data from server we need only the orderNumber
 			return messageToServer;
 		}
-		messageToServer.add(order.getRestaurantName());
-		messageToServer.add(order.getOrderTime());
-		messageToServer.add(order.getPhoneNumber());
+		messageToServer.add(String.valueOf(order.getRestaurantID()));
+		messageToServer.add(order.getTimeOfOrder());
+		messageToServer.add(order.getUserPhone());
 		messageToServer.add(order.getTypeOfOrder());
-		messageToServer.add(order.getOrderAddress());
+		messageToServer.add(order.getDeliveryAddress());
 		
 		return messageToServer;
 	}
@@ -37,7 +37,7 @@ public class MessageParserOrder extends MessageParser{
 			//TODO:ADD ERROR HANDLING
 			return null; 
 		}
-		return new Order(msg.get(2),msg.get(3),msg.get(4),msg.get(5),msg.get(6),msg.get(7));
+		return new Order(msg.get(2),msg.get(3),msg.get(4),msg.get(5),Integer.parseInt(msg.get(6)),msg.get(7));
 	}
 
 }

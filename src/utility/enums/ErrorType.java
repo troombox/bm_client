@@ -10,7 +10,9 @@ public enum ErrorType {
 	CLIENT_ALREADY_EXIST("CLIENT_ALREADY_EXIST"),
 	DISHES_NOT_FOUND("DISHES_NOT_FOUND"),
 	UNKNOWN("UNKNOWN_ERROR_TYPE"),  			//used internally, should not be sent as a type
-	ORDERS_NOT_FOUND("ORDERS_NOT_FOUND");			
+	COULD_NOT_UPDATE_ORDER("COULD_NOT_UPDATE_ORDER"),
+	COULD_NOT_CANCEL_ORDER("COULD_NOT_CANCEL_ORDER"),
+	ORDERS_NOT_FOUND("ORDERS_NOT_FOUND");
 	
 	private String errorType;
 	
@@ -39,6 +41,11 @@ public enum ErrorType {
 			return ErrorType.INVALID_CREDENTIALS_RESTAURANT_NOT_FOUND;
 		case "DISHES_NOT_FOUND":
 			return ErrorType.DISHES_NOT_FOUND;
+		case "ORDERS_NOT_FOUND":
+			return ErrorType.ORDERS_NOT_FOUND;
+		case "COULD_NOT_UPDATE_ORDER":
+			return ErrorType.COULD_NOT_UPDATE_ORDER;
+
 		default:
 			return ErrorType.UNKNOWN;
 		}

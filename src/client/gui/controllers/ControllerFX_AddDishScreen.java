@@ -184,7 +184,11 @@ public class ControllerFX_AddDishScreen implements IClientFxController, Initiali
 		}
 		
 		dish = (Dish)ClientUI.clientLogic.getLastDataRecieved();
-		System.out.println(dish.getName() + " added to your menu");
+		Alert alert = new Alert(AlertType.INFORMATION);
+    	alert.setTitle("successful update");
+    	alert.setHeaderText(null);
+    	alert.setContentText(dish.getName() + " added to your menu");
+    	alert.showAndWait();
 
     }
 

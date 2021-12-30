@@ -105,11 +105,13 @@ public class BMClientLogic extends AbstractClient{
 			System.out.println("sendMessageToServer: unknown dataType");
 			return;
 		}
+		
 		handleMessageToServer(message);
 	}
 	
 	private void handleMessageToServer(Object msg) {
 		try {
+			System.out.println(msg);
 			sendToServer(msg);
 		} catch (IOException e) {
 			System.out.println("Could not send message to server. Terminating client.");
