@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import server.exceptions.BMServerException;
 import utility.entity.Restaurant;
-import utility.entity.User;
 import utility.enums.ErrorType;
 
 
@@ -80,43 +79,6 @@ public class RestaurantDBController {
 			return null;
 		}
 	}
-	
-	public Restaurant GetRestaurantFromUserSupplierData(User supplier) throws BMServerException {
-		String res_workersTableNameInDB = "res_workers";
-		Restaurant result;
-		PreparedStatement ps;
-		try {
-			int supplierID = supplier.getUser_ID();
-			String query_getResID = "SELECT * FROM  `"+ dbName + "`." + res_workersTableNameInDB +
-					" WHERE userId = '" + supplierID + "'";
-			ps = dbConnection.prepareStatement(query_getResID);
-			ResultSet rs = ps.executeQuery();
-			
-			if(!rs.next()) {//if restaurant doesn't exist 
-				throw new BMServerException(ErrorType.INVALID_CREDENTIALS_RESTAURANT_NOT_FOUND, "no restaurants found");
-			}
-			String resID = rs.getString(2);
-			String query_getRes = "SELECT * FROM  `"+ dbName + "`." + restaurantTableNameInDB +
-					" WHERE resId = '" + resID + "'";
-			ps = dbConnection.prepareStatement(query_getRes);
-			ResultSet rs2 = ps.executeQuery();
-			
-			if(!rs2.next()) {//if restaurant doesn't exist 
-				throw new BMServerException(ErrorType.INVALID_CREDENTIALS_RESTAURANT_NOT_FOUND, "no restaurants found");
-			}
-			//DB holds:[resID|resName|category|branch]
-			//we don't want to return some fields back to client side after authentication, so we leave them blank
-			result = new Restaurant(rs2.getString(1),rs2.getString(2),rs2.getString(3),rs2.getString(4));		
-			
-			rs.close();
-			return result;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-	
-	}
-
 	
 
 }

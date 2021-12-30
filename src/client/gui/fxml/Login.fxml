@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.controllers.ControllerFX_Login">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.controllers.ControllerFX_Login">
    <children>
       <VBox layoutX="-4.0" layoutY="-9.0" prefHeight="510.0" prefWidth="606.0">
          <children>
@@ -43,7 +43,7 @@
                                     <Image url="@../../../../images/user.png" />
                                  </image>
                               </ImageView>
-                              <TextField fx:id="Useremail" prefHeight="26.0" prefWidth="198.0" promptText="enter email" text="arthur@gmail.com" />
+                              <TextField fx:id="Useremail" prefHeight="26.0" prefWidth="198.0" promptText="enter email" text="binky@gmail.com" />
                            </children>
                         </HBox>
                         <HBox alignment="TOP_CENTER" prefHeight="39.0" prefWidth="528.0" spacing="10.0">
@@ -53,7 +53,7 @@
                                     <Image url="@../../../../images/password.png" />
                                  </image>
                               </ImageView>
-                              <TextField fx:id="Password" prefHeight="26.0" prefWidth="200.0" promptText="password" text="Kk" />
+                              <TextField fx:id="Password" prefHeight="26.0" prefWidth="200.0" promptText="password" text="Ss" />
                            </children>
                         </HBox>
                         <Button fx:id="loginbutton" mnemonicParsing="false" onAction="#loginButtonPressed" prefHeight="42.0" prefWidth="70.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28; -fx-font-size: 16;" text="login">

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import ocsf.client.AbstractClient;
+import utility.entity.BusinessClient;
 import utility.entity.Client;
 import utility.entity.Supplier;
 import utility.entity.User;
@@ -45,11 +46,12 @@ public class BMClientLogic extends AbstractClient{
 			case RESTAURANTS_LIST:
 				lastDataRecieved = MessegeParserRestaurants.handleMessageExtractDataType_Restaurants(messageFromServerToClient);
 				break;
-			case RESTAURANT:
-				lastDataRecieved = MessegeParserRestaurants.handleMessageExtractDataType_singleRestaurant(messageFromServerToClient);
-				break;
 			case HR_MANAGER:
-				lastDataRecieved = MessageParserHR.handleMessageExtractDataType_HRGetData(messageFromServerToClient);
+				if(messageRequestType == RequestType.CLIENT_REQUEST_TO_SERVER_CHECK_APRROVE_BUSINESS)
+					lastDataRecieved = MessageParserHR.handleMessageFromClient_ApproveBusinessClient((ArrayList<String>)messageFromServerToClient);
+				else {
+					lastDataRecieved = MessageParserHR.handleMessageExtractDataType_HRGetData(messageFromServerToClient);
+				}
 				break;
 			case ERROR_MESSAGE:
 				lastDataRecieved = MessageParserError.handleMessageExtractDataType__ErrorType(messageFromServerToClient);
@@ -57,22 +59,13 @@ public class BMClientLogic extends AbstractClient{
 			case DISHES_LIST:
 				lastDataRecieved = MessegeParserDishes.handleMessageExtractDataType_Dishes(messageFromServerToClient);
 				break;
-			case DISH:
-				lastDataRecieved = MessegeParserDishes.handleMessageExtractDataType_SingleDish(messageFromServerToClient);
-				break;
-			case SINGLE_TEXT_STRING:
-				lastDataRecieved = MessageParserTextString.handleMessageExtractDataType_SingleTextString(messageFromServerToClient);
-				break;
-			case ORDERS_LIST:
-				lastDataRecieved = MessageParserOrder.handleMessageExtractDataType_orders(messageFromServerToClient);
-				break;
 			default:
 				System.out.println("ERROR, UNKNOWN DATA TYPE");
 		}	
 	}
 	
 	public void sendMessageToServer(Object dataToSendToServer, DataType dataType, RequestType requestType) {
-		Object message;
+		Object message = null;
 		switch(dataType) {
 		case USER:
 			message = MessageParserUser.prepareMessageWithDataType_User((User)dataToSendToServer, requestType);
@@ -89,17 +82,20 @@ public class BMClientLogic extends AbstractClient{
 		case HR_MANAGER:
 			if(requestType == RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA) {
 				message = MessageParserHR.prepareMessageToServer_HRDataRequest((int)dataToSendToServer,dataType, requestType);	
-				break;
-			} else {
-				/*TODO: the option where we want to update the data base*/
-				return;
+			} else if (requestType == RequestType.CLIENT_REQUEST_TO_SERVER_WRITE_UPDATE_TO_DB){
+				message = MessageParserHR.prepareMessageToServer_HRUpdateDB((BusinessClient) dataToSendToServer, dataType, requestType);
 			}
+			else if(requestType == RequestType.CLIENT_REQUEST_TO_SERVER_APRROVE_BUSINESS || 
+					requestType == RequestType.CLIENT_REQUEST_TO_SERVER_CHECK_APRROVE_BUSINESS) {
+				message = MessageParserHR.prepareMessageToServer_HRApproveBusiness((int) dataToSendToServer, dataType, requestType);
+			}
+			else if(requestType == RequestType.CLIENT_REQUEST_TO_SERVER_GET_APPROVED_BUSINESS_CLIENTS) {
+				message = MessageParserHR.prepareMessageToServer_HRDataRequest((int)dataToSendToServer,dataType, requestType);	
+			}
+			break;
 		case ARRAYLIST_STRING:
 			ArrayList<String> arraylist = (ArrayList<String>)dataToSendToServer;
 			message = MessageParserTextString.prepareMessageToServerDataType_ArrayListString(arraylist, requestType);
-			break;
-		case DISH:
-			message = MessegeParserDishes.prepareMessageWithDataType_SingleDish(dataToSendToServer, requestType);
 			break;
 		default:
 			System.out.println("sendMessageToServer: unknown dataType");
@@ -110,7 +106,6 @@ public class BMClientLogic extends AbstractClient{
 	
 	private void handleMessageToServer(Object msg) {
 		try {
-			System.out.println(msg);
 			sendToServer(msg);
 		} catch (IOException e) {
 			System.out.println("Could not send message to server. Terminating client.");

@@ -56,11 +56,4 @@ public class Dish {
 	public void setCooking_level(String cooking_level) {
 		this.cooking_level = cooking_level;
 	}
-
-	@Override
-	public String toString() {
-		return "Dish [dish_ID=" + dish_ID + ", description=" + description + ", size=" + size + ", cooking_level="
-				+ cooking_level + ", res_ID=" + res_ID + ", price=" + price + ", name=" + name + ", type=" + type + "]";
-	}
-	
 }

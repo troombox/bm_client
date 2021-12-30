@@ -19,7 +19,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
@@ -191,23 +190,12 @@ public class ControllerFX_MenuScreen implements IClientFxController, Initializab
 				}
 				
 				}
-			ScrollPane firstsScroll = new ScrollPane();
-			firstsScroll.setContent(firtsVbox);
-			firstsTab.setContent(firstsScroll);
-			
-			ScrollPane mainScroll = new ScrollPane();
-			mainScroll.setContent(mainVbox);
-			mainDishTab.setContent(mainScroll);
-			
-			ScrollPane dessertsScroll = new ScrollPane();
-			dessertsScroll.setContent(dessertsVbox);
-			dessertsTab.setContent(dessertsScroll);
-			
-			ScrollPane drinksScroll = new ScrollPane();
-			drinksScroll.setContent(drinksVbox);
-			drinksTab.setContent(drinksScroll);
+			firstsTab.setContent(firtsVbox);
+			mainDishTab.setContent(mainVbox);
+			dessertsTab.setContent(dessertsVbox);
+			drinksTab.setContent(drinksVbox);
+		
 	}
-	
 
 }
 

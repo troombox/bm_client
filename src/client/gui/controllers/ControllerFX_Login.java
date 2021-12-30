@@ -1,5 +1,6 @@
 package client.gui.controllers;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import client.debug.TempScreenControllerFx;
 import client.gui.logic.ClientUI;
@@ -41,7 +42,7 @@ public class ControllerFX_Login implements IClientFxController {
     		User user = new User(-1, "", "", "", userEmail, "", UserType.USER,"", "", false,password);
     		ClientUI.clientLogic.sendMessageToServer(user, DataType.USER, RequestType.CLIENT_REQUEST_TO_SERVER_LOGIN_REQUEST);
 	    	try {
-				Thread.sleep(100);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				// TODO error handling
 				e.printStackTrace();
@@ -58,6 +59,12 @@ public class ControllerFX_Login implements IClientFxController {
 		    			break;
 		    		case "INVALID_CREDENTIALS_USER_ALREADY_LOGGED_IN":
 		    			errorString = "You already logged in";
+		    			break;
+		    		case "USER_STATUS_UNREGISTERED":
+		    			errorString = "your are not registered";
+		    			break;
+		    		case "USER_STATUS_FROZEN":
+		    			errorString = "your account is frozen";
 		    			break;
 		    		default:
 		    			errorString = ErrorType.UNKNOWN.toString();
@@ -83,7 +90,7 @@ public class ControllerFX_Login implements IClientFxController {
     		nextScreen.start(ClientUI.parentWindow);
     	}
     	if(userType == UserType.HR_MANAGER) {
-    		nextScreen = new ControllerFX_HRScreen();
+    		nextScreen = new ControllerFX_HRApproveBusiness();
     		ClientUI.historyStack.pushFxController(this);
     		nextScreen.start(ClientUI.parentWindow);
     	}
@@ -96,14 +103,19 @@ public class ControllerFX_Login implements IClientFxController {
     		nextScreen.start(ClientUI.parentWindow);
     	}
     	if(userType == UserType.RESTAURANT_OWNER) {
-    		nextScreen = new ControllerFX_SupplierScreen();
-    		ClientUI.historyStack.pushFxController(this);
     		nextScreen.start(ClientUI.parentWindow);
     	}
     		
     }
     
     private boolean checkValidInput(String userEmail, String password) {
+    	String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@" 
+        + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+    	if(patternMatches(userEmail,regexPattern) == false ) {
+    		ErrorMsg.setVisible(true);
+			ErrorMsg.setText("You must enter an valid Email");
+			return false;
+    	}
     	 if (userEmail.trim().isEmpty()) {
     		 ErrorMsg.setVisible(true);
 			ErrorMsg.setText("You must enter an Email");
@@ -116,6 +128,12 @@ public class ControllerFX_Login implements IClientFxController {
     	 }
     	 return true;
     }
+    
+    public static boolean patternMatches(String emailAddress, String regexPattern) {
+    return Pattern.compile(regexPattern)
+      .matcher(emailAddress)
+      .matches();
+}
 
 	@Override
 	public void start(Stage stage) {

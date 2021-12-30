@@ -4,16 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
-import server.exceptions.BMServerException;
-import utility.entity.Dish;
 import utility.entity.Order;
-import utility.enums.ErrorType;
+import utility.enums.RequestType;
 
 public class OrderDBController {
 	
-	private final String ordersTableNameInDB = "orders";
+	private final String orderTableNameInDB = "order";
 	
 	Connection dbConnection;
 	String dbName;
@@ -23,159 +20,103 @@ public class OrderDBController {
 		this.dbName = dbController.getDBName();
 	}
 	
-	public Boolean moveOrder(String resId, String status) {
-		PreparedStatement ps;
-		try {
-			String query = "UPDATE `" + dbName + "`." +  ordersTableNameInDB +
-							" SET status = ?" +
-							" WHERE orderId = ?";
-			ps = dbConnection.prepareStatement(query);
-			ps.setString(1, status);
-			ps.setInt(2, Integer.parseInt(resId));
-			ps.executeUpdate();			
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
 	
-	public Boolean cancelOrder(String orderId) {
+	//method that get order details from the DB 
+	public Order getOrderDataFromDB(String orderNumber) {
+		Order result;
 		PreparedStatement ps;
-		PreparedStatement ps1;
-		PreparedStatement ps2;
-		PreparedStatement ps3;
-		PreparedStatement ps4;
-		
-		ResultSet rs1;
-		ResultSet rs2;
-		ResultSet rs3;
-		
 		try {
-			String query5 = "SELECT recieverID" +
-							" FROM `" + dbName + "`." + ordersTableNameInDB +
-							" WHERE orderId = ?";
-			ps4 = dbConnection.prepareStatement(query5);
-			ps4.setInt(1, Integer.parseInt(orderId));
-			rs1 = ps4.executeQuery();
-			if(rs1.next()) {
-				
-				int recieverId = rs1.getInt(1);
-				String query2 = "SELECT totalPrice" +
-								" FROM `" + dbName + "`." + ordersTableNameInDB +
-								" WHERE orderId = ?";
-				ps1 = dbConnection.prepareStatement(query2);
-				ps1.setInt(1, Integer.parseInt(orderId));
-				rs2 = ps1.executeQuery();
-				rs2.next();
-				int totalPrice = rs2.getInt(1);
-				
-				String query3 = "SELECT budget" +
-								" FROM `" + dbName + "`.business_client BC, `" + dbName + "`." + ordersTableNameInDB + " O"+
-								" WHERE O.orderId = ? AND BC.userId = O.recieverID";
-				ps2 = dbConnection.prepareStatement(query3);
-				ps2.setInt(1, Integer.parseInt(orderId));
-				rs3 = ps2.executeQuery();
-				rs3.next();
-				int budget = rs3.getInt(1);
-				
-				String query4 = "UPDATE `" + dbName + "`.business_client" +
-								" SET budget = ?" +
-								" WHERE userId = ?";
-				ps3 = dbConnection.prepareStatement(query4);
-				int sum = budget + totalPrice;
-				ps3.setInt(1, sum);
-				ps3.setInt(2, recieverId);
-				ps3.executeUpdate();
-			}
-			
-			String query = "DELETE FROM `" + dbName + "`." +  ordersTableNameInDB +
-							" WHERE orderId = ?";
+			String query = "SELECT * FROM "+dbName+"."+orderTableNameInDB+" WHERE OrderNumber = ?";
 			ps = dbConnection.prepareStatement(query);
-			ps.setInt(1, Integer.parseInt(orderId));
-			ps.executeUpdate();
-			
-			String query1= "DELETE FROM `" + dbName + "`.dish_in_order" +
-					" WHERE orderId = ?";
-			ps1 = dbConnection.prepareStatement(query1);
-			ps1.setInt(1, Integer.parseInt(orderId));
-			ps1.executeUpdate();
-		
-			
-		} catch(SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-		
-		return true;
-	}
-		
-
-	public ArrayList<Order> getOrdersByResId(String resId, String status) throws BMServerException{
-		ArrayList<Order> result = new ArrayList<>();
-		PreparedStatement ps;
-		boolean flag = true;
-
-		try {
-			String query = "SELECT * FROM  `"+ dbName + "`." + ordersTableNameInDB +
-					" WHERE resID = '" + resId + "' AND status = '" + status +"'"; //get list of all orders in this specific restaurant that are in specific status
-			ps = dbConnection.prepareStatement(query);
+			ps.setString(1, orderNumber);
 			ResultSet rs = ps.executeQuery();
-			
-			if(!rs.next()) {//if there are no orders
-//				throw new BMServerException(ErrorType.ORDERS_NOT_FOUND, "no orders found");
-				flag = false;
+			if(!rs.next()) {
+				System.out.println("Did not find an order with orderNumber: " + orderNumber);
+				return null;
 			}
-			
-		
-			while(flag == true) { //for each order
-				String query2 = "SELECT dishId FROM  `"+ dbName + "`." + "dish_in_order" +
-						" WHERE orderId = '" + rs.getInt(1) + "'"; //get list of all dishes in this order
-				PreparedStatement ps2 = dbConnection.prepareStatement(query2);
-				ResultSet rs2 = ps2.executeQuery();
-				
-				Order order = new Order(rs.getInt(1), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6),
-						rs.getString(7), rs.getString(9), rs.getString(10));
-				
-				if(!rs2.next()) {//if there are no dishes in this order 
-					rs2.close();
-					break;
-				}
-				
-				
-				while(true) {//for each dish in this order
-					String query3 = "SELECT * FROM  `"+ dbName + "`." + "dishes" +
-						" WHERE dishId = '" + rs2.getInt(1) + "'"; //get details for this dish
-					PreparedStatement ps3 = dbConnection.prepareStatement(query3);
-					ResultSet rs3 = ps3.executeQuery();
-					if(rs3.next()) { 
-						order.getDishesInOrder().add(new Dish(rs3.getString(1), rs3.getString(2), rs3.getString(3), rs3.getString(4),
-						rs3.getString(5), rs3.getString(6), rs3.getString(7), rs3.getString(8)));
-					} 
-					rs3.close();
-					if(!rs2.next()) {
-						rs2.close();
-						break;
-					}
-					
-				}
-				
-				result.add(order);
-				if(!rs.next()) {
-					rs.close();
-					break;
-				}
-			}
-						
+			result = new Order(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6));
+			rs.close();
 			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
-		
 	}
 	
+	//TODO: check if exists!
+	//method that writes a new order in the DB
+	public boolean writeOrderDataToDB(Order order) {
+		try {
+			System.out.println("writeOrderDataToDB started");
+			String query = "INSERT INTO "+dbName+"."+orderTableNameInDB+" (OrderNumber,Restaurant,OrderTime,PhoneNumber,TypeOfOrder,OrderAddress) VALUES (?,?,?,?,?,?)";
+			PreparedStatement ps = dbConnection.prepareStatement(query);
+			ps.setString(1, order.getOrderNumber());
+			ps.setString(2, order.getRestaurantName());
+			ps.setString(3, order.getOrderTime());
+			ps.setString(4, order.getPhoneNumber());
+			ps.setString(5, order.getTypeOfOrder());
+			ps.setString(6, order.getOrderAddress());
+			ps.executeUpdate();
+			System.out.println("writeOrderDataToDB ended successfully");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	//method that updates existing order in DB
+	public boolean updateOrderDataToDB(Order order) {
+		System.out.println("updateOrderDataToDB started");
+		Order currentOrderValue = null;
+		Order newOrderValue = order;
+		currentOrderValue = getOrderDataFromDB(order.getOrderNumber());
+		if (currentOrderValue == null) {
+			// TODO: take care of the error
+			System.out.println("updateOrder Failed ,no order found to update");
+			return false;
+		}
+		if (newOrderValue.getOrderAddress().equals(""))
+			newOrderValue.setOrderAddress(currentOrderValue.getOrderAddress());
+		if (newOrderValue.getOrderTime().equals(""))
+			newOrderValue.setOrderTime(currentOrderValue.getOrderTime());
+		if (newOrderValue.getTypeOfOrder().equals(""))
+			newOrderValue.setTypeOfOrder(currentOrderValue.getTypeOfOrder());
+		if (newOrderValue.getPhoneNumber().equals(""))
+			newOrderValue.setPhoneNumber(currentOrderValue.getPhoneNumber());
+		if (newOrderValue.getRestaurantName().equals(""))
+			newOrderValue.setRestaurantName(currentOrderValue.getRestaurantName());
+		try {
+			String query = "UPDATE "+dbName+"."+orderTableNameInDB+" SET Restaurant = ? ,OrderTime = ? ,PhoneNumber = ? , TypeOfOrder = ?,OrderAddress = ? WHERE OrderNumber = ?";
+			PreparedStatement ps = dbConnection.prepareStatement(query);
+			ps.setString(1, newOrderValue.getRestaurantName());
+			ps.setString(2, newOrderValue.getOrderTime());
+			ps.setString(3, newOrderValue.getPhoneNumber());
+			ps.setString(4, newOrderValue.getTypeOfOrder());
+			ps.setString(5, newOrderValue.getOrderAddress());
+			ps.setString(6, newOrderValue.getOrderNumber());
+			ps.executeUpdate();
+			System.out.println("updateOrderDataToDB ended successfully");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	//method that handles write requests for Order data 
+	public boolean handleWriteRequestMessage(RequestType actionRequired, Order orderData) {
+		boolean result;
+		if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_WRITE_NEW_TO_DB) {
+			result = writeOrderDataToDB(orderData);
+		}else if (actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_WRITE_UPDATE_TO_DB) {
+			result = updateOrderDataToDB(orderData);
+		}else {
+			System.out.println("ERROR handleWriteRequestMessage, unknown request");
+			result = false;
+			//TODO: add error handling
+		}
+		return result;
+	}
 	
-
 }

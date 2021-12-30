@@ -8,7 +8,6 @@ import utility.enums.RequestType;
 
 public class MessageParserHR {
 	
-	
 	public static ArrayList<BusinessClient>  handleMessageExtractDataType_HRGetData(Object message) {
 		ArrayList<BusinessClient> parsedData = new ArrayList<BusinessClient>();
 		ArrayList<String> DataFromServer = (ArrayList<String>)message;
@@ -34,8 +33,51 @@ public class MessageParserHR {
 
 	}
 	
+	public static Object prepareMessageToServer_HRUpdateDB(BusinessClient businessClient,  DataType dataType,RequestType requestType) {	
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+		
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.HR_MANAGER.toString());
+		messageToPrepare.add(businessClient.getWorkerID());
+		messageToPrepare.add(String.valueOf(businessClient.getIsApproved()));
+				
+		return messageToPrepare;
+
+	}
+	
 	public static ArrayList<String> handleMessageFromClient_HRGetData(Object msg){
 		return (ArrayList<String>)msg;
+	}
+	
+	public static Object prepareMessageToServer_HRApproveBusiness(int hr_id,  DataType dataType,RequestType requestType) {	
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+		
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.HR_MANAGER.toString());
+		messageToPrepare.add(String.valueOf(hr_id));
+
+				
+		return messageToPrepare;
+
+	}
+	
+	
+	
+	public static int handleMessageFromClient_ApproveBusinessClient(ArrayList<String> messageFromClient) {	
+		return Integer.parseInt(messageFromClient.get(2));
+
+	}
+	
+	public static ArrayList<String> prepareMessageToServer_HRCheckApproveBusiness(int isApproved,  DataType dataType,RequestType requestType) {	
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+		
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.HR_MANAGER.toString());
+		messageToPrepare.add(String.valueOf(isApproved));
+
+				
+		return messageToPrepare;
+
 	}
 }
 //	public static Object prepareMessageWithDataType_User(BusinessClient BusinessClient, RequestType requestType) {
