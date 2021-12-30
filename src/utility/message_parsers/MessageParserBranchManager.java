@@ -2,9 +2,10 @@ package utility.message_parsers;
 
 import java.util.ArrayList;
 
+import utility.entity.Business;
 import utility.entity.Client;
+import utility.entity.ClientChangePermission;
 import utility.entity.Supplier;
-import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 import utility.enums.UserType;
@@ -73,17 +74,18 @@ public class MessageParserBranchManager {
 			// TODO:ADD ERROR HANDLING
 			return null;
 		}
-		return new Supplier(msg.get(2), msg.get(3), msg.get(4), msg.get(5));
+		return new Supplier(msg.get(2), msg.get(3), msg.get(4), msg.get(5), msg.get(6));
 	}
 	
 	public static Object prepareMessageWithDataType_Supplier(Supplier supplier, RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
 		messageToPrepare.add(requestType.toString());
 		messageToPrepare.add(DataType.SUPPLIER.toString());
-		messageToPrepare.add(String.valueOf(supplier.getRestaurantName()));
+		messageToPrepare.add(supplier.getRestaurantName());
 		messageToPrepare.add(supplier.getImagePath());
 		messageToPrepare.add(supplier.getCategories());
 		messageToPrepare.add(supplier.getPersonalBranch());
+		messageToPrepare.add(supplier.getWorkerID());
 		
 		return messageToPrepare;
 	}
@@ -100,7 +102,121 @@ public class MessageParserBranchManager {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		return msg.get(0);
 	}
+	//------------------------------------------------>approve_business
 	
+	public static Object prepareMessageWithDataType_GET_DATA_OF_BUSINESS(String branchName ,RequestType requestType) {
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.GET_DATA_OF_BUSINESS.toString());
+		messageToPrepare.add(branchName);
+		return messageToPrepare;
+	}
 	
+	public static Object prepareMessageWithResultOfGettingData_Business(RequestType requestType,Object message) {
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+		ArrayList<String> msg = (ArrayList<String>)message;
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.GET_DATA_OF_BUSINESS.toString());
+		messageToPrepare.addAll(msg);
+		
+		return messageToPrepare;
+	}
 	
+	public static Business handleMessageExtractDataType_Business(Object message) {
+		ArrayList<String> msg = (ArrayList<String>) message;
+		if (!msg.get(1).equals("APPROVE_BUSINESS")) {
+			// TODO:ADD ERROR HANDLING
+			return null;
+		}
+		return new Business(Integer.parseInt(msg.get(2)),msg.get(3),Integer.parseInt(msg.get(4)),Integer.parseInt(msg.get(5)),msg.get(6));
+	}
+
+	public static Object prepareMessageWithDataType_Business(Business business, RequestType requestType) {
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.APPROVE_BUSINESS.toString());
+		messageToPrepare.add(String.valueOf(business.getBusinessId()));
+		messageToPrepare.add(business.getBusinessName());
+		messageToPrepare.add(String.valueOf(business.getIsApproved()));
+		messageToPrepare.add(String.valueOf(business.getHr_id()));
+		messageToPrepare.add(business.getBranch());
+		
+		
+		return messageToPrepare;
+	}
+	
+	public static Object prepareMessageWithResultOfApproveBusiness(RequestType requestType) {
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.APPROVE_BUSINESS.toString());
+		
+		return messageToPrepare;
+	}
+	
+	public static String handleMessageExtractDataTypeResultOfApproveBusiness(Object message) {
+		ArrayList<String> msg = (ArrayList<String>) message;
+		return msg.get(0);
+	}
+
+	
+	//-------------------------------------------------------->user
+	public static Object prepareMessageWithDataType_getDataOfClient(String branchName,RequestType requestType) {
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.GET_DATA_OF_CLIENT.toString());
+		messageToPrepare.add(branchName);
+		return messageToPrepare;
+	}	
+	
+	public static Object prepareMessageWithDataType_GetDataOfClient(ArrayList<String> clientList, RequestType requestType) {
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.GET_DATA_OF_CLIENT.toString());
+		messageToPrepare.addAll(clientList);
+		return messageToPrepare;
+	}
+	
+	public static ArrayList<ClientChangePermission> handleMessageExtractDataType_GetDataOfClient(Object message) {
+		ArrayList<String> msg = (ArrayList<String>) message;
+		ArrayList<ClientChangePermission> parsedData = new ArrayList<ClientChangePermission>();
+		if (!msg.get(1).equals("GET_DATA_OF_CLIENT")) {
+			// TODO:ADD ERROR HANDLING
+			return null;
+		}
+		for(int i = 2 ; i+4 < msg.size() ; i+=5) {
+			ClientChangePermission client = new ClientChangePermission(msg.get(i), msg.get(i+1),msg.get(i+2), msg.get(i+3),msg.get(i+4));
+			parsedData.add(client);
+		}
+		return parsedData;
+	}
+	
+	public static Object prepareMessageWithDataType_changePermission(ClientChangePermission client,RequestType requestType) {
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.CHANGE_PERMISSION.toString());
+		messageToPrepare.add(client.getFirstName());
+		messageToPrepare.add(client.getLastName());
+		messageToPrepare.add(client.getBranch());
+		messageToPrepare.add(client.getStatus());
+		messageToPrepare.add(client.getId());
+		return messageToPrepare;
+	}
+	
+	public static Object prepareMessageWithResultOfChangePermission(RequestType requestType) {
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.CHANGE_PERMISSION.toString());
+		
+		return messageToPrepare;
+	}
+	//extract message from arraylist to string ,for change permission and report
+	public static String handleMessageExtractFromArrayList(Object message) {
+		ArrayList<String> msg = (ArrayList<String>) message;
+		return msg.get(0);
+	}
+
 }

@@ -6,15 +6,22 @@ public class Supplier {
 	private String imagePath;
 	private String categories;
 	private String personalBranch;
-	public Supplier(String restaurantName, String imagePath, String categories,String personalBranch) {
+	private String workerID;
+	
+	public Supplier(String restaurantName, String imagePath, String categories,String personalBranch,String workerID) {
 		this.restaurantName = restaurantName;
 		this.imagePath = imagePath;
 		this.categories = categories;
 		this.personalBranch=personalBranch;
+		this.workerID = workerID;
 	}
 	
-	public Supplier(String restaurantName,String personalBranch) {
-		this(restaurantName,"","",personalBranch);
+	public String getWorkerID() {
+		return workerID;
+	}
+
+	public Supplier(String restaurantName,String categories,String personalBranch,String workerID) {
+		this(restaurantName,"",categories,personalBranch,workerID);
 	}
 	
 	public String getRestaurantName() {

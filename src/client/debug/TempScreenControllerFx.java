@@ -2,7 +2,6 @@ package client.debug;
 
 import java.io.IOException;
 
-
 import client.interfaces.IClientFxController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

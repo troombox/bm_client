@@ -39,11 +39,13 @@ public class User {
 	
 	public User(int user_ID, String firstName, String lastName, String personalBranch, String email, String phone, UserType userType,
 			String status, String w4c, boolean isSignedIn, String password) {
+
 		this(user_ID, firstName, lastName, personalBranch, email, phone, userType, status, w4c, isSignedIn, password, -1, -1);
 	}
 	
 	public User(String email, String password){
 		this(-1, "", "", "", email, "", UserType.USER, "", "", false, password, -1, -1);
+
 	}
 	
 	
@@ -100,9 +102,11 @@ public class User {
 		return userType;
 	}
 	
+
 	public int getPersonalCode() {
 		return personalCode;
 	}
+
 
 
 	public int getBuisnessCode() {
@@ -116,6 +120,7 @@ public class User {
 				+ ", password=" + password + ", isSignedIn=" + isSignedIn + ", userType=" + userType + ", personalCode="
 				+ personalCode + ", buisnessCode=" + buisnessCode + "]";
 	}
+
 
 	public void setPersonalCode(int personalCode) {
 		this.personalCode = personalCode;

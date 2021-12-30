@@ -66,7 +66,10 @@ public class BMClientLogic extends AbstractClient{
 				lastDataRecieved = MessageParserBranchManager.handleMessageExtractDataType_GetDataOfClient(messageFromServerToClient);
 				break;
 			case CHANGE_PERMISSION:
-				lastDataRecieved = MessageParserBranchManager.handleMessageExtractDataTypeResultOfChangePermission(messageFromServerToClient);
+				lastDataRecieved = MessageParserBranchManager.handleMessageExtractFromArrayList(messageFromServerToClient);
+				break;
+			case REPORT:
+				lastDataRecieved = MessageParserBranchManager.handleMessageExtractFromArrayList(messageFromServerToClient);
 				break;
 			default:
 				System.out.println("ERROR, UNKNOWN DATA TYPE");
@@ -107,6 +110,9 @@ public class BMClientLogic extends AbstractClient{
 			break;
 		case CHANGE_PERMISSION:
 			message = MessageParserBranchManager.prepareMessageWithDataType_changePermission((ClientChangePermission)dataToSendToServer, requestType);
+			break;
+		case REPORT:
+			message = dataToSendToServer;
 			break;
 		case ARRAYLIST_STRING:
 			ArrayList<String> arraylist = (ArrayList<String>)dataToSendToServer;

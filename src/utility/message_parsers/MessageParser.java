@@ -55,6 +55,10 @@ public class MessageParser {
 			return RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA_CLIENT_INFO;
 		case "CLIENT_REQUEST_TO_SERVER_CHANGE_PERMISSION":
 			return RequestType.CLIENT_REQUEST_TO_SERVER_CHANGE_PERMISSION; 
+		case "CLIENT_REQUEST_TO_SERVER_OPEN_REPORT":
+			return RequestType.CLIENT_REQUEST_TO_SERVER_OPEN_REPORT;
+		case "SERVER_MESSAGE_TO_CLIENT_OPEN_REPORT_SUCCESS":
+			return RequestType.SERVER_MESSAGE_TO_CLIENT_OPEN_REPORT_SUCCESS;
 		default:
 			// TODO: ADD error handling for this case;
 			return RequestType.CLIENT_REQUEST_TO_SERVER_UNKNOWN_REQUEST;
@@ -93,6 +97,8 @@ public class MessageParser {
 			return DataType.GET_DATA_OF_CLIENT; 
 		case "CHANGE_PERMISSION":
 			return DataType.CHANGE_PERMISSION;
+		case "REPORT":
+			return DataType.REPORT;
 		default:
 			// TODO: ADD error handling for this case;
 			return DataType.UNKNOWN;
