@@ -2,6 +2,7 @@ package client.gui.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import client.gui.logic.ClientUI;
@@ -14,10 +15,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.VBox;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import utility.entity.Dish;
@@ -57,11 +61,37 @@ public class ControllerFX_EditDishScreen implements IClientFxController, Initial
     public static Dish dish;
     
     @FXML
+    private Label ErrorMsg;
+    
+    @FXML
+    private VBox cookingLevelVBox;
+    
+    public static ArrayList<Dish> menu;
+    
+    @FXML
+    private Tooltip priceTT;
+    
+    @FXML
+    private Tooltip sizeTT;
+    
+    @FXML
+    private Tooltip coockingLevelTT;
+
+    
+    @FXML
     void removeSelectedLevelOfCooking(ActionEvent event) {
     	String levelOfCooking = levelOfCookingList.getSelectionModel().getSelectedItem();
     	if(levelOfCooking != null) {
     		levelOfCookingList.getItems().remove(levelOfCooking);
     	}
+    }
+    
+    @FXML
+    void checkSelectedTypeValue(ActionEvent event) {
+    	if(dishTypeComboBox.getValue() == "drink") {
+    		cookingLevelVBox.setDisable(true);
+    	}
+    	else cookingLevelVBox.setDisable(false);
     }
 
     @FXML
@@ -69,11 +99,8 @@ public class ControllerFX_EditDishScreen implements IClientFxController, Initial
     	String size = sizeList.getSelectionModel().getSelectedItem();
     	String price = priceList.getSelectionModel().getSelectedItem();
     	if(size==null || price == null) {
-    		Alert alert = new Alert(AlertType.INFORMATION);
-	    	alert.setTitle("empty field");
-	    	alert.setHeaderText(null);
-	    	alert.setContentText("please select size and price to delete");
-	    	alert.showAndWait();
+    		ErrorMsg.setVisible(true);
+    		ErrorMsg.setText("please select size and price to delete");
 	    	return;
     	}
     	
@@ -95,29 +122,20 @@ public class ControllerFX_EditDishScreen implements IClientFxController, Initial
     	String size = sizeTextBox.getText();
     	String price = priceTextBox.getText();
     	if(size.isEmpty()) {
-    		Alert alert = new Alert(AlertType.INFORMATION);
-	    	alert.setTitle("empty field");
-	    	alert.setHeaderText(null);
-	    	alert.setContentText("please fill size to add");
-	    	alert.showAndWait();
+    		ErrorMsg.setVisible(true);
+    		ErrorMsg.setText("please fill size to add");
 	    	return;
     	}
     	if(price.isEmpty()) {
-    		Alert alert = new Alert(AlertType.INFORMATION);
-	    	alert.setTitle("empty field");
-	    	alert.setHeaderText(null);
-	    	alert.setContentText("please fill price to add");
-	    	alert.showAndWait();
+    		ErrorMsg.setVisible(true);
+    		ErrorMsg.setText("please fill price to add");
 	    	return;
     	}
     	try {
-    		Integer.parseInt(price);
+    		Float.parseFloat(price);
     	} catch (Exception e) {
-    		Alert alert = new Alert(AlertType.INFORMATION);
-	    	alert.setTitle("wrong input");
-	    	alert.setHeaderText(null);
-	    	alert.setContentText("The price must be a number");
-	    	alert.showAndWait();
+    		ErrorMsg.setVisible(true);
+    		ErrorMsg.setText("The price must be a number");
 	    	return;
 		}   	
     	
@@ -152,8 +170,9 @@ public class ControllerFX_EditDishScreen implements IClientFxController, Initial
     			e.printStackTrace();
     		}
     		if(ClientUI.clientLogic.getTypeOfLastDataRecieved() == DataType.ERROR_MESSAGE) {
-    			System.out.println(ClientUI.clientLogic.getLastDataRecieved());
-    			return;
+    			ErrorMsg.setVisible(true);
+        		ErrorMsg.setText((String)ClientUI.clientLogic.getLastDataRecieved());
+    	    	return;
     		}
     		if(ClientUI.clientLogic.getTypeOfLastDataRecieved() != DataType.SINGLE_TEXT_STRING) {
     			System.out.println("Houston, we got a problem!");
@@ -189,10 +208,6 @@ public class ControllerFX_EditDishScreen implements IClientFxController, Initial
     			price += ",";
     		}
     	}
-    	if(price == "") {
-    		System.out.println("please enter a price");
-    		return;
-    	}
     	String levelOfCooking = "";
     	for(int i=0; i<levelOfCookingList.getItems().size(); i++) {
     		levelOfCooking += levelOfCookingList.getItems().get(i);
@@ -201,9 +216,33 @@ public class ControllerFX_EditDishScreen implements IClientFxController, Initial
     		}
     	}
     	if(levelOfCooking == "") levelOfCooking = null;
-    	if(dishType == null || dishName == null || description == null) {
-    		System.out.println("please fill all fields");
+    	if(dishName.isEmpty() ) {
+    		ErrorMsg.setVisible(true);
+    		ErrorMsg.setText("please insert dish name");
     		return;
+    	}
+    	if(dishType == null ) {
+        	ErrorMsg.setVisible(true);
+        	ErrorMsg.setText("please insert dish type");
+        	return;
+        }
+        if(description.isEmpty() ) {
+            ErrorMsg.setVisible(true);
+            ErrorMsg.setText("please insert dish description");
+            return;
+        }
+    	if(price == "") {
+    		ErrorMsg.setVisible(true);
+            ErrorMsg.setText("please enter size and price");
+            return;
+    	}
+    	
+    	for(Dish dish1: menu) {
+    		if(dish1.getName().equals(dishName) && dish1.getDish_ID()!=dish.getDish_ID()) {
+    			ErrorMsg.setVisible(true);
+                ErrorMsg.setText(dishName + " already exist in your menu! please select different name to your dish.");
+                return;
+    		}
     	}
     	
     	Dish updatedDish = new Dish(dish.getDish_ID(), dish.getRes_ID(),dishType , dishName, description, sizes, levelOfCooking, price);
@@ -215,8 +254,9 @@ public class ControllerFX_EditDishScreen implements IClientFxController, Initial
 			e.printStackTrace();
 		}
 		if(ClientUI.clientLogic.getTypeOfLastDataRecieved() == DataType.ERROR_MESSAGE) {
-			System.out.println(ClientUI.clientLogic.getLastDataRecieved());
-			return;
+			ErrorMsg.setVisible(true);
+    		ErrorMsg.setText((String)ClientUI.clientLogic.getLastDataRecieved());
+	    	return;
 		}
 		if(ClientUI.clientLogic.getTypeOfLastDataRecieved() != DataType.SINGLE_TEXT_STRING) {
 			System.out.println("Houston, we got a problem!");
@@ -253,6 +293,19 @@ public class ControllerFX_EditDishScreen implements IClientFxController, Initial
 			String[] cookingLevel = dish.getCooking_level().split(",");
 		levelOfCookingList.getItems().addAll(cookingLevel);
 		}
+		
+		priceList.setTooltip(priceTT);
+		sizeList.setTooltip(sizeTT);
+		levelOfCookingList.setTooltip(coockingLevelTT);
+		
+		sizeList.setPlaceholder(new Label("No sizes"));
+		priceList.setPlaceholder(new Label("No prices"));
+		levelOfCookingList.setPlaceholder(new Label("No cooking level"));
+		
+		if(dishTypeComboBox.getValue() == "drink") {
+    		cookingLevelVBox.setDisable(true);
+    	}
+    	else cookingLevelVBox.setDisable(false);
 		
 	}
 

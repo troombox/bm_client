@@ -48,12 +48,15 @@ public class ControllerFX_EditMenuscreen implements IClientFxController, Initial
     private Tab drinksTab;
     
     public static Restaurant res;
+    
+    public static ArrayList<Dish> menu;
 
     @FXML
     void addNewDish(ActionEvent event) {
     	ClientUI.historyStack.pushFxController(this);
     	IClientFxController nextScreen = new ControllerFX_AddDishScreen();
     	ControllerFX_AddDishScreen.res = res;
+    	ControllerFX_AddDishScreen.menu = menu;    	
 	    nextScreen.start(ClientUI.parentWindow);
 
     }
@@ -110,6 +113,8 @@ public class ControllerFX_EditMenuscreen implements IClientFxController, Initial
 			
 			ArrayList<Dish> DishesToShow = (ArrayList<Dish>)ClientUI.clientLogic.getLastDataRecieved();
 	    	
+			menu = DishesToShow;
+			
 			if(DishesToShow.size() == 0) return;
 			
 			VBox firtsVbox = new VBox();
@@ -137,6 +142,7 @@ public class ControllerFX_EditMenuscreen implements IClientFxController, Initial
 		            public void handle(ActionEvent event) {
 		            	IClientFxController nextScreen = new ControllerFX_EditDishScreen();
 		            	ControllerFX_EditDishScreen.dish = d;
+		            	ControllerFX_EditDishScreen.menu = menu;    	
 		            	ClientUI.historyStack.pushFxController(editMenu);
 		            	nextScreen.start(ClientUI.parentWindow);
 		            }

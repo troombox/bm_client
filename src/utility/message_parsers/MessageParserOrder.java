@@ -66,7 +66,6 @@ public class MessageParserOrder {
 				messageToPrepare.add(dish.getCooking_level());
 				messageToPrepare.add(String.valueOf(dish.getPrice()));
 				messageToPrepare.add(dish.getExceptions());
-				System.out.println(dish);
 			}
 		}
 		

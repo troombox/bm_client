@@ -166,7 +166,6 @@ public class OrderDBController {
 						Dish dish = new Dish(rs3.getString(1), rs3.getString(2), rs3.getString(3), rs3.getString(4),
 								rs3.getString(5), rs2.getString(5), rs2.getString(6), rs3.getString(8));
 						dish.setExceptions(rs2.getString(7));
-						System.out.println(rs2.getString(7));
 						order.getDishesInOrder().add(dish);
 					} 
 					rs3.close();

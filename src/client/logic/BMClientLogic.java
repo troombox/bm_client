@@ -111,7 +111,6 @@ public class BMClientLogic extends AbstractClient{
 	
 	private void handleMessageToServer(Object msg) {
 		try {
-			System.out.println(msg);
 			sendToServer(msg);
 		} catch (IOException e) {
 			System.out.println("Could not send message to server. Terminating client.");

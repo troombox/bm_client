@@ -7,6 +7,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -40,22 +41,16 @@
                   <Label style="-fx-font-size: 16;" text="insert the new dish details here:" />
                   <HBox spacing="20.0">
                      <children>
-                        <TextField fx:id="dishNameTextBox" prefHeight="26.0" prefWidth="422.0" promptText="name" />
-                        <ComboBox fx:id="dishTypeComboBox" prefHeight="26.0" prefWidth="228.0" promptText="type of dish" />
+                        <TextField fx:id="dishNameTextBox" prefHeight="26.0" prefWidth="422.0" promptText="dish name" />
+                        <ComboBox fx:id="dishTypeComboBox" onAction="#checkSelectedTypeValue" prefHeight="26.0" prefWidth="228.0" promptText="type of dish" />
                      </children>
                   </HBox>
-                  <TextArea fx:id="dishDescriptionTextBox" prefHeight="66.0" prefWidth="538.0" promptText="description" wrapText="true" />
+                  <TextArea fx:id="dishDescriptionTextBox" prefHeight="60.0" prefWidth="584.0" promptText="description the dish" wrapText="true" />
                   <HBox alignment="CENTER" prefHeight="146.0" prefWidth="538.0" spacing="20.0">
                      <children>
                         <VBox alignment="CENTER" prefHeight="36.0" prefWidth="374.0" spacing="5.0">
                            <children>
                               <Label alignment="CENTER" contentDisplay="CENTER" style="-fx-font-size: 14;" text="edit options of sizes and their price:" />
-                              <HBox>
-                                 <children>
-                                    <ListView fx:id="sizeList" editable="true" prefHeight="88.0" prefWidth="170.0" />
-                                    <ListView fx:id="priceList" editable="true" prefHeight="88.0" prefWidth="183.0" />
-                                 </children>
-                              </HBox>
                               <HBox spacing="5.0">
                                  <children>
                                     <TextField fx:id="sizeTextBox" prefHeight="26.0" prefWidth="145.0" promptText="add new size" />
@@ -75,12 +70,23 @@
                                     </Button>
                                  </children>
                               </HBox>
+                              <HBox>
+                                 <children>
+                                    <ListView fx:id="sizeList" pickOnBounds="false" prefHeight="88.0" prefWidth="170.0">
+                                       <tooltip>
+                                          <Tooltip fx:id="sizeTT" text="you can see here your dish's sizes" wrapText="true" />
+                                       </tooltip></ListView>
+                                    <ListView fx:id="priceList" prefHeight="88.0" prefWidth="183.0">
+                                       <tooltip>
+                                          <Tooltip fx:id="priceTT" text="you can see here your dish's prices" wrapText="true" />
+                                       </tooltip></ListView>
+                                 </children>
+                              </HBox>
                            </children>
                         </VBox>
-                        <VBox prefHeight="146.0" prefWidth="261.0" spacing="5.0">
+                        <VBox fx:id="cookingLevelVBox" prefHeight="146.0" prefWidth="261.0" spacing="5.0">
                            <children>
                               <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="19.0" prefWidth="278.0" style="-fx-font-size: 13;" text="edit options of level of cooking:" wrapText="true" />
-                              <ListView fx:id="levelOfCookingList" prefHeight="200.0" prefWidth="200.0" />
                               <HBox prefHeight="26.0" prefWidth="339.0" spacing="5.0">
                                  <children>
                                     <TextField fx:id="levelOfCookingTextBox" promptText="add new level of cooking" />
@@ -99,15 +105,42 @@
                                     </Button>
                                  </children>
                               </HBox>
+                              <ListView fx:id="levelOfCookingList" prefHeight="200.0" prefWidth="200.0">
+                                 <tooltip>
+                                    <Tooltip fx:id="coockingLevelTT" text="you can see here your dish's cooking levels" wrapText="true" />
+                                 </tooltip></ListView>
                            </children>
                         </VBox>
                      </children>
                   </HBox>
-                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addDishToMenu" prefHeight="42.0" prefWidth="119.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="add dish to menu">
-                     <effect>
-                        <DropShadow />
-                     </effect>
-                  </Button>
+                  <HBox alignment="TOP_RIGHT" spacing="20.0">
+                     <children>
+                        <HBox prefHeight="42.0" prefWidth="406.0">
+                           <children>
+                              <Label fx:id="ErrorMsg" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" style="-fx-background-color: #f44336; -fx-background-radius: 10px; -fx-text-fill: #ffffff; -fx-font-size: 14;" visible="false" wrapText="true">
+                                 <padding>
+                                    <Insets left="10.0" right="10.0" />
+                                 </padding>
+                                 <graphic>
+                                    <ImageView fitHeight="34.0" fitWidth="36.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../../images/error.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addDishToMenu" prefHeight="42.0" prefWidth="119.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="add dish to menu">
+                           <effect>
+                              <DropShadow />
+                           </effect>
+                           <HBox.margin>
+                              <Insets right="20.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
                </children>
             </VBox>
          </children>
