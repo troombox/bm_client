@@ -135,84 +135,51 @@ public class ControllerFX_ActiveOrdersScreen implements IClientFxController, Ini
     public static Restaurant res;
     
     private void sendEmail(Order order, String msg) {
+         
     	 //String to = order.getUserEmail();
     	String to = "nitzan963@gmail.com";
-
+    	
          // Sender's email ID needs to be mentioned
-         String from = "mebite857@gmail.com";
-         String Password = "group@#16";
+    	final String from = "mebite857@gmail.com";
+    	final String Password = "group@#16";
 
-         // Assuming you are sending email from localhost
-         String host = "smtp.gmail.com";
-         String emailPort = "465";
-
-         // Get system properties
-         Properties properties = new Properties();
-
-         // Setup mail server
-        // properties.setProperty("mail.smtp.host", host);
-        // properties = System.getProperties();
-         properties.put("mail.smtp.host", host);
-         properties.put("mail.smtp.socketFactory.port", emailPort);  
-         properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-         properties.put("mail.smtp.auth", "true");
-         properties.put("mail.smtp.port", emailPort);
-         
-        // properties.put("mail.smtp.ssl.enable", "true"); 
+ 
+         Properties prop = new Properties();
+  		prop.put("mail.smtp.host", "smtp.gmail.com");
+          prop.put("mail.smtp.port", "587");
+          prop.put("mail.smtp.auth", "true");
+          prop.put("mail.smtp.starttls.enable", "true"); //TLS
+          
 
          
-//         properties.put("mail.smtp.starttls.enable", "true");
-//                  
-//         properties.put("mail.smtp.starttls.required", "true");
-//         properties.put("mail.smtp.ssl.protocols", "TLSv1.2");
-//         properties.put("mail.smtp.user", from);
-//         properties.put("mail.smtp.password", Password);
-
-         // Get the default Session object.
-         Session session = Session.getDefaultInstance(properties, new javax.mail.Authenticator() {
-
-             protected PasswordAuthentication getPasswordAuthentication() {
-
-                 return new PasswordAuthentication(from, Password);
-
-             }
-
-         });
-         
-         
+         Session session = Session.getInstance(prop,
+                 new javax.mail.Authenticator() {
+                     protected PasswordAuthentication getPasswordAuthentication() {
+                         return new PasswordAuthentication(from, Password);
+                     }
+                 });
 
          try {
-            // Create a default MimeMessage object.
-            MimeMessage message = new MimeMessage(session);
 
-            // Set From: header field of the header.
-           // message.setFrom(new InternetAddress(from));
+             Message message = new MimeMessage(session);
+             message.setFrom(new InternetAddress(from));
+             message.setRecipients(
+                     Message.RecipientType.TO,
+                     InternetAddress.parse(to)
+             );
+           message.setSubject("Your order's status updated!");
+           message.setText(msg);
 
-            // Set To: header field of the header.
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
-            // Set Subject: header field
-            message.setSubject("Your order's status updated!");
+             Transport.send(message);
 
-            // Now set the actual message
-            message.setText(msg);
 
-//            Transport transport = session.getTransport("smtp");
-//
-//            transport.connect(host, from, Password);
-//
-//    		transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
-//    		transport.close();
-            // Send message
-            
-            Transport.send(message);
-            
-            
-            System.out.println("Sent message successfully....");
-         } catch (MessagingException mex) {
-            mex.printStackTrace();
+         } catch (MessagingException e) {
+             e.printStackTrace();
          }
-      }
+     }
+    
+   
 
     @FXML
     void goBack(ActionEvent event) {
@@ -432,117 +399,10 @@ public class ControllerFX_ActiveOrdersScreen implements IClientFxController, Ini
 	
 	private void populateTable() {
 		populateWaitingForApprovalTable();
-//		ClientUI.clientLogic.sendMessageToServer(request,
-//				DataType.ARRAYLIST_STRING, RequestType.CLIENT_REQUEST_TO_SERVER_GET_ORDERS_BY_RESTAURANT_ID_REQUEST);
-//		try {
-//			Thread.sleep(500);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//		if(ClientUI.clientLogic.getTypeOfLastDataRecieved() == DataType.ERROR_MESSAGE)
-//			{
-//				Alert alert = new Alert(AlertType.INFORMATION);
-//		    	alert.setTitle("Error");
-//		    	alert.setHeaderText(null);
-//		    	alert.setContentText(ClientUI.clientLogic.getLastDataRecieved().toString());
-//		    	alert.showAndWait();
-//		    	return;
-//			}
-//			if(ClientUI.clientLogic.getTypeOfLastDataRecieved() != DataType.ORDERS_LIST) {
-//				System.out.println("Houston, we got a problem!");
-//				return;
-//			}	
-//		ArrayList<Order> recievedData = (ArrayList<Order>) ClientUI.clientLogic.getLastDataRecieved();
-//		waitForApprovalTable.getItems().setAll(recievedData);
-		
-		// in the kitchen table load
-//		request.clear();
-//		request.add(res.getRes_ID());
-//		request.add("in the kitchen");
 		populateInKitchenTable();
-//		ClientUI.clientLogic.sendMessageToServer(request,
-//			DataType.ARRAYLIST_STRING, RequestType.CLIENT_REQUEST_TO_SERVER_GET_ORDERS_BY_RESTAURANT_ID_REQUEST);
-//				try {
-//			Thread.sleep(500);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//		if(ClientUI.clientLogic.getTypeOfLastDataRecieved() == DataType.ERROR_MESSAGE)
-//			{
-//				Alert alert = new Alert(AlertType.INFORMATION);
-//		    	alert.setTitle("Error");
-//		    	alert.setHeaderText(null);
-//		    	alert.setContentText(ClientUI.clientLogic.getLastDataRecieved().toString());
-//		    	alert.showAndWait();
-//		    	return;
-//			}
-//			if(ClientUI.clientLogic.getTypeOfLastDataRecieved() != DataType.ORDERS_LIST) {
-//				System.out.println("Houston, we got a problem!");
-//				return;
-//			}	
-//		ArrayList<Order> recievedData = (ArrayList<Order>) ClientUI.clientLogic.getLastDataRecieved();
-//		inTheKitchenTable.getItems().setAll(recievedData);
-//		
-		
-		// ready table load
-//		request.clear();
-//		request.add(res.getRes_ID());
-//		request.add("ready");
 		populateReadyTable();
-//		ClientUI.clientLogic.sendMessageToServer(request,
-//			DataType.ARRAYLIST_STRING, RequestType.CLIENT_REQUEST_TO_SERVER_GET_ORDERS_BY_RESTAURANT_ID_REQUEST);
-//				try {
-//			Thread.sleep(500);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//		if(ClientUI.clientLogic.getTypeOfLastDataRecieved() == DataType.ERROR_MESSAGE)
-//			{
-//				Alert alert = new Alert(AlertType.INFORMATION);
-//		    	alert.setTitle("Error");
-//		    	alert.setHeaderText(null);
-//		    	alert.setContentText(ClientUI.clientLogic.getLastDataRecieved().toString());
-//		    	alert.showAndWait();
-//		    	return;
-//			}
-//			if(ClientUI.clientLogic.getTypeOfLastDataRecieved() != DataType.ORDERS_LIST) {
-//				System.out.println("Houston, we got a problem!");
-//				return;
-//			}	
-//		ArrayList<Order> recievedData = (ArrayList<Order>) ClientUI.clientLogic.getLastDataRecieved();
-//		readyTable.getItems().setAll(recievedData);
-		
-		
-		// completed table load
-//		request.clear();
-//		request.add(res.getRes_ID());
-//		request.add("done");
 		populateCompletedTable();
-//		ClientUI.clientLogic.sendMessageToServer(request,
-//			DataType.ARRAYLIST_STRING, RequestType.CLIENT_REQUEST_TO_SERVER_GET_ORDERS_BY_RESTAURANT_ID_REQUEST);
-//				try {
-//			Thread.sleep(500);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//		if(ClientUI.clientLogic.getTypeOfLastDataRecieved() == DataType.ERROR_MESSAGE)
-//			{
-//				Alert alert = new Alert(AlertType.INFORMATION);
-//		    	alert.setTitle("Error");
-//		    	alert.setHeaderText(null);
-//		    	alert.setContentText(ClientUI.clientLogic.getLastDataRecieved().toString());
-//		    	alert.showAndWait();
-//		    	return;
-//			}
-//			if(ClientUI.clientLogic.getTypeOfLastDataRecieved() != DataType.ORDERS_LIST) {
-//				System.out.println("Houston, we got a problem!");
-//				return;
-//			}	
-//		ArrayList<Order> recievedData = (ArrayList<Order>) ClientUI.clientLogic.getLastDataRecieved();
-//		completedTable.getItems().setAll(recievedData);
 		
-		
-
 	}
 	
 	public void populateCompletedTable() {
