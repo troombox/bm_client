@@ -28,8 +28,8 @@ public class BMServerLogic extends AbstractServer {
 	RestaurantDBController restaurantDBController;
 	HRDBController hrDBController;
 	DishesDBController dishesDBController;
-	OpenReoprtDBController openReoprtDBController;
-	
+	BusinessClientDBController budDBController;
+  OpenReoprtDBController openReoprtDBController;
 	
 	boolean flagFileIncoming = false;
 	ConnectionToClient fileSenderClient = null;
@@ -52,8 +52,12 @@ public class BMServerLogic extends AbstractServer {
 		this.restaurantDBController = new RestaurantDBController(dbController);
 		this.hrDBController = new HRDBController(dbController);
 		this.dishesDBController = new DishesDBController(dbController);
-		this.businessDBConteroller = new BusinessDBController(dbController);
+    
+    this.businessDBConteroller = new BusinessDBController(dbController);
 		this.openReoprtDBController = new OpenReoprtDBController(dbController);
+		this.budDBController = new BusinessClientDBController(dbController);
+		
+		userDBController.setAllUsersToLoggedOut();
 	}
 
 	public void handleMessageFromClient(Object msg, ConnectionToClient client) {
@@ -96,6 +100,10 @@ public class BMServerLogic extends AbstractServer {
 			handleGetRestaurantsByCategoryRequest(actionRequired, msg, client);
 		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_MENU_REQUEST) {
 			handleGetMenuRequest(actionRequired, msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_BUSINESS_CLIENT_DATA) {
+			handleGetBusinessClientDataRequest(actionRequired, msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_CLIENT_REFUNDS_DATA) {
+			handleGetCRFRequest(actionRequired, msg, client);
 		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA_BUSINESSES_NAMES) {
 			handleGetDataOfBusiness(actionRequired, msg, client);
 		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_APPROVE_BUSINESS) {
@@ -177,12 +185,10 @@ public class BMServerLogic extends AbstractServer {
 		DataType messageDataType = MessageParser.parseMessage_DataType(msg);
 		switch (messageDataType) {
 		case ORDER:
-//				Order orderData = MessageParser.parseMessageDataType_Order(msg);
-//				if(!orderDBController.handleWriteRequestMessage(actionRequired, orderData)) {
-//					String error = "Error: Failed to update given OrderNumber in DB";
-//					Object response = MessageParser.createMessageToClientDataType_Error(error);
-//					sendMessageToGivenClient(response,client);
-//				}
+			System.out.println("handleWriteRequest, ORDER");
+			Order orderData = MessageParserOrder.handleMessageExtractDataType_Order(msg);
+			System.out.println(orderData.toString());
+			orderDBController.writeOrderDataToDB(orderData);
 			break;
 		case HR_MANAGER:
 			boolean response = HRDBController.updateUsersInDB((ArrayList<String>)msg);
@@ -497,6 +503,34 @@ public class BMServerLogic extends AbstractServer {
 
 	}
 	
+	private void handleGetBusinessClientDataRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		String businessCode = MessageParserTextString.handleMessageExtractDataType_SingleTextString(msg);
+		if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_BUSINESS_CLIENT_DATA) {
+			Object response;
+    		try {
+    			BusinessClientData result = budDBController.getBUD(businessCode);
+            	response = MessageParserBusinessClientData.prepareMessageWithDataType_BusinessClientData(result, RequestType.SERVER_MESSAGE_TO_CLIENT_DATA_PROVIDED);
+            	sendMessageToGivenClient(response,client);
+            }catch(BMServerException e) {
+            	e.printStackTrace();
+            	System.out.println(e.getMessage());
+                response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(), e.getMessage());
+                sendMessageToGivenClient(response,client);
+            }
+		}
+	}
+	
+	private void handleGetCRFRequest(RequestType actionRequired, Object msg, ConnectionToClient client){
+		ArrayList<String> resIDs = MessageParserTextString.parseMessageDataType_ArrayListString(msg);
+		if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_CLIENT_REFUNDS_DATA) {
+			Object response;
+			int refundAmount =  orderDBController.getCRFDataForRestaurantsGiven(resIDs);
+        	response = MessageParserTextString.prepareMessageWithDataType_SingleTextString(String.valueOf(refundAmount), RequestType.SERVER_MESSAGE_TO_CLIENT_REFUND_AMOUNT);
+        	sendMessageToGivenClient(response,client);
+    	}
+	}
+	
+
 	private void handleOrdersStatus(RequestType actionRequired, Object msg, ConnectionToClient client) {
         ArrayList<String> array = (ArrayList<String>) msg;
         Boolean response = orderDBController.moveOrder(array.get(2), array.get(3));

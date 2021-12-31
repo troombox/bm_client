@@ -1,3 +1,4 @@
+
 package utility.entity;
 
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public class Order {
 	private int totalPrice;
 	private String timeOfOrder;
 	private String timeOfArrival;
+  
+  private boolean isPrivateOrder = true;
 
 	private ArrayList<Dish> dishesInOrder;
 	
@@ -188,6 +191,15 @@ public class Order {
 	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
 	}
+  
+  public boolean isPrivateOrder() {
+		return isPrivateOrder;
+	}
+
+	public void setPrivateOrder(boolean isPrivateOrder) {
+		this.isPrivateOrder = isPrivateOrder;
+	}
 	
 	
 }
+

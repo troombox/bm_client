@@ -33,8 +33,9 @@ public class MessageParserTextString {
 		ArrayList<String> messageToServer = new ArrayList<String>();	
 		messageToServer.add(requestType.toString());
 		messageToServer.add(DataType.ARRAYLIST_STRING.toString());
-		messageToServer.add(dataToSendToServer.get(0));
-		messageToServer.add(dataToSendToServer.get(1));
+		for(int i = 0; i < dataToSendToServer.size(); i++) {
+			messageToServer.add(dataToSendToServer.get(i));
+		}
 		return messageToServer;
 	}
 	
@@ -47,8 +48,9 @@ public class MessageParserTextString {
 			return null;
 		}
 		ArrayList<String> arraylist = new ArrayList<>();
-		arraylist.add(msg.get(2));
-		arraylist.add(msg.get(3));
+		for(int i = 2; i < msg.size(); i++) {
+			arraylist.add(msg.get(i));
+		}
 		return arraylist;
 	}
 }

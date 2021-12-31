@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import server.exceptions.BMServerException;
 import utility.enums.ErrorType;
@@ -131,6 +132,16 @@ public class UserDBController {
 		try {
 			ps = dbConnection.prepareStatement(query);
 			ps.setString(1, userEmail);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void setAllUsersToLoggedOut() {
+		String query = "UPDATE `" + dbName + "`." + userTableNameInDB + " SET isSignedIn = 0";
+		try {
+			PreparedStatement ps = dbConnection.prepareStatement(query);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

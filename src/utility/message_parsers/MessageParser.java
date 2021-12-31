@@ -45,6 +45,12 @@ public class MessageParser {
 			return RequestType.CLIENT_REQUEST_TO_SERVER_CATEGORY_RESTAURANT_REQUEST;
 		case "CLIENT_REQUEST_TO_SERVER_MENU_REQUEST":
 			return RequestType.CLIENT_REQUEST_TO_SERVER_MENU_REQUEST;
+		case "CLIENT_REQUEST_TO_SERVER_BUSINESS_CLIENT_DATA":
+			return RequestType.CLIENT_REQUEST_TO_SERVER_BUSINESS_CLIENT_DATA;
+		case "CLIENT_REQUEST_TO_SERVER_GET_CLIENT_REFUNDS_DATA":
+			return RequestType.CLIENT_REQUEST_TO_SERVER_GET_CLIENT_REFUNDS_DATA;
+		case "SERVER_MESSAGE_TO_CLIENT_REFUND_AMOUNT":
+			return RequestType.SERVER_MESSAGE_TO_CLIENT_REFUND_AMOUNT;
 		case "CLIENT_REQUEST_TO_SERVER_GET_DATA_BUSINESSES_NAMES":
 			return RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA_BUSINESSES_NAMES;
 		case "CLIENT_REQUEST_TO_SERVER_APPROVE_BUSINESS":
@@ -81,7 +87,6 @@ public class MessageParser {
         	return RequestType.CLIENT_REQUEST_TO_SERVER_SUPPLIER_UPDATE_ORDER;
         case "CLIENT_REQUEST_TO_SERVER_SUPPLIER_CANCEL_ORDER":
         	return RequestType.CLIENT_REQUEST_TO_SERVER_SUPPLIER_CANCEL_ORDER;
-        
 		default:
 			// TODO: ADD error handling for this case;
 			return RequestType.CLIENT_REQUEST_TO_SERVER_UNKNOWN_REQUEST;
@@ -112,6 +117,8 @@ public class MessageParser {
 			return DataType.ARRAYLIST_STRING;
 		case "ERROR_MESSAGE":
 			return DataType.ERROR_MESSAGE;
+		case "BUSINESS_CLIENT_DATA":
+			return DataType.BUSINESS_CLIENT_DATA;
 		case "GET_DATA_OF_BUSINESS":
 			return DataType.GET_DATA_OF_BUSINESS;
 		case "APPROVE_BUSINESS":
@@ -129,7 +136,7 @@ public class MessageParser {
 		case "DISH":
 			return DataType.DISH;
 		default:
-			// TODO: ADD error handling for this case;
+			System.out.println("parseMessage_DataType: unknown dataType - " + msg.get(1));
 			return DataType.UNKNOWN;
 		}
 	}

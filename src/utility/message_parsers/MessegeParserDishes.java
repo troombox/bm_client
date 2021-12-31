@@ -3,7 +3,6 @@ package utility.message_parsers;
 import java.util.ArrayList;
 
 import utility.entity.Dish;
-import utility.entity.Restaurant;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 

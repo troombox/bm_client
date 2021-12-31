@@ -3,17 +3,29 @@ package client.logic;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import client.utility.wrappers.MultiOrder;
 import ocsf.client.AbstractClient;
 import utility.entity.Business;
 import utility.entity.BusinessClient;
 import utility.entity.Client;
+import utility.entity.Dish;
+import utility.entity.Order;
 import utility.entity.ClientChangePermission;
 import utility.entity.Supplier;
 import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 import utility.enums.UserType;
-import utility.message_parsers.*;
+import utility.message_parsers.MessageParser;
+import utility.message_parsers.MessageParserBranchManager;
+import utility.message_parsers.MessageParserBusinessClientData;
+import utility.message_parsers.MessageParserError;
+import utility.message_parsers.MessageParserHR;
+import utility.message_parsers.MessageParserOrder;
+import utility.message_parsers.MessageParserTextString;
+import utility.message_parsers.MessageParserUser;
+import utility.message_parsers.MessegeParserDishes;
+import utility.message_parsers.MessegeParserRestaurants;
 
 
 public class BMClientLogic extends AbstractClient{
@@ -23,6 +35,8 @@ public class BMClientLogic extends AbstractClient{
 	private RequestType typeOfLastRequestRecieved;
 	
 	private User loggedInUser;
+	
+	private MultiOrder currentOrder;
 	
 	public BMClientLogic(String host, int port) throws IOException {
 	    super(host, port); //Call the superclass constructor
@@ -60,6 +74,12 @@ public class BMClientLogic extends AbstractClient{
 				break;
 			case DISHES_LIST:
 				lastDataRecieved = MessegeParserDishes.handleMessageExtractDataType_Dishes(messageFromServerToClient);
+				break;
+			case BUSINESS_CLIENT_DATA:
+				lastDataRecieved = MessageParserBusinessClientData.handleMessageExtractDataType_BusinessClientData(messageFromServerToClient);
+				break;
+			case SINGLE_TEXT_STRING:
+				lastDataRecieved = MessageParserTextString.handleMessageExtractDataType_SingleTextString(messageFromServerToClient);
 				break;
 			case GET_DATA_OF_BUSINESS:
 				lastDataRecieved = messageFromServerToClient;
@@ -101,6 +121,11 @@ public class BMClientLogic extends AbstractClient{
 			break;
 		case SUPPLIER:
 			message = MessageParserBranchManager.prepareMessageWithDataType_Supplier((Supplier)dataToSendToServer, requestType);
+			break;
+		case ORDER:
+			message = MessageParserOrder.prepareMessageWithDataType_Order((Order)dataToSendToServer, requestType);
+//			System.out.println("Sending Order: sendMessageToServer");
+//			return;
 			break;
 		case SINGLE_TEXT_STRING:
 			message = MessageParserTextString.prepareMessageWithDataType_SingleTextString((String)dataToSendToServer, requestType);
@@ -145,6 +170,9 @@ public class BMClientLogic extends AbstractClient{
 			ArrayList<String> arraylist = (ArrayList<String>)dataToSendToServer;
 			message = MessageParserTextString.prepareMessageToServerDataType_ArrayListString(arraylist, requestType);
 			break;
+//		case BUSINESS_CLIENT_DATA:
+//			message = MessageParserBusinessClientData.prepareMessageWithDataType_BusinessClientData((BusinessClientData)dataToSendToServer, requestType);
+//			break;
 		default:
 			System.out.println("sendMessageToServer: unknown dataType");
 			return;
@@ -183,6 +211,7 @@ public class BMClientLogic extends AbstractClient{
 		}
 		sendMessageToServer(loggedInUser, DataType.USER, RequestType.CLIENT_REQUEST_TO_SERVER_LOGOUT_REQUEST);
 		loggedInUser = new User(-1, "", "", "", "", "", UserType.USER, "", "", false, "");
+		currentOrder = null;
 	}
 	
 	public User getLoggedUser() {
@@ -192,8 +221,59 @@ public class BMClientLogic extends AbstractClient{
 			return loggedInUser;
 		}
 	}
-
 	
+	//--------------CURRENT ORDER METHODS
+	
+	public void createOrder(int restaurantID) {
+		if(currentOrder == null) {
+			currentOrder = new MultiOrder(loggedInUser, restaurantID);
+		}
+		return;
+	}
+	
+	public void addToOrder(Dish dishToAdd) {
+		createOrder(Integer.parseInt(dishToAdd.getRes_ID()));
+		currentOrder.addDish(dishToAdd);
+	}
+	
+	public void removeFromOrder(Dish dishToRemove) {
+		if(currentOrder == null) {
+			return;
+		}
+		if(currentOrder.checkIfDishInOrderByDish(dishToRemove)) {
+			currentOrder.removeDish(dishToRemove);
+		}
+	}
+	
+	public boolean isOrderListEmpty() {
+		if(currentOrder == null) {
+			return true;
+		}
+		if(currentOrder.getAmountOfDishes() != 0) {
+			return false;
+		}
+		return true;
+	}
+	
+	public ArrayList<Dish> getOrderDishes(){
+		if(currentOrder == null) {
+			return null;
+		}
+		return currentOrder.getDishesInOrder();
+	}
+	
+	public MultiOrder getOrder(){
+		if(currentOrder == null) {
+			return null;
+		}
+		return currentOrder;
+	}
+	
+	public void clearCurrentOrder() {
+		currentOrder = null;
+	}
+	
+
 	//----------------TO BE CHANGED WHEN MESSAGE HISTORY ADDED (POSSIBLY)
 	public Object getLastDataRecieved() {
 		return lastDataRecieved;

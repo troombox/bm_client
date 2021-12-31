@@ -28,4 +28,12 @@ public class FxControllerHistory {
 	public void clearControllerHistory() {
 		history.clear();
 	}
+	
+	public void setBaseController(IClientFxController baseController) {
+		base = baseController;
+	}
+	
+	public IClientFxController getBaseController() {
+		return base;
+	}
 }

@@ -2,7 +2,6 @@ package client.gui.controllers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import client.gui.logic.ClientUI;
@@ -18,6 +17,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import utility.entity.Dish;
 
@@ -60,6 +61,19 @@ public class ControllerFX_ChooseDishScreen implements IClientFxController, Initi
 
     @FXML
     private Label emptyCartLabel1;
+    
+    @FXML
+    private VBox cartVBox;
+
+    @FXML
+    private GridPane cartDishesGrid;
+    
+    @FXML
+    private Label labelTotalPrice;
+    
+	@FXML
+	private Button buttonCheckout;
+
 
     @FXML
     void exitCart(ActionEvent event) {
@@ -86,8 +100,40 @@ public class ControllerFX_ChooseDishScreen implements IClientFxController, Initi
     
     @FXML
     void addToCart(ActionEvent event) {
+    	String dishSize = "";
+    	String dishLevelOfCooking = "";
+    	//check the fields:
+    	if(!sizeCombo.isDisabled()) {
+    		if(sizeCombo.getValue() == null) {
+    			//TODO: Error
+    			System.out.println("Error: sizeCombo not selected");
+    			return;
+    		}
+    		dishSize = sizeCombo.getValue();
+    	}
+    	if(!levelOfCookingCombo.isDisabled()) {
+    		if(levelOfCookingCombo.getValue() == null) {
+    			//TODO: Error
+    			System.out.println("Error: levelOfCookingCombo not selected");
+    			return;
+    		}
+    		dishLevelOfCooking = levelOfCookingCombo.getValue();
+    	}
     	
-
+    	Dish tempDish =Dish.copyOfDish(dish);
+    	tempDish.setPrice(tempDish.getPriceBySize(dishSize));
+    	tempDish.setSize(dishSize);
+    	tempDish.setCooking_level(dishLevelOfCooking);
+    	ClientUI.clientLogic.addToOrder(tempDish);
+    	//refresh cart
+    	updateCart();
+    }
+    
+    @FXML
+    void doCheckOut(ActionEvent event) {
+		IClientFxController nextScreen = new ControllerFX_ClientCheckoutScreen();
+		ClientUI.historyStack.pushFxController(this);
+		nextScreen.start(ClientUI.parentWindow);
     }
     
     @FXML
@@ -120,8 +166,7 @@ public class ControllerFX_ChooseDishScreen implements IClientFxController, Initi
 		else levelOfCookingCombo.setDisable(true);
 		
 		priceLabel.setText("price: " + price + "$");
-		
-		
+		updateCart();
 	}
 
 	@Override
@@ -137,7 +182,26 @@ public class ControllerFX_ChooseDishScreen implements IClientFxController, Initi
         stage.setTitle("Choose Dish");
         stage.setScene(scene);
         stage.show();
-		
+	}
+	
+	private void updateCart() {
+		if(ClientUI.clientLogic.isOrderListEmpty()) {
+			return;
+		}
+		int cartPrice = 0;
+		emptyCartLabel1.setVisible(false);
+		cartVBox.setVisible(true);
+		cartDishesGrid.getChildren().clear();
+		//for each dish in order we update the cart to show it
+		for(int i = 0; i < ClientUI.clientLogic.getOrderDishes().size(); i++) {
+			Dish dish = ClientUI.clientLogic.getOrderDishes().get(i);
+			Label dishName = new Label(dish.getName());
+			Label dishPrice = new Label(dish.getPrice());
+			cartDishesGrid.add(dishName, 0, i);
+			cartDishesGrid.add(dishPrice, 1, i);
+			cartPrice += Integer.parseInt(dish.getPrice());
+		}
+		labelTotalPrice.setText(String.valueOf(cartPrice));
 	}
     
     

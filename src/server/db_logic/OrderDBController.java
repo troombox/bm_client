@@ -12,16 +12,21 @@ import utility.entity.Order;
 import utility.enums.ErrorType;
 
 public class OrderDBController {
+  
+  private final String orderTableNameInDB = "orders";
+	private final String refundsTableNameInDB = "refunds";
+	private final String dishInOrderTableNameInDB = "dish_in_order";
 	
 	private final String ordersTableNameInDB = "orders";
-	
+
 	Connection dbConnection;
 	String dbName;
-	
+
 	public OrderDBController(DBController dbController) {
 		this.dbConnection = dbController.getDBConnection();
 		this.dbName = dbController.getDBName();
 	}
+
 	
 	public Boolean moveOrder(String resId, String status) {
 		PreparedStatement ps;
@@ -44,8 +49,11 @@ public class OrderDBController {
             }
 			
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
+
 		}
 		return true;
 	}
@@ -200,7 +208,4 @@ public class OrderDBController {
 		}
 		
 	}
-	
-	
-
 }

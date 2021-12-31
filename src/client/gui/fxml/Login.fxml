@@ -54,6 +54,7 @@
                                  </image>
                               </ImageView>
                               <TextField fx:id="Password" prefHeight="26.0" prefWidth="200.0" promptText="password" text="Kk" />
+
                            </children>
                         </HBox>
                         <Button fx:id="loginbutton" mnemonicParsing="false" onAction="#loginButtonPressed" prefHeight="42.0" prefWidth="70.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28; -fx-font-size: 16;" text="login">
