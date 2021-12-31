@@ -1,19 +1,31 @@
 package client.gui.controllers;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import client.gui.logic.ClientUI;
 import client.interfaces.IClientFxController;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import utility.enums.DataType;
+import utility.enums.RequestType;
+import utility.files.MyFile;
 
-public class ControllerFX_BranchManagerScreen implements IClientFxController{
+public class ControllerFX_BranchManagerScreen implements IClientFxController, Initializable{
 
 	IClientFxController previous;
 	
@@ -35,6 +47,18 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController{
     @FXML
     private Button viewRepBtn;
     
+
+    @FXML
+    private Button approveBusiness;
+    
+
+    @FXML
+    private Button permissionBtn;
+    
+
+    @FXML
+    private Button reportCEObtn;
+    
     
 
     @FXML
@@ -46,16 +70,58 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController{
 
     @FXML
     void moveToRegisterSupWin(ActionEvent event) {
-    	IClientFxController nextScreen = new ControllerFX_RegisterSupplyerScreen();
+    	IClientFxController nextScreen = new ControllerFX_RegisterSupplierScreen();
     	ClientUI.historyStack.pushFxController(this);
     	nextScreen.start(ClientUI.parentWindow);
     }
 
     @FXML
     void moveToViewReportWin(ActionEvent event) {
-//    	IClientFxController nextScreen = new ControllerFX_CategoriesScreen();
-//    	nextScreen.start(ClientUI.parentWindow);
+    	IClientFxController nextScreen = new ControllerFX_OpenReportBranch();
+    	ClientUI.historyStack.pushFxController(this);
+    	nextScreen.start(ClientUI.parentWindow);
     }
+    
+    @FXML
+    void moveToChangePermissionWin(ActionEvent event) {
+    	IClientFxController nextScreen = new ControllerFX_ChangePermission();
+    	ClientUI.historyStack.pushFxController(this);
+    	nextScreen.start(ClientUI.parentWindow);
+    }
+    
+
+    @FXML
+    void doApproveBusiness(ActionEvent event) {
+    	IClientFxController nextScreen = new ControllerFX_ApproveBusinesses();
+    	ClientUI.historyStack.pushFxController(this);
+    	nextScreen.start(ClientUI.parentWindow);
+    }
+    
+
+    @FXML
+    void sendReportToCEO(ActionEvent event) {
+    	FileChooser fileChooser = new FileChooser();
+    	fileChooser.setTitle("Open Resource File");
+    	File file = fileChooser.showOpenDialog(null);
+    	String path = file.getAbsolutePath();
+    	MyFile msg= new MyFile(path);
+    	try{
+
+            byte [] mybytearray  = new byte [(int)file.length()];
+            FileInputStream fis = new FileInputStream(file);
+            BufferedInputStream bis = new BufferedInputStream(fis);
+
+            msg.initArray(mybytearray.length);
+            msg.setSize(mybytearray.length);
+
+            bis.read(msg.getMybytearray(),0,mybytearray.length);
+            ClientUI.clientLogic.sendMessageToServer(msg,DataType.REPORT,RequestType.CLIENT_REQUEST_TO_SERVER_SEND_REPORT_TO_CEO);
+          }
+      catch (Exception e) {
+          System.out.println("Error send (Files)msg) to Server");
+      }
+    }
+    
 
 	@Override
 	public void start(Stage stage) {
@@ -95,6 +161,11 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController{
 	    	ClientUI.historyStack.clearControllerHistory();
 	    	ClientUI.loginScreen.start(ClientUI.parentWindow);
 	    }
+
+		@Override
+		public void initialize(URL location, ResourceBundle resources) {	
+			setWelcomeMessage();
+		}
 
 		
 	

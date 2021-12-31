@@ -83,9 +83,9 @@ public class ControllerFX_Login implements IClientFxController {
     		nextScreen.start(ClientUI.parentWindow);
     	}
     	if(userType == UserType.HR_MANAGER) {
-    		nextScreen = new ControllerFX_HRScreen();
-    		ClientUI.historyStack.pushFxController(this);
-    		nextScreen.start(ClientUI.parentWindow);
+    		nextScreen = new ControllerFX_HRApproveBusiness();
+            ClientUI.historyStack.pushFxController(this);
+            nextScreen.start(ClientUI.parentWindow);
     	}
     	if(userType == UserType.BM_BRANCH_MANAGER) {
             nextScreen = new ControllerFX_BranchManagerScreen();
@@ -96,8 +96,10 @@ public class ControllerFX_Login implements IClientFxController {
     		nextScreen.start(ClientUI.parentWindow);
     	}
     	if(userType == UserType.RESTAURANT_OWNER) {
-    		nextScreen.start(ClientUI.parentWindow);
-    	}
+            nextScreen = new ControllerFX_SupplierScreen();
+            ClientUI.historyStack.pushFxController(this);
+            nextScreen.start(ClientUI.parentWindow);
+        }
     		
     }
     

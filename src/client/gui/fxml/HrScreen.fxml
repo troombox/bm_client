@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="510.0" prefWidth="606.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.controllers.ControllerFX_HRScreen">
+<VBox prefHeight="510.0" prefWidth="606.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.controllers.ControllerFX_HRScreen">
    <children>
       <Pane prefHeight="89.0" prefWidth="606.0" style="-fx-background-color: #FF5700;">
          <children>
@@ -32,9 +32,9 @@
       </Pane>
       <Pane prefHeight="414.0" prefWidth="606.0">
          <children>
-            <TabPane layoutX="25.0" layoutY="15.0" prefHeight="384.0" prefWidth="556.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="tabPane" layoutX="25.0" layoutY="15.0" prefHeight="384.0" prefWidth="556.0" tabClosingPolicy="UNAVAILABLE">
                <tabs>
-                  <Tab text="wait for approval">
+                  <Tab fx:id="waitForApproval" text="wait for approval">
                      <content>
                         <AnchorPane prefHeight="328.0" prefWidth="546.0">
                            <children>
@@ -59,14 +59,29 @@
                                     <DropShadow />
                                  </effect>
                               </Button>
-                              <Button fx:id="button" layoutX="14.0" layoutY="293.0" mnemonicParsing="false" onAction="#doButtton" text="Button" />
+                              <Label fx:id="errorMsg" layoutX="260.0" layoutY="321.0" />
                            </children>
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab text="approved">
+                  <Tab fx:id="approvedTable" text="approved">
                      <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        <AnchorPane fx:id="anocherPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="approvedUsersTable" prefHeight="263.0" prefWidth="556.0">
+                                <columns>
+                                  <TableColumn fx:id="approvedWorkerID" prefWidth="120.80005264282227" text="worker ID" />
+                                  <TableColumn fx:id="approvedWorkerName" minWidth="0.0" prefWidth="148.80003356933594" text="worker name" />
+                                    <TableColumn fx:id="approvedWorkerPhone" minWidth="0.0" prefWidth="129.60003662109375" text="worker phone" />
+                                    <TableColumn fx:id="approvedWorkerEmail" minWidth="0.0" prefWidth="156.7999267578125" text="worker email" />
+                                </columns>
+                              </TableView>
+                              <Button fx:id="remove" alignment="CENTER" contentDisplay="CENTER" layoutX="210.0" layoutY="285.0" mnemonicParsing="false" onAction="#removeFromApproved" prefHeight="35.0" prefWidth="134.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28; -fx-text-fill: #d50000;" text="remove">
+                                 <effect>
+                                    <DropShadow />
+                                 </effect>
+                              </Button>
+                           </children></AnchorPane>
                      </content>
                   </Tab>
                </tabs>

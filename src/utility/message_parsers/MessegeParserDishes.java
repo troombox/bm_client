@@ -47,4 +47,36 @@ public class MessegeParserDishes {
 		return result;
 	}
 
+
+	public static Object prepareMessageWithDataType_SingleDish(Object dataToSendToServer, RequestType requestType) {
+		ArrayList<String> messageToPrepare = new ArrayList<String>();
+		messageToPrepare.add(requestType.toString());
+		messageToPrepare.add(DataType.DISH.toString());
+		
+		Dish dish = (Dish)dataToSendToServer;
+		messageToPrepare.add(String.valueOf(dish.getDish_ID()));
+		messageToPrepare.add(dish.getRes_ID());
+		messageToPrepare.add(dish.getType());
+		messageToPrepare.add(dish.getName());
+		messageToPrepare.add(dish.getDescription());
+		messageToPrepare.add(dish.getSize());
+		messageToPrepare.add(dish.getCooking_level());
+		messageToPrepare.add(dish.getPrice());			
+		
+
+		return messageToPrepare;
+	}
+
+
+	public static Dish handleMessageExtractDataType_SingleDish(Object message) {
+		ArrayList<String> msg = (ArrayList<String>) message;
+		if (!msg.get(1).equals("DISH")) {
+			// TODO:ADD ERROR HANDLING
+			return null;
+		}
+		Dish result = new Dish(msg.get(2),msg.get(3),msg.get(4),msg.get(5), msg.get(6),
+				msg.get(7),msg.get(8), msg.get(9));
+		return result;
+	}
+
 }

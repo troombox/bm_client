@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="510.0" prefWidth="606.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.controllers.ControllerFX_RegisterSupplyerScreen">
+<VBox prefHeight="510.0" prefWidth="606.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.controllers.ControllerFX_RegisterSupplierScreen">
    <children>
       <Pane prefHeight="89.0" prefWidth="606.0" style="-fx-background-color: #FF5700;">
          <children>
@@ -30,7 +30,7 @@
       </Pane>
       <Pane prefHeight="414.0" prefWidth="606.0">
          <children>
-            <VBox alignment="TOP_CENTER" layoutX="185.0" layoutY="48.0" prefHeight="149.0" prefWidth="247.0" spacing="15.0">
+            <VBox alignment="TOP_CENTER" layoutX="185.0" layoutY="48.0" prefHeight="168.0" prefWidth="247.0" spacing="15.0">
                <children>
                   <TextField id="resNameTxt" fx:id="resNameTxt" promptText="restaurant name" />
                   <HBox prefHeight="30.0" prefWidth="247.0" spacing="5.0">
@@ -39,15 +39,16 @@
                         <Button fx:id="buttonOpenImage" mnemonicParsing="false" onAction="#doOpenFile" text="..." />
                      </children>
                   </HBox>
-                  <ComboBox prefHeight="26.0" prefWidth="256.0" promptText="category" />
+                  <ComboBox id="categoryCmbo" fx:id="categoryCmbo" onAction="#chooseCategoryInCmbo" prefHeight="26.0" prefWidth="256.0" promptText="category" />
+                  <TextField id="workerID" fx:id="workerID" promptText="Worker ID" />
                </children>
             </VBox>
-            <Button id="registerBtn" fx:id="registerBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="236.0" layoutY="197.0" mnemonicParsing="false" onAction="#sendInformation" prefHeight="35.0" prefWidth="134.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="register">
+            <Button id="registerBtn" fx:id="registerBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="236.0" layoutY="245.0" mnemonicParsing="false" onAction="#sendInformation" prefHeight="35.0" prefWidth="134.0" style="-fx-background-radius: 100PX; -fx-background-color: #ffca28;" text="register">
                <effect>
                   <DropShadow />
                </effect>
             </Button>
-            <Label id="resultTxt" fx:id="resultTxt" layoutX="78.0" layoutY="254.0" prefHeight="17.0" prefWidth="455.0" />
+            <Label id="resultTxt" fx:id="resultTxt" layoutX="76.0" layoutY="299.0" prefHeight="17.0" prefWidth="455.0" />
          </children>
       </Pane>
    </children>

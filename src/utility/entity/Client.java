@@ -23,7 +23,7 @@ public class Client extends User{
 		this.budget = budget;
 		this.isApproved = isApproved;
 		this.businessId = businessId;
-		this.employerCode = employerCode;
+		this.employerCode = businessId;
 		this.personalCreditNumber = personalCreditNumber;
 		this.email=email;
 		this.userType=userType;

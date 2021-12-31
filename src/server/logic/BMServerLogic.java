@@ -1,7 +1,9 @@
 package server.logic;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
@@ -20,13 +22,14 @@ public class BMServerLogic extends AbstractServer {
 	DBController dbController;
 	OrderDBController orderDBController;
 	UserDBController userDBController;
-
+	BusinessDBController businessDBConteroller;
 	ClientDBController clientDBController;
 	SupplierDBController supplierDBController;
 	RestaurantDBController restaurantDBController;
 	HRDBController hrDBController;
 	DishesDBController dishesDBController;
 	BusinessClientDBController budDBController;
+  OpenReoprtDBController openReoprtDBController;
 	
 	boolean flagFileIncoming = false;
 	ConnectionToClient fileSenderClient = null;
@@ -45,9 +48,13 @@ public class BMServerLogic extends AbstractServer {
 		this.orderDBController = new OrderDBController(dbController);
 		this.userDBController = new UserDBController(dbController);
 		this.clientDBController = new ClientDBController(dbController);
+		this.supplierDBController = new SupplierDBController(dbController);
 		this.restaurantDBController = new RestaurantDBController(dbController);
 		this.hrDBController = new HRDBController(dbController);
 		this.dishesDBController = new DishesDBController(dbController);
+    
+    this.businessDBConteroller = new BusinessDBController(dbController);
+		this.openReoprtDBController = new OpenReoprtDBController(dbController);
 		this.budDBController = new BusinessClientDBController(dbController);
 		
 		userDBController.setAllUsersToLoggedOut();
@@ -97,9 +104,45 @@ public class BMServerLogic extends AbstractServer {
 			handleGetBusinessClientDataRequest(actionRequired, msg, client);
 		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_CLIENT_REFUNDS_DATA) {
 			handleGetCRFRequest(actionRequired, msg, client);
-		}
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA_BUSINESSES_NAMES) {
+			handleGetDataOfBusiness(actionRequired, msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_APPROVE_BUSINESS) {
+			handleApproveBusiness(actionRequired, msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA_CLIENT_INFO) {
+			handleGetDataOfClient(actionRequired, msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_CHANGE_PERMISSION) {
+			handleChangePermission(actionRequired, msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_OPEN_REPORT) {
+			handleOpenReportRequest(actionRequired, msg, client);
+		}else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_APRROVE_BUSINESS) {
+            handleApproveBusinessRequest(actionRequired,msg,client);
+        }
+        else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_CHECK_APRROVE_BUSINESS) {
+            handleCheckApproveBusinessRequest(actionRequired,msg,client);
+        }
+        else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_APPROVED_BUSINESS_CLIENTS) {
+            handleGetRequest(actionRequired, msg, client);
+        }else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_RESTAURANT_BY_SUPPLIER_REQUEST) {
+            handleGetResBySupplierRequest(actionRequired, msg, client);
+        }else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_ADD_DISH_TO_MENU_REQUEST) {
+            handleAddDishToMenuRequest(actionRequired, msg, client);
+        }else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_UPDATE_DISH_IN_MENU_REQUEST) {
+            handleUpdateDishInMenuRequest(actionRequired, msg, client);
+        }else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_DELETE_DISH_FROM_MENU_REQUEST) {
+            handleDeleteDishFromMenuRequest(actionRequired, msg, client);
+        }else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_ORDERS_BY_RESTAURANT_ID_REQUEST) {
+            handleGetOrdersFromSupplierRequest(actionRequired, msg, client);
+        } else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_SUPPLIER_CANCEL_ORDER) {
+            handleCancelOrder(actionRequired, msg, client);
+        } else if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_SUPPLIER_UPDATE_ORDER) {
+            handleOrdersStatus(actionRequired, msg, client);
+        }
 		serverPrintToGuiLog("Message From Client Handled, action: " + actionRequired.toString(), true);
 	}
+
+	
+	
+	
 
 	public void sendMessageToGivenClient(Object msg, ConnectionToClient client) {
 		try {
@@ -147,11 +190,18 @@ public class BMServerLogic extends AbstractServer {
 			System.out.println(orderData.toString());
 			orderDBController.writeOrderDataToDB(orderData);
 			break;
+		case HR_MANAGER:
+			boolean response = HRDBController.updateUsersInDB((ArrayList<String>)msg);
+			if(response == false) {
+				sendMessageToGivenClient(ErrorType.COULD_NOT_UPDATE_BUSINESS_CLIENT,client);
+			}
+			break;
 		case UNKNOWN:
 			// TODO: HANDLE ERROR - UNKNOWN DATA TYPE?
 		default:
 			// TODO: HANDE ERROR - HOW DID WE GET HERE?
 		}
+		
 	}
 
 	private void handleGetRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
@@ -171,10 +221,17 @@ public class BMServerLogic extends AbstractServer {
 //				sendMessageToGivenClient(response,client);
 			break;
 		case HR_MANAGER:
-			ArrayList<String> gotFromClient = MessageParserHR.handleMessageFromClient_HRGetData(msg);
-			Object response = HRDBController.getUsersToApproveFromDB(Integer.parseInt(gotFromClient.get(2)));
-			sendMessageToGivenClient(response,client);
-			break;
+            if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_APPROVED_BUSINESS_CLIENTS) {
+                ArrayList<String> gotFromClient = MessageParserHR.handleMessageFromClient_HRGetData(msg);
+                Object response = HRDBController.getApprovedUsers(Integer.parseInt(gotFromClient.get(2)));
+                sendMessageToGivenClient(response,client);
+            }
+            else {
+                ArrayList<String> gotFromClient = MessageParserHR.handleMessageFromClient_HRGetData(msg);
+                Object response = HRDBController.getUsersToApproveFromDB(Integer.parseInt(gotFromClient.get(2)));
+                sendMessageToGivenClient(response,client);
+            }
+			break; 
 		case UNKNOWN:
 			// TODO: HANDLE ERROR - UNKNOWN DATA TYPE?
 		default:
@@ -241,6 +298,7 @@ public class BMServerLogic extends AbstractServer {
 
 	private void handleRegisterClientRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
 		Client newClient = MessageParserBranchManager.handleMessageExtractDataType_Client(msg);
+		System.out.println(newClient.getBusinessId());
 		if (actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_REGISTER_CLIENT) {
 			Object response;
 			try {
@@ -262,7 +320,6 @@ public class BMServerLogic extends AbstractServer {
 		if (actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_REGISTER_SUPPLIER) {
 			Object response;
 			try {
-				// newClient
 				supplierDBController.setNewSupplier(newSupplier);
 				response = MessageParserBranchManager.prepareMessageWithResultOfRegisterion_Supplier(
 						RequestType.SERVER_MESSAGE_TO_CLIENT_SUPPLIER_REGISTER_SUCCESS);
@@ -274,6 +331,117 @@ public class BMServerLogic extends AbstractServer {
 			}
 		}
 	}
+	private void handleGetDataOfBusiness(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		ArrayList<String> message = (ArrayList<String>)msg;
+		String branch = message.get(2);
+		Object response;
+			message = businessDBConteroller.getBusinessesNames(branch);
+			if(message != null) {
+			response = MessageParserBranchManager.prepareMessageWithResultOfGettingData_Business(RequestType.CLIENT_REQUEST_TO_SERVER_GET_DATA_BUSINESSES_NAMES,message);
+			sendMessageToGivenClient(response, client);
+	
+			}
+		}
+	
+	private void handleApproveBusiness(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		Business business = MessageParserBranchManager.handleMessageExtractDataType_Business(msg);
+		Object response;
+		try {
+			businessDBConteroller.approveBusiness(business);
+			response = MessageParserBranchManager.prepareMessageWithResultOfApproveBusiness(
+					RequestType.SERVER_MESSAGE_TO_CLIENT_APPROVE_BUSINESS_SUCCESS);
+			sendMessageToGivenClient(response, client);
+		} catch (BMServerException e) {
+			response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(),
+					e.getMessage());
+			sendMessageToGivenClient(response, client);
+		}
+		
+	}
+	private void handleGetDataOfClient(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		ArrayList<String> message = (ArrayList<String>)msg;
+		ArrayList<String> result;
+		Object response;
+		try {
+			result = clientDBController.getClientInfo(message.get(2));
+			response = MessageParserBranchManager.prepareMessageWithDataType_GetDataOfClient(result,actionRequired);
+			sendMessageToGivenClient(response, client);
+			
+		} catch (BMServerException e) {
+			response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(),
+					e.getMessage());
+			sendMessageToGivenClient(response, client);
+		}
+		
+	}
+	
+	private void handleChangePermission(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		ArrayList<String> message = (ArrayList<String>)msg;
+		Object response;
+		
+		try {
+			clientDBController.changePermissionRequest(message.get(5),message.get(6));
+			response = MessageParserBranchManager.prepareMessageWithResultOfChangePermission(
+					RequestType.SERVER_MESSAGE_TO_CLIENT_CHANGE_PERMISSION_SUCCESS);
+			sendMessageToGivenClient(response, client);
+		} catch (BMServerException e) {
+			response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(),
+					e.getMessage());
+			sendMessageToGivenClient(response, client);
+		}
+		
+		
+	}
+	
+	private void handleOpenReportRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+		ArrayList<String> message = (ArrayList<String>)msg;
+		String type = message.get(2);
+		String year = message.get(3);
+		String month = message.get(4);
+		String path = message.get(5);
+		Object response;
+		try {
+			openReoprtDBController.openReoprt(type,year,month,path);
+			String[] ressultSuccess= {RequestType.SERVER_MESSAGE_TO_CLIENT_OPEN_REPORT_SUCCESS.toString(),DataType.REPORT.toString()};
+			ArrayList<String> result = new ArrayList<String>();
+			result.add(ressultSuccess[0]);
+			result.add(ressultSuccess[1]);
+			response = result;
+			sendMessageToGivenClient(response, client);
+		}catch(BMServerException e) {
+			response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(),
+					e.getMessage());
+			sendMessageToGivenClient(response, client);
+		}
+		
+		
+	}
+
+	private void handleApproveBusinessRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+        DataType messageDataType = MessageParser.parseMessage_DataType(msg);
+        switch (messageDataType) {
+            case HR_MANAGER:
+                int hr_id = MessageParserHR.handleMessageFromClient_ApproveBusinessClient((ArrayList<String>) msg);
+                HRDBController.approveBusiness(hr_id);
+                break;
+        }
+    }
+	
+	private void handleCheckApproveBusinessRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+        int isBusinessApproved = 0;
+        ArrayList<String> message;
+        DataType messageDataType = MessageParser.parseMessage_DataType(msg);
+        switch (messageDataType) {
+            case HR_MANAGER:
+                int hr_id = MessageParserHR.handleMessageFromClient_ApproveBusinessClient((ArrayList<String>) msg);
+                isBusinessApproved = HRDBController.CheckApproveBusiness(hr_id);
+                message = MessageParserHR.prepareMessageToServer_HRCheckApproveBusiness(isBusinessApproved,messageDataType,actionRequired);
+                sendMessageToGivenClient(message,client);
+                break;
+
+        }
+    }
+
 
 
 	private void handleSearchRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {		
@@ -362,6 +530,113 @@ public class BMServerLogic extends AbstractServer {
     	}
 	}
 	
+
+	private void handleOrdersStatus(RequestType actionRequired, Object msg, ConnectionToClient client) {
+        ArrayList<String> array = (ArrayList<String>) msg;
+        Boolean response = orderDBController.moveOrder(array.get(2), array.get(3));
+        if(response == false) {
+            sendMessageToGivenClient(ErrorType.COULD_NOT_UPDATE_ORDER,client);
+        }
+    }
+	
+	private void handleCancelOrder(RequestType actionRequired, Object msg, ConnectionToClient client) {
+        ArrayList<String> array = (ArrayList<String>) msg;
+        Boolean response = orderDBController.cancelOrder(array.get(2));
+        if(response == false) {
+            sendMessageToGivenClient(ErrorType.COULD_NOT_CANCEL_ORDER,client);
+        }
+    }
+	
+	private void handleGetOrdersFromSupplierRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+        ArrayList<String> data = (ArrayList<String>)msg;
+
+        if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_ORDERS_BY_RESTAURANT_ID_REQUEST) {
+            Object response;
+            try {
+                ArrayList<Order> orders = orderDBController.getOrdersByResId(data.get(2), data.get(3));
+                response = MessageParserOrder.prepareMessageWithDataType_Orders(orders, 
+                        RequestType.SERVER_MESSAGE_TO_CLIENT_DATA_PROVIDED);
+                sendMessageToGivenClient(response,client);
+            }catch(BMServerException e) {
+                response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(), e.getMessage());
+                sendMessageToGivenClient(response,client);
+            }
+        }
+
+    }
+	
+	private void handleDeleteDishFromMenuRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+        Dish dish = MessegeParserDishes.handleMessageExtractDataType_SingleDish(msg);
+
+        if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_DELETE_DISH_FROM_MENU_REQUEST) {
+            Object response;
+            try {
+                dishesDBController.DeleteDishFromMenu(dish);
+                response = MessageParserTextString.prepareMessageWithDataType_SingleTextString("your dish deleted", 
+                        RequestType.SERVER_MESSAGE_TO_CLIENT_UPDATED_DISH_SUCCESS);
+                sendMessageToGivenClient(response,client);
+            }catch(BMServerException e) {
+                response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(), e.getMessage());
+                sendMessageToGivenClient(response,client);
+            }
+        }
+
+    }
+	
+	private void handleUpdateDishInMenuRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+        Dish dish = MessegeParserDishes.handleMessageExtractDataType_SingleDish(msg);
+
+        if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_UPDATE_DISH_IN_MENU_REQUEST) {
+            Object response;
+            try {
+                dishesDBController.UpdateDishInMenu(dish);
+                response = MessageParserTextString.prepareMessageWithDataType_SingleTextString("your dish updated", 
+                        RequestType.SERVER_MESSAGE_TO_CLIENT_UPDATED_DISH_SUCCESS);
+                sendMessageToGivenClient(response,client);
+            }catch(BMServerException e) {
+                response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(), e.getMessage());
+                sendMessageToGivenClient(response,client);
+            }
+        }
+
+    }
+	
+	private void handleAddDishToMenuRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+        Dish dish = MessegeParserDishes.handleMessageExtractDataType_SingleDish(msg);
+
+        if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_ADD_DISH_TO_MENU_REQUEST) {
+            Object response;
+            try {
+                Dish result = dishesDBController.AddDishToMenu(dish);
+                response = MessegeParserDishes.prepareMessageWithDataType_SingleDish(result,RequestType.SERVER_MESSAGE_TO_CLIENT_DATA_PROVIDED);
+                sendMessageToGivenClient(response,client);
+            }catch(BMServerException e) {
+                response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(), e.getMessage());
+                sendMessageToGivenClient(response,client);
+            }
+        }
+
+    }
+	
+	private void handleGetResBySupplierRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
+        User supplier = MessageParserUser.handleMessageExtractDataType_User(msg);
+
+        if(actionRequired == RequestType.CLIENT_REQUEST_TO_SERVER_GET_RESTAURANT_BY_SUPPLIER_REQUEST) {
+            Object response;
+            try {
+                Restaurant result =  restaurantDBController.GetRestaurantFromUserSupplierData(supplier);
+                response = MessegeParserRestaurants.prepareMessageWithDataType_singleRestaurant(result, RequestType.SERVER_MESSAGE_TO_CLIENT_DATA_PROVIDED);
+                sendMessageToGivenClient(response,client);
+            }catch(BMServerException e) {
+                response = MessageParserError.prepareMessageToClientWithDataType_Error(e.getErrorType(), e.getMessage());
+                sendMessageToGivenClient(response,client);
+            }
+        }
+
+    }
+
+
+    
 
 	// -------------------------DEBUG FUNCTIONS
 	private void handleDebugRequest(RequestType actionRequired, Object msg, ConnectionToClient client) {
