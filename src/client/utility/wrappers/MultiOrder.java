@@ -32,6 +32,12 @@ public class MultiOrder extends Order {
 	@Override
 	public void removeDish(Dish dish) {
 		super.removeDish(dish);
+		String resID = dish.getRes_ID();
+		for(Dish d : super.getDishesInOrder()) {
+			if(d.getRes_ID().equals(resID)) {
+				return;
+			}
+		}
 		resIDs.remove(dish.getRes_ID());
 	}
 	

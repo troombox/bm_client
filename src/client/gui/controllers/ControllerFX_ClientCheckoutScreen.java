@@ -536,14 +536,25 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     		}
     		//take care of the budget of business client
     		if(!isPrivate && bcd != null) {
-    			if(bcd.getBudget() > order.getOrderPrice()) {
-    				int newBudget = bcd.getBudget() - order.getOrderPrice();
+//    			if(bcd.getBudget() > order.getOrderPrice()) {
+//    				int newBudget = bcd.getBudget() - order.getOrderPrice();
+//    				order.setOrderPrice(0);
+//    				ArrayList<String> updateMessage = new ArrayList<>();
+//    				updateMessage.add(String.valueOf(ClientUI.clientLogic.getLoggedUser().getUser_ID()));
+//    				updateMessage.add(String.valueOf(newBudget));
+//    				ClientUI.clientLogic.sendMessageToServer(updateMessage, DataType.ARRAYLIST_STRING, RequestType.CLIENT_REQUEST_TO_SERVER_BUSINESS_CLIENT_BUDGED_UPDATE);
+//    			}
+    			int newBudget = 0;
+    			if(bcd.getBudget() >= order.getOrderPrice()) {
+    				newBudget = bcd.getBudget() - order.getOrderPrice();
     				order.setOrderPrice(0);
-    				ArrayList<String> updateMessage = new ArrayList<>();
-    				updateMessage.add(String.valueOf(ClientUI.clientLogic.getLoggedUser().getUser_ID()));
-    				updateMessage.add(String.valueOf(newBudget));
-    				ClientUI.clientLogic.sendMessageToServer(updateMessage, DataType.ARRAYLIST_STRING, RequestType.CLIENT_REQUEST_TO_SERVER_BUSINESS_CLIENT_BUDGED_UPDATE);
+    			} else {
+    				order.setOrderPrice(order.getOrderPrice()- bcd.getBudget());
     			}
+				ArrayList<String> updateMessage = new ArrayList<>();
+				updateMessage.add(String.valueOf(ClientUI.clientLogic.getLoggedUser().getUser_ID()));
+				updateMessage.add(String.valueOf(newBudget));
+				ClientUI.clientLogic.sendMessageToServer(updateMessage, DataType.ARRAYLIST_STRING, RequestType.CLIENT_REQUEST_TO_SERVER_BUSINESS_CLIENT_BUDGED_UPDATE);
     		}
     		ClientUI.clientLogic.sendMessageToServer(order, DataType.ORDER, RequestType.CLIENT_REQUEST_TO_SERVER_WRITE_NEW_TO_DB);
     	}
