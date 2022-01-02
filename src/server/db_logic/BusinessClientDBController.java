@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.itextpdf.text.log.SysoCounter;
+
 import server.exceptions.BMServerException;
 import utility.entity.BusinessClientData;
 import utility.enums.ErrorType;
@@ -55,7 +57,10 @@ public class BusinessClientDBController {
 			ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}		
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
 	}
 	
 	
