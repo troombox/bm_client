@@ -23,6 +23,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.VBox;
 
+/*
+ * this screen is shown to the customer and it presents a list of restaurants in biteme.
+ * the customer can watch this screen after choosing a category, from categories page,
+ *  or after searching a restaurant from search page
+ */
+
 public class ControllerFX_ChooseRestaurantscreen implements IClientFxController, Initializable{
 
     @FXML

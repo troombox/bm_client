@@ -18,6 +18,11 @@ import utility.entity.Restaurant;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
+/*
+ * this is the supplier's home page
+ * the supplier can edit his menu - or watch his restaurant's active orders
+ */
+
 public class ControllerFX_SupplierScreen implements IClientFxController, Initializable {
 
     @FXML

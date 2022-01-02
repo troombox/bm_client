@@ -32,6 +32,12 @@ import utility.entity.Restaurant;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
+/*
+ * this screen is shown to the customer, after clicking at a restaurent's "menu" button
+ * the customer can watch all the restaurant's dishes and choose a dish
+ * after choosing a dish the customer will watch the details of the dish
+ */
+
 public class ControllerFX_MenuScreen implements IClientFxController, Initializable {
 
     @FXML

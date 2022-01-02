@@ -26,6 +26,12 @@ import utility.enums.DataType;
 import utility.enums.ErrorType;
 import utility.enums.RequestType;
 
+/*
+ * this screen is shown to the customer after clicking the search buttom in categories page,
+ * the customer can search a restaurant by it's name or by part of it's name,
+ * and matching restaurant will be shown to the customer
+ */
+
 public class ControllerFX_ClientSearchscreen implements IClientFxController{
 	
 	    @FXML

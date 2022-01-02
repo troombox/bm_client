@@ -32,6 +32,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+/*
+ * this screen is show to the supplier after clicking "edit menu" button in his home page
+ * the screen present a list of all the supplier's dishes, 
+ * the supplier can add a new dish to his menu
+ * the supplier can edit an existing dish in his menu by clicking the dish's "edit dish" button
+ */
+
 public class ControllerFX_EditMenuscreen implements IClientFxController, Initializable {
 	
 

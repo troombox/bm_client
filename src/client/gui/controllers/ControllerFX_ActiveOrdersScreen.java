@@ -38,7 +38,11 @@ import utility.entity.Restaurant;
 import utility.enums.DataType;
 import utility.enums.RequestType;   
 
-
+/*
+ * only supplier can watch this screen, this screen present all orders of the supplier 
+ * supplier can approve or cancel orders, update when the dish is ready and when it is delivered to the client
+ * for every update the supplier make, the client receive an email
+ * */
 
 public class ControllerFX_ActiveOrdersScreen implements IClientFxController, Initializable {
 	
@@ -139,7 +143,6 @@ public class ControllerFX_ActiveOrdersScreen implements IClientFxController, Ini
     	 //String to = order.getUserEmail();
     	String to = "nitzan963@gmail.com";
     	
-         // Sender's email ID needs to be mentioned
     	final String from = "mebite857@gmail.com";
     	final String Password = "group@#16";
 
@@ -148,7 +151,7 @@ public class ControllerFX_ActiveOrdersScreen implements IClientFxController, Ini
   		prop.put("mail.smtp.host", "smtp.gmail.com");
           prop.put("mail.smtp.port", "587");
           prop.put("mail.smtp.auth", "true");
-          prop.put("mail.smtp.starttls.enable", "true"); //TLS
+          prop.put("mail.smtp.starttls.enable", "true"); 
           
 
          

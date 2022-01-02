@@ -1,6 +1,7 @@
 package client.gui.controllers;
 
 import java.io.IOException;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -31,6 +32,11 @@ import utility.entity.Dish;
 import utility.entity.Restaurant;
 import utility.enums.DataType;
 import utility.enums.RequestType;
+
+/*
+ * this screen presented to supplier in edit menu - after pressing the button "add dish"
+ * supplier can add a new dish to his menu
+ */
 
 public class ControllerFX_AddDishScreen implements IClientFxController, Initializable {
 	@FXML

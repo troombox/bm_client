@@ -21,6 +21,11 @@ import utility.entity.Restaurant;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
+/*
+ * this screen is presented to the customer, it presents all categories of restaurants in biteme. 
+ * customer can choose a category and the system will show a list of restaurant in this category
+ */
+
 public class ControllerFX_CategoriesScreen implements IClientFxController {
 	
     @FXML

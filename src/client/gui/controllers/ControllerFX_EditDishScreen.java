@@ -29,6 +29,12 @@ import utility.entity.Restaurant;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
+/*
+ * this screen will be shown to the supplier after clicking a dish's "edit dish" button in the edit menu page
+ * the screen will show the details of the chosen dish,
+ * the supplier can edit any detail of the dish in his menu
+ */
+
 public class ControllerFX_EditDishScreen implements IClientFxController, Initializable {
 
     @FXML

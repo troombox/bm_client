@@ -21,6 +21,13 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import utility.entity.Dish;
 
+/*
+ * this screen will be shown to the customer, after looking at a restaurant's menu and clicking at a dish's "choose dish", 
+ * this screen will show the details of the chosen dish
+ * the customer need to pick a size and cooking level (if exist), he can insert any restrictions,
+ * after clicking "add to cart" button the dish will be added to the customer's cart
+ */
+
 public class ControllerFX_ChooseDishScreen implements IClientFxController, Initializable {
 
     public static Dish dish;
