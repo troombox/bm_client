@@ -59,6 +59,12 @@ public class ControllerFX_Login implements IClientFxController {
 		    		case "INVALID_CREDENTIALS_USER_ALREADY_LOGGED_IN":
 		    			errorString = "You already logged in";
 		    			break;
+		    		case "USER_ACCOUNT_IS_FROZEN":
+		    			errorString = "user acount is frozen";
+	                    break;
+	                case "USER_IS_UNREGISTERED":
+	                	errorString = "user is unregistered";
+	                    break;
 		    		default:
 		    			errorString = ErrorType.UNKNOWN.toString();
 	    		}
