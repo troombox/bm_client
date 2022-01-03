@@ -155,10 +155,8 @@ public class MessageParser {
 			return DataType.DISH;
 		case "CEO":
 			return DataType.CEO;
-		case "CLIENT_REFUNDS_DATA":
-			return DataType.CLIENT_REFUNDS_DATA;
 		default:
-			System.out.println("parseMessage_DataType: unknown dataType - " + msg.get(1));
+			// TODO: ADD error handling for this case;
 			return DataType.UNKNOWN;
 		}
 	}

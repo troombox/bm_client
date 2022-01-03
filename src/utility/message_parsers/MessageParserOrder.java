@@ -25,6 +25,8 @@ public class MessageParserOrder {
 		messageToPrepare.add(String.valueOf(order.isPrivateOrder()));
 		messageToPrepare.add(order.getTimeOfOrder());
 		messageToPrepare.add(String.valueOf(order.getOrderingUserID()));
+		messageToPrepare.add(String.valueOf(order.getTotalPrice()));
+		messageToPrepare.add(String.valueOf(order.getOrderingUserID()));
 		for(Dish dish: order.getDishesInOrder()) {
 			messageToPrepare.add(String.valueOf(dish.getDish_ID()));
 			messageToPrepare.add(dish.getRes_ID());
@@ -48,13 +50,14 @@ public class MessageParserOrder {
 		order.setPrivateOrder(Boolean.parseBoolean(msg.get(10)));
 		order.setTimeOfOrder(msg.get(11));
 		order.setOrderingUserID(Integer.parseInt(msg.get(12)));
-		int i, j=13;
-		for(i=0; i<(msg.size()-12)/8; i++) {
+		order.setTotalPrice(Integer.parseInt(msg.get(13)));
+		order.setOrderingUserID(Integer.parseInt(msg.get(14)));
+		int i, j=15;
+		for(i=0; i<(msg.size()-14)/8; i++) {
 			order.addDish(new Dish(msg.get(j),msg.get(j+1),msg.get(j+2),msg.get(j+3), msg.get(j+4),
 					msg.get(j+5),msg.get(j+6), msg.get(j+7)));
 			j+=8;
 		}
-		System.out.println("handleMessageExtractDataType_Order: " + order.toString());
 		return order;
 	}
 	

@@ -1,5 +1,8 @@
 package utility.entity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Dish {
 
 	private String dish_ID, description,size,cooking_level;
@@ -55,6 +58,29 @@ public class Dish {
 
 	public void setCooking_level(String cooking_level) {
 		this.cooking_level = cooking_level;
+	}
+	
+	public String getPriceBySize(String size){
+		//fix for a null, no idea where the bug comes from
+		if(this.size == null)
+			this.size = "";
+		if(this.price == null) {
+			this.price = "";
+		}
+		String[] sizes = this.size.split(",");
+		ArrayList<String> sizesArray = new ArrayList<String>(Arrays.asList(sizes));
+		String[] prices = this.price.split(",");
+		ArrayList<String> pricesArray = new ArrayList<String>(Arrays.asList(prices));
+		int index = sizesArray.indexOf(size);
+		return pricesArray.get(index);
+	}
+
+	public void setPrice(String price) {
+		this.price = price;
+	}
+	
+	public static Dish copyOfDish(Dish dish) {
+		return new Dish(dish.dish_ID, dish.res_ID, dish.type, dish.name, dish.description, dish.size, dish.cooking_level, dish.price);
 	}
 
 	@Override

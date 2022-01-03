@@ -22,7 +22,7 @@ public class Order {
 	private int restaurantID;
 	private String typeOfOrder;
 	
-	private int totalPrice;
+	private int totalPrice; 	//dish price + discount
 	private String timeOfOrder;
 	private String timeOfArrival;
 
@@ -30,8 +30,8 @@ public class Order {
 	
 	//Added by Semion:
 	private boolean isPrivateOrder = true;
-	private int orderPrice;
-	private int deliveryPrice;
+	private int orderPrice; 	//price actually paid without delivery
+	private int deliveryPrice; 	//price for order delivery paid
 	
 	public Order(User user,  int restaurantID) {
 		this(user.getFirstName(), user.getLastName(), user.getPhone(), "", restaurantID, "");
@@ -193,15 +193,17 @@ public class Order {
 		this.dishesInOrder = dishesInOrder;
 	}
 	
+
 	@Override
 	public String toString() {
 		return "Order [orderingUserID=" + orderingUserID + ", orderID=" + orderID + ", userFirstName=" + userFirstName
 				+ ", userLastName=" + userLastName + ", fullName=" + fullName + ", userPhone=" + userPhone + ", status="
-				+ status + ", deliveryAddress=" + deliveryAddress + ", restaurantID=" + restaurantID + ", typeOfOrder="
-				+ typeOfOrder + ", totalPrice=" + totalPrice + ", timeOfOrder=" + timeOfOrder + ", timeOfArrival="
-				+ timeOfArrival + ", dishesInOrder=" + dishesInOrder + "]";
+				+ status + ", userEmail=" + userEmail + ", deliveryAddress=" + deliveryAddress + ", restaurantID="
+				+ restaurantID + ", typeOfOrder=" + typeOfOrder + ", totalPrice=" + totalPrice + ", timeOfOrder="
+				+ timeOfOrder + ", timeOfArrival=" + timeOfArrival
+				+ ", isPrivateOrder=" + isPrivateOrder + ", orderPrice=" + orderPrice + ", deliveryPrice="
+				+ deliveryPrice + ", dishesInOrder=" + dishesInOrder.toString()+ "]";
 	}
-
 
 
 	public String getUserEmail() {
@@ -268,5 +270,6 @@ public class Order {
 	public void setDeliveryPrice(int deliveryPrice) {
 		this.deliveryPrice = deliveryPrice;
 	}
+
 }
 
