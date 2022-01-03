@@ -143,7 +143,7 @@
             </AnchorPane>
          </items>
       </SplitPane>
-      <Pane layoutX="233.0" layoutY="455.0" prefHeight="42.0" prefWidth="163.0" style="-fx-background-color: white; -fx-border-color: #FF5700;" visible="false">
+      <Pane fx:id="dishAddedPopup" layoutX="233.0" layoutY="455.0" prefHeight="42.0" prefWidth="163.0" style="-fx-background-color: white; -fx-border-color: #FF5700;" visible="false">
          <effect>
             <DropShadow />
          </effect>
