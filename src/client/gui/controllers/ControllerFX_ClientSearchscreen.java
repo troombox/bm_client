@@ -1,7 +1,9 @@
 package client.gui.controllers;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import client.gui.logic.ClientUI;
 import client.interfaces.IClientFxController;
@@ -9,7 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,16 +20,18 @@ import javafx.scene.control.Labeled;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import utility.entity.Dish;
 import utility.entity.Restaurant;
 import utility.enums.DataType;
 import utility.enums.ErrorType;
 import utility.enums.RequestType;
 
-public class ControllerFX_ClientSearchscreen implements IClientFxController{
+public class ControllerFX_ClientSearchscreen implements IClientFxController, Initializable{
 	
 	    @FXML
 	    private Button backButton;
@@ -52,6 +56,15 @@ public class ControllerFX_ClientSearchscreen implements IClientFxController{
 
 	    @FXML
 	    private Label emptyCartLabel1;
+	    
+	    @FXML
+	    private VBox cartVBox;
+
+	    @FXML
+	    private GridPane cartDishesGrid;
+
+	    @FXML
+	    private Label labelTotalPrice;
 	    
 	    @FXML
 	    private Label ErrorMsg;
@@ -171,6 +184,32 @@ public class ControllerFX_ClientSearchscreen implements IClientFxController{
 	        stage.setTitle("Search");
 	        stage.setScene(scene);
 	        stage.show();
+			
+		}
+		
+		private void updateCart() {
+			if(ClientUI.clientLogic.isOrderListEmpty()) {
+				return;
+			}
+			int cartPrice = 0;
+			emptyCartLabel1.setVisible(false);
+			cartVBox.setVisible(true);
+			cartDishesGrid.getChildren().clear();
+			//for each dish in order we update the cart to show it
+			for(int i = 0; i < ClientUI.clientLogic.getOrderDishes().size(); i++) {
+				Dish dish = ClientUI.clientLogic.getOrderDishes().get(i);
+				Label dishName = new Label(dish.getName());
+				Label dishPrice = new Label(dish.getPrice());
+				cartDishesGrid.add(dishName, 0, i);
+				cartDishesGrid.add(dishPrice, 1, i);
+				cartPrice += Integer.parseInt(dish.getPrice());
+			}
+			labelTotalPrice.setText(String.valueOf(cartPrice));
+		}
+
+		@Override
+		public void initialize(URL location, ResourceBundle resources) {
+			updateCart();
 			
 		}
 

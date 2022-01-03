@@ -73,6 +73,9 @@ public class ControllerFX_ChooseDishScreen implements IClientFxController, Initi
     
 	@FXML
 	private Button buttonCheckout;
+	
+    @FXML
+    private Label ErrorMsg;
 
 
     @FXML
@@ -106,15 +109,14 @@ public class ControllerFX_ChooseDishScreen implements IClientFxController, Initi
     	if(!sizeCombo.isDisabled()) {
     		if(sizeCombo.getValue() == null) {
     			//TODO: Error
-    			System.out.println("Error: sizeCombo not selected");
+    			showError(true, "dish size not selected");
     			return;
     		}
     		dishSize = sizeCombo.getValue();
     	}
     	if(!levelOfCookingCombo.isDisabled()) {
     		if(levelOfCookingCombo.getValue() == null) {
-    			//TODO: Error
-    			System.out.println("Error: levelOfCookingCombo not selected");
+    			showError(true, "cooking level not selected");
     			return;
     		}
     		dishLevelOfCooking = levelOfCookingCombo.getValue();
@@ -125,6 +127,7 @@ public class ControllerFX_ChooseDishScreen implements IClientFxController, Initi
     	tempDish.setSize(dishSize);
     	tempDish.setCooking_level(dishLevelOfCooking);
     	ClientUI.clientLogic.addToOrder(tempDish);
+    	showError(false,null);
     	//refresh cart
     	updateCart();
     }
@@ -204,6 +207,17 @@ public class ControllerFX_ChooseDishScreen implements IClientFxController, Initi
 		labelTotalPrice.setText(String.valueOf(cartPrice));
 	}
     
-    
+	void showError(boolean show, String message) {
+		if(message == null || message.equals("") || !show) {
+			ErrorMsg.setVisible(false);
+			return;
+		}
+		if(show) {
+			ErrorMsg.setVisible(true);
+			ErrorMsg.setText(message);
+			return;
+		}
+		ErrorMsg.setVisible(false);
+	}
 
 }

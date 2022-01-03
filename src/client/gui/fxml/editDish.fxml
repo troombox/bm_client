@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="510.0" prefWidth="606.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.controllers.ControllerFX_EditDishScreen">
+<VBox prefHeight="510.0" prefWidth="606.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.controllers.ControllerFX_EditDishScreen">
    <children>
       <Pane prefHeight="89.0" prefWidth="606.0" style="-fx-background-color: #FF5700;">
          <effect>
@@ -60,7 +60,7 @@
                                        <graphic>
                                           <ImageView fitHeight="21.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@../../../../images/delete.png" />
+                                                <Image url="@../../../../images/delete.jpeg" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -95,7 +95,7 @@
                                        <graphic>
                                           <ImageView fitHeight="21.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@../../../../images/delete.png" />
+                                                <Image url="@../../../../images/delete.jpeg" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -122,7 +122,7 @@
                            <graphic>
                               <ImageView fitHeight="33.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../../../images/delete_red.png" />
+                                    <Image url="@../../../../images/delete_red.jpeg" />
                                  </image>
                               </ImageView>
                            </graphic>

@@ -164,36 +164,39 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     
     @FXML
     private Label labelRefundsValue;
+    
+    @FXML
+    private Label ErrorMsg;
 
     @FXML
     void doPayment(ActionEvent event) {
     	//validate the inputs:
     	if(deliveryType == OrderType.UNKNOWN) {
-    		System.out.println("Choose delivery type!");
+    		showError(true, "Choose delivery type!");
     		return;
     	}
     	if(datePicker.getValue() == null) {
-    		System.out.println("pick a date!");
+    		showError(true, "pick a date!");
     		return;
     	}
     	if(timePicker.getValue() == null) {
-    		System.out.println("pick time!");
+    		showError(true, "pick time!");
     		return;
     	}
     	if(!(deliveryType == OrderType.PICKUP) && typeOfDelivery.getValue() == null) {
-    		System.out.println("Choose kind of delivery!");
+    		showError(true, "Choose kind of delivery!");
     		return;
     	}
     	if(!(deliveryType == OrderType.PICKUP) && txtAddress.getText().equals("")) {
-    		System.out.println("Choose address!");
+    		showError(true, "Choose address!");
     		return;
     	}
     	if(txtName.getText().equals("")) {
-    		System.out.println("Type in your name");
+    		showError(true, "Type in your name");
     		return;
     	}
     	if(txtPhone.getText().equals("")) {
-    		System.out.println("Type in your phone");
+    		showError(true, "Type in your phone");
     		return;
     	}
     	confirmationPane.setVisible(true);
@@ -209,6 +212,7 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     		priceToConfirm = (int) Math.round(priceToConfirm * 0.9);
     	}
     	txtConfirmPrice.setText(String.valueOf(priceToConfirm));
+    	showError(false, null);
     }
     
     @FXML
@@ -236,7 +240,6 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
 
     @FXML
     void doByes(ActionEvent event) {
-    	System.out.println("doByes: " + ClientUI.clientLogic.getLoggedUser().getBuisnessCode());
     	ClientUI.clientLogic.sendMessageToServer(String.valueOf(ClientUI.clientLogic.getLoggedUser().getBuisnessCode()), 
     			DataType.SINGLE_TEXT_STRING, RequestType.CLIENT_REQUEST_TO_SERVER_BUSINESS_CLIENT_DATA);
     	try {
@@ -246,7 +249,7 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
 			e.printStackTrace();
 		}
     	if(ClientUI.clientLogic.getTypeOfLastDataRecieved() == DataType.ERROR_MESSAGE) {
-    		System.out.println("ControllerFX_ClientCheckout: doByes() - last data is ERROR");
+    		showError(true,ClientUI.clientLogic.getTypeOfLastDataRecieved().toString());
     	}
     	businessChoice.setVisible(false);
     	businessPane.setVisible(true);
@@ -384,9 +387,9 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
  		timePicker.getItems().clear();
  		ArrayList<String> time = new ArrayList<String>();
  		if(startingMinute < 30) {
- 			time.add(String.format("%02d",startingHour) + ":30");
+ 			time.add(String.format("%02d",startingHour%24) + ":30");
  		}
- 		for(int i = startingHour + 1; i < 24; i++) {
+ 		for(int i = ((startingHour + 1)%25); i < 24; i++) {
  			String hour = String.format("%02d", i);
  			time.add(hour + ":00");
  			time.add(hour + ":30");
@@ -466,8 +469,8 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
 			finalPrice = price;
 		}else if(deliveryType == OrderType.DELIVERY_EARLY){
 			labelDelivery.setText(String.valueOf(deliveryPrice * numberOfRes));
-			labelFinalPrice.setText(String.valueOf(Math.round((price + deliveryPrice * numberOfRes)*0.9 - totalRefundValue)));
-			finalPrice = (int) Math.round((price + deliveryPrice * numberOfRes) *0.9 - totalRefundValue);
+			labelFinalPrice.setText(String.valueOf(Math.round((price * numberOfRes)*0.9 + deliveryPrice - totalRefundValue)));
+			finalPrice = (int) Math.round((price * numberOfRes) *0.9  + deliveryPrice - totalRefundValue);
 		}else if(deliveryType == OrderType.DELIVERY_REGULAR){
 			labelDelivery.setText(String.valueOf(deliveryPrice * numberOfRes));
 			labelFinalPrice.setText(String.valueOf(price + deliveryPrice * numberOfRes - totalRefundValue));
@@ -490,7 +493,8 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     			if(flagDishAdded == false && order.getRestaurantID() == Integer.valueOf(dish.getRes_ID())) {
     				//if found, add the dish
     				order.addDish(dish);
-    				order.setOrderPrice(order.getOrderPrice() + Integer.valueOf(dish.getPrice()));
+    				order.setTotalPrice(order.getTotalPrice() + Integer.valueOf(dish.getPrice()));
+    				order.setOrderPrice(order.getOrderPrice() + Integer.parseInt(dish.getPrice()));
     				flagDishAdded = true;
     			}
     		}
@@ -510,6 +514,7 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     			String addressText = (txtAddress.getText() == null) ? "" : txtAddress.getText();
     			Order newOrder = new Order(name[0], name[1], txtPhone.getText(), addressText, Integer.valueOf(dish.getRes_ID()), deliveryType);
     			newOrder.addDish(dish);
+    			newOrder.setTotalPrice(Integer.parseInt(dish.getPrice()));
     			newOrder.setOrderPrice(Integer.parseInt(dish.getPrice()));
     			newOrder.setDeliveryPrice(deliveryPriceForOrder);
     			newOrder.setPrivateOrder(isPrivate);
@@ -521,13 +526,18 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     	}
     	ClientRefundsData updated = new ClientRefundsData(ClientUI.clientLogic.getLoggedUser().getUser_ID());
     	for(Order order : ordersToSend) {
+    		//applying discount if needed:
+    		if(deliveryType == OrderType.DELIVERY_EARLY) {
+    			order.setTotalPrice((int)(order.getTotalPrice() * 0.9));
+    		}
+    		
     		//doing the refunds math
-    		int refundValueLeft= 0;
-    		if((order.getOrderPrice() - crf.getRefundByResID(order.getRestaurantID())) >= 0 ) {
-    			order.setOrderPrice(order.getOrderPrice() - crf.getRefundByResID(order.getRestaurantID()));
+    		int refundValueLeft = 0;
+    		if((order.getTotalPrice() - crf.getRefundByResID(order.getRestaurantID())) >= 0 ) {
+    			order.setTotalPrice(order.getTotalPrice() - crf.getRefundByResID(order.getRestaurantID()));
     		}
     		else {
-    			order.setOrderPrice(0);
+    			order.setTotalPrice(0);
     			refundValueLeft = crf.getRefundByResID(order.getRestaurantID()) - order.getOrderPrice();	
     		}
     		//if there was a refund value for that ResID:
@@ -536,20 +546,12 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     		}
     		//take care of the budget of business client
     		if(!isPrivate && bcd != null) {
-//    			if(bcd.getBudget() > order.getOrderPrice()) {
-//    				int newBudget = bcd.getBudget() - order.getOrderPrice();
-//    				order.setOrderPrice(0);
-//    				ArrayList<String> updateMessage = new ArrayList<>();
-//    				updateMessage.add(String.valueOf(ClientUI.clientLogic.getLoggedUser().getUser_ID()));
-//    				updateMessage.add(String.valueOf(newBudget));
-//    				ClientUI.clientLogic.sendMessageToServer(updateMessage, DataType.ARRAYLIST_STRING, RequestType.CLIENT_REQUEST_TO_SERVER_BUSINESS_CLIENT_BUDGED_UPDATE);
-//    			}
     			int newBudget = 0;
     			if(bcd.getBudget() >= order.getOrderPrice()) {
     				newBudget = bcd.getBudget() - order.getOrderPrice();
-    				order.setOrderPrice(0);
+    				order.setTotalPrice(0);
     			} else {
-    				order.setOrderPrice(order.getOrderPrice()- bcd.getBudget());
+    				order.setTotalPrice(order.getTotalPrice()- bcd.getBudget());
     			}
 				ArrayList<String> updateMessage = new ArrayList<>();
 				updateMessage.add(String.valueOf(ClientUI.clientLogic.getLoggedUser().getUser_ID()));
@@ -566,6 +568,17 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     	sucessfullySentPane.setVisible(true);
 	}
 	
-	
+	void showError(boolean show, String message) {
+		if(message == null || message.equals("") || !show) {
+			ErrorMsg.setVisible(false);
+			return;
+		}
+		if(show) {
+			ErrorMsg.setVisible(true);
+			ErrorMsg.setText(message);
+			return;
+		}
+		ErrorMsg.setVisible(false);
+	}
 
 }

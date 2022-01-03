@@ -25,6 +25,7 @@ import javax.mail.internet.MimeMessage;
 
 import client.gui.logic.ClientUI;
 import client.interfaces.IClientFxController;
+import client.utility.email.SendEmail;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -313,7 +314,9 @@ public class ControllerFX_ActiveOrdersScreen implements IClientFxController, Ini
 			}
 		waitForApprovalTable.getItems().remove(currentOrder);
 		populateInKitchenTable();
-		
+		SendEmail sendEmail = new SendEmail(currentOrder.getUserEmail(), 
+				"Your order approved! we will let you know when it is ready.");
+		sendEmail.main(null);
 		//sendEmail(currentOrder, "Your order approved! we will let you know when it is ready.");
     }
 
@@ -346,7 +349,9 @@ public class ControllerFX_ActiveOrdersScreen implements IClientFxController, Ini
 			}
 		waitForApprovalTable.getItems().remove(currentOrder);
 		
-		sendEmail(currentOrder, "We canceled your order. sorry:(");
+		SendEmail sendEmail = new SendEmail(currentOrder.getUserEmail(), 
+				"We canceled your order. sorry:(");
+		sendEmail.main(null);
 
     }
 
@@ -429,8 +434,9 @@ public class ControllerFX_ActiveOrdersScreen implements IClientFxController, Ini
 		}
 		readyTable.getItems().remove(currentOrder);
 		populateCompletedTable();
-		
-		sendEmail(currentOrder, "Your order is with you now! Thank you for your order");
+		SendEmail sendEmail = new SendEmail(currentOrder.getUserEmail(),
+				"Your order is with you now! Thank you for your order");
+		sendEmail.main(null);
 		
     }
 
@@ -468,8 +474,9 @@ public class ControllerFX_ActiveOrdersScreen implements IClientFxController, Ini
 			}
 		inTheKitchenTable.getItems().remove(currentOrder);
 		populateReadyTable();
-
-		sendEmail(currentOrder, "Your order is ready! soon it will be with you.");
+		SendEmail sendEmail = new SendEmail(currentOrder.getUserEmail(),
+				"Your order is ready! soon it will be with you.");
+		sendEmail.main(null);
 
     }
 
