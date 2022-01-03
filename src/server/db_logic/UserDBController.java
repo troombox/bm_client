@@ -4,12 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import server.exceptions.BMServerException;
+import utility.entity.User;
 import utility.enums.ErrorType;
 import utility.enums.UserType;
-import utility.entity.User;
 
 public class UserDBController {
 	
@@ -45,6 +44,12 @@ public class UserDBController {
 			if(rs.getBoolean(10) == true) {
 				throw new BMServerException(ErrorType.INVALID_CREDENTIALS_USER_ALREADY_LOGGED_IN, "user currently logged");
 			}
+			if(rs.getString(8).equals("frozen")) {
+                throw new BMServerException(ErrorType.USER_ACCOUNT_IS_FROZEN, "user acount is frozen");
+            }
+            if(rs.getString(8).equals("unregistered")) {
+                throw new BMServerException(ErrorType.USER_IS_UNREGISTERED, "user is unregistered");
+            }
 			UserType userType = UserType.fromString(rs.getString(7)); 
 			//DB holds:[user_ID|firstName|lastName|personalBranch|email|phone|userType|status|w4c(!)|isSignedIn|password]
 			//we don't want to return some fields back to client side after authentication, so we leave them blank
