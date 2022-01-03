@@ -10,7 +10,7 @@ import server.exceptions.BMServerException;
 import utility.entity.ClientRefundsData;
 import utility.entity.Dish;
 import utility.entity.Order;
-import utility.enums.ErrorType;
+import utility.enums.OrderType;
 
 public class OrderDBController {
   private final String orderTableNameInDB = "orders";
@@ -27,23 +27,27 @@ public class OrderDBController {
 		this.dbName = dbController.getDBName();
 	}
 	
-	public Boolean moveOrder(String resId, String status) {
+	public Boolean moveOrder(String orderId, String status) {
 		PreparedStatement ps;
 		PreparedStatement ps1;
+		PreparedStatement ps3;
+		PreparedStatement ps4;
+		PreparedStatement ps5;
+		PreparedStatement ps6;
 		try {
 			String query = "UPDATE `" + dbName + "`." +  ordersTableNameInDB +
 							" SET status = ?" +
 							" WHERE orderId = ?";
 			ps = dbConnection.prepareStatement(query);
 			ps.setString(1, status);
-			ps.setInt(2, Integer.parseInt(resId));
+			ps.setInt(2, Integer.parseInt(orderId));
 			ps.executeUpdate();			
 			if(status.equals("in the kitchen")) {
                 String query1 = "UPDATE `" + dbName + "`." +  ordersTableNameInDB +
                             " SET timeOfApproval = CURRENT_TIMESTAMP" +
                             " WHERE orderId = ?";
                 ps1 = dbConnection.prepareStatement(query1);
-                ps1.setInt(1, Integer.parseInt(resId));
+                ps1.setInt(1, Integer.parseInt(orderId));
                 ps1.executeUpdate();
             }
 			if(status.equals("done")) {
@@ -51,8 +55,54 @@ public class OrderDBController {
                             " SET timeOfArrival = CURRENT_TIMESTAMP" +
                             " WHERE orderId = ?";
                 PreparedStatement ps2 = dbConnection.prepareStatement(query2);
-                ps2.setInt(1, Integer.parseInt(resId));
+                ps2.setInt(1, Integer.parseInt(orderId));
                 ps2.executeUpdate();
+                String query3 = "SELECT recieverID, resId,totalPrice FROM  `"+ dbName + "`." + ordersTableNameInDB 
+                        + " WHERE orderId = ? AND ((((typeOfOrder=?) OR (typeOfOrder=?)) AND (time_to_sec(TIMEDIFF(timeOfArrival,timeOfApproval))/60>60)) "
+                        + " OR (typeOfOrder=? AND (time_to_sec(TIMEDIFF(timeOfArrival,timeOfApproval))/60>20)))";
+                    
+                    ps3 = dbConnection.prepareStatement(query3);
+                    ps3.setInt(1, Integer.parseInt(orderId));
+                    ps3.setString(2, OrderType.DELIVERY_REGULAR.toString());
+                    ps3.setString(3,  OrderType.DELIVERY_ROBOT.toString());
+                    ps3.setString(4,  OrderType.DELIVERY_EARLY.toString());
+                    
+                    ResultSet rs = ps3.executeQuery();
+                    
+                    if(rs.next()) {
+                        String query4 = "SELECT refundAmount" +
+                                " FROM `" + dbName + "`.refunds" +
+                                " WHERE userId = ? AND resId=?";
+                        
+                        ps4 = dbConnection.prepareStatement(query4);
+                        ps4.setInt(1, rs.getInt(1));
+                        ps4.setInt(2, rs.getInt(2));
+                        
+                        ResultSet rs1 = ps4.executeQuery();
+                        
+                        if(rs1.next()) {
+                            String query5 = "UPDATE `" + dbName + "`.refunds" +
+                                " SET refundAmount =?" +
+                                " WHERE orderId = ? AND resId=?";
+                            
+                            ps5 = dbConnection.prepareStatement(query5);
+                            ps5.setFloat(1, (float) (rs.getInt(3) * 0.5));
+                            ps5.setInt(2, rs.getInt(1));
+                            ps5.setInt(3, rs.getInt(2));
+                            
+                            ps5.executeUpdate();
+                        }
+                        else {
+                            System.out.println("here");
+                            String query6 = "INSERT INTO `bm-db`.refunds (userId,resId,refundAmount) VALUES(?,?,?)";
+                            ps6 = dbConnection.prepareStatement(query6);
+                            ps6.setFloat(3, (float) (rs.getInt(3) * 0.5));
+                            ps6.setInt(1, rs.getInt(1));
+                            ps6.setInt(2, rs.getInt(2));
+                            
+                            ps6.executeUpdate();
+                        }
+                    }
             }
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -67,7 +117,6 @@ public class OrderDBController {
 		PreparedStatement ps2;
 		PreparedStatement ps3;
 		PreparedStatement ps4;
-		
 		ResultSet rs1;
 		ResultSet rs2;
 		ResultSet rs3;
@@ -212,18 +261,17 @@ public class OrderDBController {
 	
 	//Added by Semion:
 	public void writeOrderDataToDB(Order order) {
-		System.out.println("entered writeOrderDataToDB");
-		System.out.println(order.toString());
+		System.out.println("writeOrderDataToDB: " + order.toString());
 		try {
 			System.out.println("writeOrderDataToDB started");
 			String query = "INSERT INTO `" + dbName + "`." + orderTableNameInDB
-					+ " (resId,typeOfOrder,address,status,totalPrice,timeOfOrder,nameOfReceiver, phone, orderPrice, orderDeliveryPrice, isPersonal) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+					+ " (resId,typeOfOrder,address,status,totalPrice,timeOfOrder,nameOfReceiver, phone, orderPrice, orderDeliveryPrice, isPersonal, recieverID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 			PreparedStatement ps = dbConnection.prepareStatement(query);
 			ps.setInt(1, order.getRestaurantID());
 			ps.setString(2, order.getTypeOfOrder().toString());
 			ps.setString(3, order.getDeliveryAddress());
-			ps.setString(4, "not_approved");
-			ps.setInt(5, order.getOrderPrice() + order.getDeliveryPrice());
+			ps.setString(4, "wait");
+			ps.setInt(5, order.getTotalPrice());
 			ps.setString(6,order.getTimeOfOrder());
 			String name = order.getUserFirstName() + " " + order.getUserLastName();
 			ps.setString(7, name);
@@ -231,6 +279,7 @@ public class OrderDBController {
 			ps.setInt(9, order.getOrderPrice());
 			ps.setInt(10, order.getDeliveryPrice());
 			ps.setBoolean(11, order.isPrivateOrder());
+			ps.setInt(12, order.getOrderingUserID());
 			ps.executeUpdate();
 			
 			query = "SELECT MAX(orderId) FROM `"+dbName+"`."+orderTableNameInDB+" WHERE resId = ? AND timeOfOrder = ?";
@@ -243,7 +292,6 @@ public class OrderDBController {
 				return;
 			}
 			int orderID = rs.getInt(1);
-			System.out.println("writeOrderDataToDB - orderID: "+ orderID);
 			//Important: dish_in_order 'key' should be auto_incremental
 			query = "INSERT INTO `" + dbName + "`." + dishInOrderTableNameInDB + " (orderId,dishId,userId,size,cookingLevel,exceptions) VALUES (?,?,?,?,?,?)";
 			for(Dish d : order.getDishesInOrder()) {
@@ -322,7 +370,7 @@ public class OrderDBController {
 			e1.printStackTrace();
 		}
 	}
+	
 }
 	
 
-}

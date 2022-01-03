@@ -271,4 +271,9 @@ public class ServerMainWindowController {
 		labelShowMessage.setStyle("-fx-text-fill: green;");
 	}
 	
+	@FXML
+    void importUsers(ActionEvent event) {
+        ServerUI.importUsers();
+    }
+	
 }

@@ -23,12 +23,9 @@ public class Scheduler implements Runnable {
 			Calendar cal = Calendar.getInstance();
 			int day=cal.get(Calendar.DAY_OF_MONTH);
 			//every 1th day of month create reports
-			System.out.println(day);
 			if(day==1) {
 					// If month is January 0 is returned, %12 set month of report to 11 December
 					int month = (((cal.get(Calendar.MONTH)+11))%12)+1;
-					System.out.println(month);
-					System.out.println(cal.get(Calendar.MONTH));
 					String year = String.valueOf((cal.get(Calendar.YEAR)-1));
 					try {
 						if(month < 10) {
@@ -36,19 +33,19 @@ public class Scheduler implements Runnable {
 						}else {
 							monthString = String.valueOf(month);
 						}
-//						reportsDBContrller.createIncomeReport(monthString,year,"north");
-//						reportsDBContrller.createOrderReport(monthString,year,"north");
-//						reportsDBContrller.createPerformanceReport(monthString,year,"north");
-//						reportsDBContrller.createIncomeReport(monthString,year,"center");
-//						reportsDBContrller.createOrderReport(monthString,year,"center");
-//						reportsDBContrller.createPerformanceReport(monthString,year,"center");
-//						reportsDBContrller.createIncomeReport(monthString,year,"south");
-//						reportsDBContrller.createOrderReport(monthString,year,"south");
-//						reportsDBContrller.createPerformanceReport(monthString,year,"south");
+						reportsDBContrller.createIncomeReport(monthString,year,"north");
+						reportsDBContrller.createOrderReport(monthString,year,"north");
+						reportsDBContrller.createPerformanceReport(monthString,year,"north");
+						reportsDBContrller.createIncomeReport(monthString,year,"center");
+						reportsDBContrller.createOrderReport(monthString,year,"center");
+						reportsDBContrller.createPerformanceReport(monthString,year,"center");
+						reportsDBContrller.createIncomeReport(monthString,year,"south");
+						reportsDBContrller.createOrderReport(monthString,year,"south");
+						reportsDBContrller.createPerformanceReport(monthString,year,"south");
 						reportsDBContrller.createIncomeReportForEachSupplier(monthString,year);
 						// Check if a quarter of the year has passed 
 						if(month == 3 || month == 6 || month ==9 || month == 12) {
-							//reportsDBContrller.ceoReport(monthString,year);
+							reportsDBContrller.ceoReport(monthString,year);
 						}
 					}
 					catch(Exception e) {

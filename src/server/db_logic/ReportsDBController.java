@@ -3,29 +3,13 @@ package server.db_logic;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;  
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
-import com.itextpdf.awt.PdfGraphics2D;
-import com.itextpdf.awt.geom.Rectangle2D.Double;
-import com.itextpdf.text.Document;   
-import com.itextpdf.text.DocumentException;  
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfTemplate;
-import com.itextpdf.text.pdf.PdfWriter;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,17 +18,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.statistics.HistogramDataset;
+
+import com.itextpdf.awt.PdfGraphics2D;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfTemplate;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import server.exceptions.BMServerException;
-import server.logic.Scheduler;
 import utility.enums.ErrorType;
-import utility.enums.UserType;
+import utility.enums.OrderType;
 //TODO: func get month as arg, delete files maybe? generate only on dates 
 public class ReportsDBController {
 
@@ -73,23 +62,23 @@ public class ReportsDBController {
 		
 	}
 	
-	public String checkDate() {
-		PreparedStatement ps;
-		String query = "SELECT CURRENT_DATE()";
-		try {
-			ps = dbConnection.prepareStatement(query);
-			ResultSet rs= ps.executeQuery();
-			if(rs.next()){
-				return rs.getString(1);
-				
-			} 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-		
-	}
+//	public String checkDate() {
+//		PreparedStatement ps;
+//		String query = "SELECT CURRENT_DATE()";
+//		try {
+//			ps = dbConnection.prepareStatement(query);
+//			ResultSet rs= ps.executeQuery();
+//			if(rs.next()){
+//				return rs.getString(1);
+//				
+//			} 
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return null;
+//		
+//	}
 	
 	public void createIncomeReport(String month,String year,String branch)  throws BMServerException{
 		rowInPdf = new ArrayList<String>();
@@ -298,10 +287,10 @@ public class ReportsDBController {
 			ps = dbConnection.prepareStatement(query);
 			ps.setString(1,"done");
 			ps.setString(2, year+"-"+month+"%");
-			ps.setString(3, "regular");
-			ps.setString(4, "robot");
+			ps.setString(3, OrderType.DELIVERY_REGULAR.toString());
+			ps.setString(4, OrderType.DELIVERY_ROBOT.toString());
 			ps.setString(5, year+"-"+month+"%");
-			ps.setString(6, "early");
+			ps.setString(6, OrderType.DELIVERY_EARLY.toString());
 			ResultSet rs= ps.executeQuery();
 			while(rs.next()) {
 				// Add amount of delays to existing res
@@ -329,10 +318,10 @@ public class ReportsDBController {
 			ps = dbConnection.prepareStatement(query);
 			ps.setString(1,"done");
 			ps.setString(2, year+"-"+month+"%");
-			ps.setString(3, "regular");
-			ps.setString(4, "robot");
+			ps.setString(3, OrderType.DELIVERY_REGULAR.toString());
+			ps.setString(4, OrderType.DELIVERY_ROBOT.toString());
 			ps.setString(5, year+"-"+month+"%");
-			ps.setString(6, "early");
+			ps.setString(6, OrderType.DELIVERY_EARLY.toString());
 			rs= ps.executeQuery();
 			while(rs.next()) {
 				// Add amount of on time to existing res

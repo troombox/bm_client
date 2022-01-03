@@ -1,6 +1,10 @@
 package server.gui;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -80,5 +84,44 @@ public class ServerUI extends Application {
 		bmServer.stopListening();
 		return true;
 	}
+	
+	//Method added especially for Avi!(Hi Avi)
+	//why whould we need to import users!?
+	public static void importUsers() {
+		if(bmServer == null) {
+			return;
+		}
+        Connection dbConnection = bmServer.getDBController().getDBConnection();
+        PreparedStatement ps;
+        PreparedStatement ps1;
+        try {
+            String query = "SELECT * FROM bm-db.manage_users";
+            ps = dbConnection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                String query1 = "SELECT email,password FROM bm-db.users WHERE email = ?";
+                ps1 = dbConnection.prepareStatement(query1);
+                ps1.setString(1, rs.getString(4));
+                ResultSet rs1 = ps1.executeQuery();
+                if(!rs1.next()) { //if the user doesn't exist
+                     String query2 = "INSERT INTO bm-db.users (firstName,lastName,email,phoneNumber,userType,status,password,personalBranch) VALUES(?,?,?,?,?,?,?,?)";
+                    ps1 = dbConnection.prepareStatement(query2);
+                    ps1.setString(1, rs.getString(1));
+                    ps1.setString(2, rs.getString(2));
+                    ps1.setString(3, rs.getString(3));
+                    ps1.setString(4, rs.getString(4));
+                    ps1.setString(5, rs.getString(5));
+                    ps1.setString(6, "unregistered");
+                    ps1.setString(7, rs.getString(7));
+                    ps1.setString(8, rs.getString(6));
+                    ps1.executeUpdate();
+                }
+                rs1.close();
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
