@@ -8,8 +8,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * The Class TempScreenControllerFx is a temporary screen used for debugging, 
+ * implements IClientFxController and can be used in any place IClientFxController is expected
+ * to see the normal run of the program
+ */
 public class TempScreenControllerFx implements IClientFxController{
 
+	/**
+	 * Starting the screen
+	 *
+	 * @param stage main stage of the application 
+	 */
 	@Override
 	public void start(Stage stage) {
 		Stage primaryStage  = stage;
