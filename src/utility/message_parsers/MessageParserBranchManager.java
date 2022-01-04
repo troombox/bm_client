@@ -10,8 +10,18 @@ import utility.enums.DataType;
 import utility.enums.RequestType;
 import utility.enums.UserType;
 
+/**
+ * The Class MessageParserBranchManager. holds parsers that take care of BranchManager data sent from server to client
+ * and data sent from client to server
+ */
 public class MessageParserBranchManager {
 
+	/**
+	 * Handle message extract data type client - used to extract Client data from messages that contain it
+	 *
+	 * @param message the message
+	 * @return the Client data
+	 */
 	//----------------------------------------------------------------------------->client
 	public static Client handleMessageExtractDataType_Client(Object message) {
 		ArrayList<String> msg = (ArrayList<String>) message;
@@ -25,6 +35,14 @@ public class MessageParserBranchManager {
 				Integer.parseInt(msg.get(17)),Integer.parseInt(msg.get(18)),Integer.parseInt(msg.get(19)));
 	}
 
+	/**
+	 * Prepare message with data type client - this method is used for 
+	 * preparing user messages with Class Client Data
+	 *
+	 * @param client the Client class that holds the data 
+	 * @param requestType the request type
+	 * @return the message as a Class Object
+	 */
 	public static Object prepareMessageWithDataType_Client(Client client, RequestType requestType) {
 		// this method is preparing user messages, data string for user are:
 		// String orderNumber,String restaurantName,String orderTime,String
@@ -55,6 +73,12 @@ public class MessageParserBranchManager {
 		return messageToPrepare;
 	}
 	
+	/**
+	 * Prepare message with result of Client registration data.
+	 *
+	 * @param requestType the request type
+	 * @return the message as a Class Object
+	 */
 	public static Object prepareMessageWithResultOfRegisterion_Client(RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
 		messageToPrepare.add(requestType.toString());
@@ -63,10 +87,23 @@ public class MessageParserBranchManager {
 		return messageToPrepare;
 	}
 	
+	/**
+	 * Handle message extract data type result registration client.
+	 *
+	 * @param message the message
+	 * @return the string
+	 */
 	public static String handleMessageExtractDataTypeResultRegistretion_Client(Object message) {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		return msg.get(0);
 	}
+	
+	/**
+	 * Handle message extract data type supplier.
+	 *
+	 * @param message the message 
+	 * @return the supplier
+	 */
 	//------------------------------------------------------------------------------------->supplier
 	public static Supplier handleMessageExtractDataType_Supplier(Object message) {
 		ArrayList<String> msg = (ArrayList<String>) message;
@@ -77,6 +114,13 @@ public class MessageParserBranchManager {
 		return new Supplier(msg.get(2), msg.get(3), msg.get(4), msg.get(5), msg.get(6));
 	}
 	
+	/**
+	 * Prepare message with data type supplier.
+	 *
+	 * @param supplier the supplier
+	 * @param requestType the request type
+	 * @return the message as a Class Object
+	 */
 	public static Object prepareMessageWithDataType_Supplier(Supplier supplier, RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
 		messageToPrepare.add(requestType.toString());
@@ -90,6 +134,12 @@ public class MessageParserBranchManager {
 		return messageToPrepare;
 	}
 	
+	/**
+	 * Prepare message with result of supplier registration.
+	 *
+	 * @param requestType the request type
+	 * @return the message as a Class Object
+	 */
 	public static Object prepareMessageWithResultOfRegisterion_Supplier(RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
 		messageToPrepare.add(requestType.toString());
@@ -98,12 +148,25 @@ public class MessageParserBranchManager {
 		return messageToPrepare;
 	}
 	
+	/**
+	 * Handle message extract data type result of supplier registration.
+	 *
+	 * @param message the message
+	 * @return the string that holds the result message
+	 */
 	public static String handleMessageExtractDataTypeResultRegistretion_Supplier(Object message) {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		return msg.get(0);
 	}
 	//------------------------------------------------>approve_business
 	
+	/**
+	 * Prepare message that specifically requests GET_DATA_OF_BUSINESS request.
+	 *
+	 * @param branchName the branch name to request the data of
+	 * @param requestType the request type, disregarded in this method (for some reason)
+	 * @return the message as a Class Object
+	 */
 	public static Object prepareMessageWithDataType_GET_DATA_OF_BUSINESS(String branchName ,RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
 		messageToPrepare.add(requestType.toString());
@@ -112,6 +175,13 @@ public class MessageParserBranchManager {
 		return messageToPrepare;
 	}
 	
+	/**
+	 * Prepare message with result of getting data of a business.
+	 *
+	 * @param requestType the request type
+	 * @param message the message
+	 * @return the message as a Class Object
+	 */
 	public static Object prepareMessageWithResultOfGettingData_Business(RequestType requestType,Object message) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
 		ArrayList<String> msg = (ArrayList<String>)message;
@@ -122,6 +192,12 @@ public class MessageParserBranchManager {
 		return messageToPrepare;
 	}
 	
+	/**
+	 * Handle message to extract data type Class Business.
+	 *
+	 * @param message the message
+	 * @return the business data as a class Business Object
+	 */
 	public static Business handleMessageExtractDataType_Business(Object message) {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		if (!msg.get(1).equals("APPROVE_BUSINESS")) {
@@ -131,6 +207,13 @@ public class MessageParserBranchManager {
 		return new Business(Integer.parseInt(msg.get(2)),msg.get(3),Integer.parseInt(msg.get(4)),Integer.parseInt(msg.get(5)),msg.get(6));
 	}
 
+	/**
+	 * Prepare message with data type business.
+	 *
+	 * @param business the business
+	 * @param requestType the request type
+	 * @return the message as a Class Object
+	 */
 	public static Object prepareMessageWithDataType_Business(Business business, RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
 
@@ -146,6 +229,12 @@ public class MessageParserBranchManager {
 		return messageToPrepare;
 	}
 	
+	/**
+	 * Prepare message with result of APPROVE_BUSINESS request.
+	 *
+	 * @param requestType the request type
+	 * @return the message as a Class Object
+	 */
 	public static Object prepareMessageWithResultOfApproveBusiness(RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
 		messageToPrepare.add(requestType.toString());
@@ -154,12 +243,25 @@ public class MessageParserBranchManager {
 		return messageToPrepare;
 	}
 	
+	/**
+	 * Handle message and extract result of APPROVE_BUSINESS request.
+	 *
+	 * @param message the message
+	 * @return the string that holds the message
+	 */
 	public static String handleMessageExtractDataTypeResultOfApproveBusiness(Object message) {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		return msg.get(0);
 	}
 
 	
+	/**
+	 * Prepare message with a GET_DATA_OF_CLIENT request
+	 *
+	 * @param branchName the branch name
+	 * @param requestType the request type (unused)
+	 * @return the message as a Class Object
+	 */
 	//-------------------------------------------------------->user
 	public static Object prepareMessageWithDataType_getDataOfClient(String branchName,RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
@@ -170,6 +272,13 @@ public class MessageParserBranchManager {
 		return messageToPrepare;
 	}	
 	
+	/**
+	 * Prepare message with GET_DATA_OF_CLIENT request
+	 *
+	 * @param clientList the ArrayList clientList of data
+	 * @param requestType the request type (unused)
+	 * @return the message as a Class Object
+	 */
 	public static Object prepareMessageWithDataType_GetDataOfClient(ArrayList<String> clientList, RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
 
@@ -179,6 +288,12 @@ public class MessageParserBranchManager {
 		return messageToPrepare;
 	}
 	
+	/**
+	 * Handle message extract the result of a GET_DATA_OF_CLIENT request
+	 *
+	 * @param message the message
+	 * @return the array list of class ClientChangePermission data
+	 */
 	public static ArrayList<ClientChangePermission> handleMessageExtractDataType_GetDataOfClient(Object message) {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		ArrayList<ClientChangePermission> parsedData = new ArrayList<ClientChangePermission>();
@@ -193,6 +308,13 @@ public class MessageParserBranchManager {
 		return parsedData;
 	}
 	
+	/**
+	 * Prepare message with CHANGE_PERMISSION request
+	 *
+	 * @param client the class ClientChangePermission object, holding the relevant data
+	 * @param requestType the request type
+	 * @return the message as a Class Object
+	 */
 	public static Object prepareMessageWithDataType_changePermission(ClientChangePermission client,RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
 
@@ -206,6 +328,12 @@ public class MessageParserBranchManager {
 		return messageToPrepare;
 	}
 	
+	/**
+	 * Prepare message with result of CHANGE_PERMISSION request .
+	 *
+	 * @param requestType the request type
+	 * @return the message as a Class Object
+	 */
 	public static Object prepareMessageWithResultOfChangePermission(RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
 		messageToPrepare.add(requestType.toString());
@@ -216,7 +344,14 @@ public class MessageParserBranchManager {
 		
 		return messageToPrepare;
 	}
-	//extract message from arraylist to string ,for change permission and report
+	
+	/**
+	 * Handle message extract from array list - extract message from arraylist to 
+	 * string ,for change permission and report
+	 *
+	 * @param message the message
+	 * @return the string that holds the message
+	 */
 	public static String handleMessageExtractFromArrayList(Object message) {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		return msg.get(0);

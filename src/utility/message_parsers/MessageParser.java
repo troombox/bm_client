@@ -5,11 +5,19 @@ import java.util.ArrayList;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
+/**
+ * The MessageParser class - to minimize later changes we took the message parser to be a class of itself.
+ * this class holds methods used to extract RequestType and DataType from a message
+ */
 public class MessageParser {
 
 	/**
-	 * Data Message Layout: [ RequestType (enum) | DataType (enum) | Data strings ]
-	 * RequestTypes defined in utility.RequestType
+	 * Used to parse Object message and extract it's RequestType. the messages use 
+	 * Data Message Layout: [ RequestType (enum) | DataType (enum) | Data strings ]. 
+	 * the RequestTypes defined in utility.RequestType
+	 *
+	 * @param message the message
+	 * @return the request type
 	 */
 
 	// to minimize later changes we took the message parser to be a class of itself;
@@ -112,7 +120,13 @@ public class MessageParser {
 			return RequestType.CLIENT_REQUEST_TO_SERVER_UNKNOWN_REQUEST;
 		}
 	}
-
+	
+	/**
+	 * parseMessage_DataType used to extract the data type from Object message
+	 *
+	 * @param message the message
+	 * @return the data type
+	 */
 	public static DataType parseMessage_DataType(Object message) {
 		// current iteration assumes message as an ArrayList<String>
 		ArrayList<String> msg = (ArrayList<String>) message;

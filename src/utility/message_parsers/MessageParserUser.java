@@ -7,8 +7,18 @@ import utility.enums.DataType;
 import utility.enums.RequestType;
 import utility.enums.UserType;
 
+/**
+ * The Class MessageParserUser -  holds all the functions needed to 
+ * send messages regarding User data in the system
+ */
 public class MessageParserUser {
 
+	/**
+	 * Handle message extract data type user from message
+	 *
+	 * @param message the message to extract data from 
+	 * @return the user data
+	 */
 	public static User handleMessageExtractDataType_User(Object message) {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		if (!msg.get(1).equals("USER")) {
@@ -20,6 +30,13 @@ public class MessageParserUser {
 				msg.get(12), Integer.parseInt(msg.get(13)), Integer.parseInt(msg.get(14)));
 	}
 
+	/**
+	 * Prepare message with data type user.
+	 *
+	 * @param user the user data to be sent
+	 * @param requestType the request type
+	 * @return the message object
+	 */
 	public static Object prepareMessageWithDataType_User(User user, RequestType requestType) {
 		// this method is preparing user messages, data string for user are:
 		// String orderNumber,String restaurantName,String orderTime,String

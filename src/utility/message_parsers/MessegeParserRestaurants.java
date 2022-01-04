@@ -6,8 +6,18 @@ import utility.entity.Restaurant;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
+/**
+ * The Class MessegeParserRestaurants - holds all the functions needed to 
+ * send messages regarding Order data in the system
+ */
 public class MessegeParserRestaurants {
 	
+	/**
+	 * Handle message extract ArrayList holding data of restaurants.
+	 *
+	 * @param message the message to extract data from
+	 * @return the array list of Restaurant class objects
+	 */
 	public static ArrayList<Restaurant> handleMessageExtractDataType_Restaurants(Object message) {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		if (!msg.get(1).equals("RESTAURANTS_LIST")) {
@@ -23,6 +33,13 @@ public class MessegeParserRestaurants {
 		return result;
 	}
 	
+	/**
+	 * Prepare message holding ArrayList of Restaurant class objects.
+	 *
+	 * @param restaurantsList the ArrayList of restaurants to be sent
+	 * @param requestType the request type
+	 * @return the message object
+	 */
 	public static Object prepareMessageWithDataType_Restaurants(ArrayList<Restaurant> restaurantsList, RequestType requestType) {
 		// this method is preparing user messages, data string for user are:
 		// String orderNumber,String restaurantName,String orderTime,String
@@ -41,6 +58,12 @@ public class MessegeParserRestaurants {
 		return messageToPrepare;
 	}
 
+	/**
+	 * Handle message extract data of a single restaurant.
+	 *
+	 * @param message the message to extract data from
+	 * @return the restaurant object
+	 */
 	public static Restaurant handleMessageExtractDataType_singleRestaurant(Object message) {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		if (!msg.get(1).equals("RESTAURANT")) {
@@ -50,6 +73,13 @@ public class MessegeParserRestaurants {
 		return new Restaurant(msg.get(2),msg.get(3),msg.get(4),msg.get(5));
 	}
 
+	/**
+	 * Prepare message with data type of a single restaurant class object.
+	 *
+	 * @param result the result class object
+	 * @param requestType the request type
+	 * @return the message object
+	 */
 	public static Object prepareMessageWithDataType_singleRestaurant(Restaurant result, RequestType requestType) {
 			
 		ArrayList<String> messageToPrepare = new ArrayList<String>();

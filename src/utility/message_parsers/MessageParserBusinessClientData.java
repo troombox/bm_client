@@ -6,7 +6,18 @@ import utility.entity.BusinessClientData;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
+/**
+ * The Class MessageParserBusinessClientData -  used to send BusinessClientData
+ */
 public class MessageParserBusinessClientData {
+	
+	/**
+	 * Prepare message with data type business client data.
+	 *
+	 * @param bcd the BusinessClientData object
+	 * @param requestType the request type
+	 * @return the message object
+	 */
 	public static Object prepareMessageWithDataType_BusinessClientData(BusinessClientData bcd, RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
 		messageToPrepare.add(requestType.toString());
@@ -22,6 +33,12 @@ public class MessageParserBusinessClientData {
 		return messageToPrepare;
 	}
 	
+	/**
+	 * Handle message extract BusinessClientData object from a message
+	 *
+	 * @param Object message the message to extract data from
+	 * @return the BusinessClientData object that the message was holding
+	 */
 	public static BusinessClientData handleMessageExtractDataType_BusinessClientData(Object message) {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		if (!msg.get(1).equals("BUSINESS_CLIENT_DATA")) {

@@ -8,9 +8,20 @@ import utility.enums.DataType;
 import utility.enums.OrderType;
 import utility.enums.RequestType;
 
+/**
+ * The Class MessageParserOrder - holds all the functions needed to 
+ * send messages regarding Order data in the system
+ */
 public class MessageParserOrder {
 
-  	public static Object prepareMessageWithDataType_Order(Order order, RequestType requestType) {
+  	/**
+	   * Prepare message with data type order.
+	   *
+	   * @param order the order object to turn to message
+	   * @param requestType the request type
+	   * @return the message object
+	   */
+	  public static Object prepareMessageWithDataType_Order(Order order, RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
 		messageToPrepare.add(requestType.toString());
 		messageToPrepare.add(DataType.ORDER.toString());
@@ -40,6 +51,12 @@ public class MessageParserOrder {
 		return messageToPrepare;
 	}
 	
+	/**
+	 * Handle message extract data type order.
+	 *
+	 * @param message the message to extract data from 
+	 * @return the order class object
+	 */
 	public static Order handleMessageExtractDataType_Order(Object message) {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		if (!msg.get(1).equals("ORDER")) {
@@ -61,6 +78,12 @@ public class MessageParserOrder {
 		return order;
 	}
 	
+	/**
+	 * Handle message extract ArrayList of Orders
+	 *
+	 * @param message the message to extract data from
+	 * @return the array list of Orders
+	 */
 	public static ArrayList<Order> handleMessageExtractDataType_orders(Object message) {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		if (!msg.get(1).equals("ORDERS_LIST")) {
@@ -90,6 +113,13 @@ public class MessageParserOrder {
 		return result;
 	}
 	
+	/**
+	 * Prepare message from an ArrayList of Orders
+	 *
+	 * @param ordersList the ArrayList of Order to be made into a message
+	 * @param requestType the request type
+	 * @return the message object
+	 */
 	public static Object prepareMessageWithDataType_Orders(ArrayList<Order> ordersList, RequestType requestType) {
 	
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
@@ -125,7 +155,6 @@ public class MessageParserOrder {
 			}
 		}
 		
-
 		return messageToPrepare;
 	}
 	

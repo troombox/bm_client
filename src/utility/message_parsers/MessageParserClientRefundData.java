@@ -6,7 +6,18 @@ import utility.entity.ClientRefundsData;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
+/**
+ * The Class MessageParserClientRefundData - used to prepare and parse messages containing ClientRefundData
+ */
 public class MessageParserClientRefundData {
+	
+	/**
+	 * Prepare message with data type ClientRefundData.
+	 *
+	 * @param cfd the ClientRefundData object to send
+	 * @param requestType the request type
+	 * @return the object message
+	 */
 	public static Object prepareMessageWithDataType_ClientRefundData(ClientRefundsData cfd, RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
 		messageToPrepare.add(requestType.toString());
@@ -19,6 +30,12 @@ public class MessageParserClientRefundData {
 		return messageToPrepare;
 	}
 	
+	/**
+	 * Handle message extract ClientRefundData data
+	 *
+	 * @param message the message to extract the data from 
+	 * @return the client refunds data as a ClientRefundData class object
+	 */
 	public static ClientRefundsData handleMessageExtractDataType_ClientRefundData(Object message) {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		if (!msg.get(1).equals("CLIENT_REFUNDS_DATA")) {

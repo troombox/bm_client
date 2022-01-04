@@ -3,13 +3,23 @@ package utility.message_parsers;
 import java.util.ArrayList;
 
 import utility.entity.Dish;
-import utility.entity.Restaurant;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
+/**
+ * The Class MessegeParserDishes - holds all the functions needed to 
+ * send messages regarding Dishes data in the system
+ */
 public class MessegeParserDishes {
 	
 
+	/**
+	 * Prepare message with data type dishes.
+	 *
+	 * @param dishesList the ArrayList of dishes
+	 * @param requestType the request type
+	 * @return the message object
+	 */
 	public static Object prepareMessageWithDataType_Dishes(ArrayList<Dish> dishesList,
 			RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
@@ -32,6 +42,12 @@ public class MessegeParserDishes {
 	}
 
 
+	/**
+	 * Handle message extract data as an ArrayList of dishes.
+	 *
+	 * @param message the message to extract data from
+	 * @return the ArrayList of Dishes
+	 */
 	public static ArrayList<Dish> handleMessageExtractDataType_Dishes(Object message) {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		if (!msg.get(1).equals("DISHES_LIST")) {
@@ -49,6 +65,13 @@ public class MessegeParserDishes {
 	}
 
 
+	/**
+	 * Prepare message with data of a single Dish.
+	 *
+	 * @param dataToSendToServer the data to send to server
+	 * @param requestType the request type
+	 * @return the message object
+	 */
 	public static Object prepareMessageWithDataType_SingleDish(Object dataToSendToServer, RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
 		messageToPrepare.add(requestType.toString());
@@ -69,6 +92,12 @@ public class MessegeParserDishes {
 	}
 
 
+	/**
+	 * Handle message extract data of a single dish.
+	 *
+	 * @param message the message to extract data from 
+	 * @return the dish class object
+	 */
 	public static Dish handleMessageExtractDataType_SingleDish(Object message) {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		if (!msg.get(1).equals("DISH")) {
