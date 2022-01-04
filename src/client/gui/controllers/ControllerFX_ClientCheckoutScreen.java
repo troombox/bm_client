@@ -39,53 +39,53 @@ import utility.enums.OrderType;
 import utility.enums.RequestType;
 import utility.enums.UserType;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ControllerFX_ClientCheckoutScreen.
+ * The Class ControllerFX_ClientCheckoutScreen - FX screen controller holding all the methods 
+ * for the checkout screen of the "BiteMe" application
  */
 public class ControllerFX_ClientCheckoutScreen implements IClientFxController, Initializable {
 	
-	/** The calendar. */
+	/** The calendar instance used to get time / date data. */
 	private Calendar calendar = Calendar.getInstance();
 	
-	/** The delivery type. */
+	/** The delivery type enum for the order. */
 	private OrderType deliveryType = OrderType.DELIVERY_REGULAR;
 	
-	/** The delivery price. */
+	/** The delivery price set as a constant of 25 (nis). */
 	private final int deliveryPrice = 25;
 	
-	/** The price. */
+	/** The price of current order being showed. */
 	private int price;
 	
-	/** The final price. */
+	/** The final price including delivery */
 	private int finalPrice;
 	
-	/** The total refund value. */
+	/** The total refund value for a client order. */
 	private int totalRefundValue = 0;
 	
-	/** The crf. */
+	/** The ClientRefundsData holding refunds data pulled from the server. */
 	private ClientRefundsData crf;
 	
-	/** The bcd. */
+	/** The BusinessClientData holding business client data pulled from the server. */
 	private BusinessClientData bcd = null;
 	
-    /** The Warning msg. */
+    /** The Warning msg label. */
     @FXML
     private Label WarningMsg;
 	
-    /** The pick early delivery. */
+    /** The pick early delivery RadioButton. */
     @FXML
     private RadioButton pickEarlyDelivery;
 
-    /** The pick regualr delivery. */
+    /** The pick regular delivery RadioButton. */
     @FXML
     private RadioButton pickRegualrDelivery;
 
-    /** The pick pickup delivery. */
+    /** The  pickup delivery RadioButton. */
     @FXML
     private RadioButton pickPickupDelivery;
 
-    /** The date picker. */
+    /** The date picker window. */
     @FXML
     private DatePicker datePicker;
 
@@ -93,23 +93,23 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     @FXML
     private GridPane dishGridPane;
 
-    /** The time picker. */
+    /** The time picker ComboBox. */
     @FXML
     private ComboBox<String> timePicker;
 
-    /** The type of delivery. */
+    /** The type of delivery ComboBox. */
     @FXML
     private ComboBox<String> typeOfDelivery;
 
-    /** The txt address. */
+    /** The address input text field. */
     @FXML
     private TextField txtAddress;
 
-    /** The txt name. */
+    /** The name input text field. */
     @FXML
     private TextField txtName;
 
-    /** The txt phone. */
+    /** The phone input text field. */
     @FXML
     private TextField txtPhone;
 
@@ -121,11 +121,11 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     @FXML
     private Label labelFinalPrice;
     
-    /** The txt price pre discount. */
+    /** The text price pre-discount. */
     @FXML
     private Label txtPricePreDiscount;
 
-    /** The button pay. */
+    /** The button to pay. */
     @FXML
     private Button buttonPay;
     
@@ -145,55 +145,55 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     @FXML
     private Pane businessPane;
     
-    /** The business choice. */
+    /** The business choice pane. */
     @FXML
     private Pane businessChoice;
     
-    /** The button business no. */
+    /** The button to choose "No" on business choice. */
     @FXML
     private Button buttonBusinessNo;
     
-    /** The button business yes. */
+    /** The button to choose "Yes" on business choice. */
     @FXML
     private Button buttonBusinessYes;
     
-    /** The button cancel. */
+    /** The button to cancel. */
     @FXML
     private Button buttonCancel;
     
-    /** The txt confirm delivery. */
+    /** The text to confirm delivery. */
     @FXML
     private Label txtConfirmDelivery;
 
-    /** The txt confirm time. */
+    /** The text to  confirm time. */
     @FXML
     private Label txtConfirmTime;
 
-    /** The txt confirm date. */
+    /** The text to  confirm date. */
     @FXML
     private Label txtConfirmDate;
 
-    /** The txt confirm price. */
+    /** The text to confirm price. */
     @FXML
     private Label txtConfirmPrice;
 
-    /** The button confirm pay. */
+    /** The button to confirm pay. */
     @FXML
     private Button buttonConfirmPay;
     
-    /** The button confirm pay business. */
+    /** The button to confirm pay as business client. */
     @FXML
     private Button buttonConfirmPayBusiness;
 
-    /** The button cancel business. */
+    /** The button cancel as a business client. */
     @FXML
     private Button buttonCancelBusiness;
     
-    /** The label B cfinal price. */
+    /** The label to show business client final price. */
     @FXML
     private Label labelBCfinalPrice;
 
-    /** The label B ccurrent budget. */
+    /** The label to show business client current budget. */
     @FXML
     private Label labelBCcurrentBudget;
 
@@ -201,30 +201,31 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     @FXML
     private VBox vboxField;
     
-    /** The sucessfully sent pane. */
+    /** The successfully sent message pane. */
     @FXML
     private Pane sucessfullySentPane;
 
-    /** The button success go back. */
+    /** The button to go back. */
     @FXML
     private Button buttonSuccessGoBack;
     
-    /** The label refunds value. */
+    /** The label showing refunds value. */
     @FXML
     private Label labelRefundsValue;
     
-    /** The pick shared delivery. */
+    /** The pick shared delivery RadioButton. */
     @FXML
     private RadioButton pickSharedDelivery;
     
-    /** The Error msg. */
+    /** The Error msg label. */
     @FXML
     private Label ErrorMsg;
 
     /**
-     * Do payment.
+     * Do payment method used to check for input texts, 
+     * and in case of a check being sucessfull used to open a confirmation pane
      *
-     * @param event the event
+     * @param event the event from javaFx
      */
     @FXML
     void doPayment(ActionEvent event) {
@@ -274,7 +275,7 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     }
     
     /**
-     * Do cancel.
+     * Do cancel action on a confirmation pane and set its isVisible() to false.
      *
      * @param event the event
      */
@@ -285,7 +286,7 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     }
     
     /**
-     * Do confirm payment.
+     * Do confirm payment action on a confirmation pane
      *
      * @param event the event
      */
@@ -301,7 +302,7 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     }
     
     /**
-     * Do bno.
+     * Do a "No" action on a business payment choice.
      *
      * @param event the event
      */
@@ -312,7 +313,7 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     }
 
     /**
-     * Do byes.
+     * Do a "Yes" action on a business payment choice.
      *
      * @param event the event
      */
@@ -343,7 +344,7 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     
 
     /**
-     * Do cancel business.
+     * Cancel business payment option and go back
      *
      * @param event the event
      */
@@ -354,7 +355,7 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     }
 
     /**
-     * Do confirm payment business.
+     * Confirm payment business option
      *
      * @param event the event
      */
@@ -366,7 +367,7 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     }
     
     /**
-     * Do success go back.
+     * On success go back to the "base" screen
      *
      * @param event the event
      */
@@ -379,9 +380,9 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     }
 
 	/**
-	 * Start.
+	 * Start the stage 
 	 *
-	 * @param stage the stage
+	 * @param stage the stage of the main window
 	 */
 	@Override
 	public void start(Stage stage) {
@@ -399,7 +400,7 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
 	}
 	
     /**
-     * Do go back.
+     * Do go back to previous screen
      *
      * @param event the event
      */
@@ -409,7 +410,7 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     }
     
     /**
-     * Do sign out.
+     * Do sign out of the application
      *
      * @param event the event
      */
@@ -467,7 +468,7 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     }
 
     /**
-     * Do pick regualr delivery.
+     * Do pick regular delivery.
      *
      * @param event the event
      */
@@ -490,7 +491,7 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     }
 
     /**
-     * Do shared delivery.
+     * Do pick shared delivery.
      *
      * @param event the event
      */
@@ -513,7 +514,7 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
 
 	
 	/**
-	 * Initialize.
+	 * Initialize the FX
 	 *
 	 * @param location the location
 	 * @param resources the resources
@@ -568,7 +569,7 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
  	}
  	
  	/**
-	  * Sets the refunds value.
+	  * Sets the refunds value for the currnet user
 	  */
 	 public void setRefundsValue(){
  		ArrayList<String> requestForRefunds = new ArrayList<String>();
@@ -595,7 +596,7 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
  	}
 	
 	/**
-	 * Fill in cart.
+	 * Fill in cart with dishes
 	 */
 	private void fillInCart() {
 		if(ClientUI.clientLogic.isOrderListEmpty()) {
@@ -644,7 +645,7 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
 	
 	
 	/**
-	 * Sets the prices.
+	 * Set the prices for the user, including discounts 
 	 */
 	private void setPrices() {
 		int numberOfRes = ClientUI.clientLogic.getOrder().numberOfRestaurantsInOrder();
@@ -671,7 +672,7 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
 	/**
 	 * Do send order to server.
 	 *
-	 * @param isPrivate the is private
+	 * @param isPrivate flag to show is the order a private or a business one. true for private
 	 */
 	private void doSendOrderToServer(boolean isPrivate) {
     	//if payment is confirmed we send the orders to the server
@@ -762,8 +763,8 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
 	/**
 	 * Show error.
 	 *
-	 * @param show the show
-	 * @param message the message
+	 * @param show the error label
+	 * @param message the message to show
 	 */
 	void showError(boolean show, String message) {
 		if(message == null || message.equals("") || !show) {
