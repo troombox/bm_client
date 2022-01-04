@@ -10,19 +10,41 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import server.logic.BMServerLogic;
 
+/**
+ * The Class ServerUI.
+ */
 public class ServerUI extends Application {
 	
+	/** The BM server. */
 	private static BMServerLogic bmServer;
 	
+	/** The Constant DEFAULT_PORT. */
 	final public static int DEFAULT_PORT = 5555;
+	
+	/** The Constant DB_NAME. */
 	final public static String DB_NAME = "bm-db"; //name of the schema in MYSQL
+	
+	/** The Constant DB_USER. */
 	final public static String DB_USER = "root";
+	
+	/** The Constant DB_PASS. */
 	final public static String DB_PASS = "Tzachi1234!";
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String[] args) {
 		 launch(args);
 	}
 
+	/**
+	 * Start.
+	 *
+	 * @param primaryStage the primary stage
+	 * @throws Exception the exception
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		//prepare and call javaFX window
@@ -32,6 +54,18 @@ public class ServerUI extends Application {
         
 	}
 	
+	/**
+	 * this method checks if all the data about the DB is currect.
+	 * creates an instance of BMServerLofic and listens to the client
+	 *
+	 * @param port the port
+	 * @param schemaName the schema name
+	 * @param DBuser the user
+	 * @param DBpassword the password
+	 * @param ctrl the ctrl
+	 * @return true, if successful
+	 * @throws Exception the exception
+	 */
 	//this function needs ServerMainWindowController class to update gui from server logic
 	public static boolean startServer(int port, String schemaName, String DBuser, 
 			String DBpassword, ServerMainWindowController ctrl) throws Exception {
@@ -52,6 +86,12 @@ public class ServerUI extends Application {
 		return true;
 	}
 	
+	/**
+	 * Stop server.
+	 *
+	 * @return true, if successful
+	 * @throws Exception the exception
+	 */
 	public static boolean stopServer() throws Exception{
 		try {
 			if(bmServer == null)
@@ -67,6 +107,12 @@ public class ServerUI extends Application {
 	
 	//----------------LISTEN FUNCTIONS
 
+	/**
+	 * Start server listening to clients
+	 *
+	 * @return true, if successful
+	 * @throws Exception the exception
+	 */
 	public static boolean startServerListening() throws Exception{
 		try {
 			if(bmServer == null)
@@ -79,6 +125,11 @@ public class ServerUI extends Application {
 		return true;
 	}
 	
+	/**
+	 * Stop server listening to clients
+	 *
+	 * @return true, if successful
+	 */
 	public static boolean stopServerListening() {
 		if (bmServer == null)
 			return false;
@@ -86,7 +137,13 @@ public class ServerUI extends Application {
 		return true;
 	}
 	
-	//Method added especially for Avi!(Hi Avi)
+	/**
+	 * Import users from system outside this system
+	 * checks if the users doesn't exist already in our system.
+	 * if they don't exist the method will add them
+	 *
+	 * @return true, if successful
+	 */
 	//why whould we need to import users!?
 	public static boolean importUsers() {
 		if(bmServer == null) {

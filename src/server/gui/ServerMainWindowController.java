@@ -19,68 +19,100 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
+/**
+ * The Class ServerMainWindowController.
+ */
 public class ServerMainWindowController {
 
+	/** The indicator server status. */
 	@FXML
 	private Circle indicatorServerStatus;
 
+	/** The text server status. */
 	@FXML
 	private TextField txtServerStatus;
 
+	/** The text clients connected. */
 	@FXML
 	private TextField txtClientsConnected;
 
+	/** The input text schema name. */
 	@FXML
 	private TextField inputTxtSchemaName;
 
+	/** The input text user name. */
 	@FXML
 	private TextField inputTxtUserName;
 
+	/** The button start server. */
 	@FXML
 	private Button buttonStartServer;
 
+    /** The button server listening. */
     @FXML
     private Button buttonServerListening;
 
+	/** The button stop server. */
 	@FXML
 	private Button buttonStopServer;
 
+	/** The button open log. */
 	@FXML
 	private Button buttonOpenLog;
 
+	/** The button quit. */
 	@FXML
 	private Button buttonQuit;
 	
+    /** The input text server port. */
     @FXML
     private TextField inputTxtServerPort;
 
+    /** The checkBox default values. */
     @FXML
     private CheckBox chkboxDefaultValues;
 
+    /** The input text password. */
     @FXML
     private PasswordField inputTxtPassword;
     
+    /** The label show message. */
     @FXML
     private Label labelShowMessage;
 	
 
+    /** The import button. */
     @FXML
     private Button importBtn;
     
+	/** The log text. */
 	@FXML
 	TextArea logText = new TextArea();
 	
 	
+	/** The server UI. */
 	//Used to gain access to functions stored in ServeUI class
 	private ServerUI serverUI; //not in use as the server instance is static
 	
+	/** The flag log window open. */
 	//Flags
 	private boolean flagLogWindowOpen = false;
+	
+	/** The flag server running. */
 	private boolean flagServerRunning = false;
+	
+	/** The flag server listening. */
 	private boolean flagServerListening = false;
+	
+	/** The flag server U iset. */
 	private boolean flagServerUIset = false; //not in use as the server instance is static
 	
 
+	/**
+	 * open the log that shows everything that happens in the server.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void doOpenLog(ActionEvent event) {
 		if(flagLogWindowOpen)
@@ -99,12 +131,22 @@ public class ServerMainWindowController {
         flagLogWindowOpen = true;
 	}
 
+	/**
+	 * Do quit.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void doQuit(ActionEvent event) {
 		doStopServer(null);
 		System.exit(0);
 	}
 
+    /**
+     * Do server listening to clients
+     *
+     * @param event the event
+     */
     @FXML
     void doServerListening(ActionEvent event) {
     	if(!flagServerRunning) {
@@ -132,6 +174,10 @@ public class ServerMainWindowController {
     }
 
     
+    /**
+     * creates instance of the server and connects to the DB
+     * @param event the event
+     */
     //This function starts the server
 	@FXML
 	void doStartServer(ActionEvent event) {
@@ -182,6 +228,11 @@ public class ServerMainWindowController {
 		flagServerListening = true;
 	}
 
+	/**
+	 * Do stop server.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void doStopServer(ActionEvent event) {
 		//STOP SERVER
@@ -212,6 +263,11 @@ public class ServerMainWindowController {
 		flagServerListening = false;
 	}
 	
+    /**
+     * Do fill default values in the server connections
+     *
+     * @param event the event
+     */
     @FXML
     void doFillDefault(ActionEvent event) {
     	if(chkboxDefaultValues.isSelected()) {
@@ -230,6 +286,11 @@ public class ServerMainWindowController {
     }
 	
     
+    /**
+     * Update data in the log.
+     *
+     * @param dataToShow the data to show
+     */
     public void updateDataLog(String dataToShow){
 		Platform.runLater(new Runnable() {
 		    @Override public void run() {
@@ -238,6 +299,11 @@ public class ServerMainWindowController {
 		});
     }
     
+    /**
+     * Update number of clients that are connected to this server.
+     *
+     * @param numberOfClients the number of clients
+     */
     public void updateNumberOfClientsConnected(int numberOfClients){
 		Platform.runLater(new Runnable() {
 		    @Override public void run() {
@@ -247,6 +313,12 @@ public class ServerMainWindowController {
     }
     
     
+    /**
+     * Start.
+     *
+     * @param primaryStage the primary stage
+     * @throws Exception the exception
+     */
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/server/gui/ServerMainWindow.fxml"));
         Scene scene = new Scene(root);
@@ -265,21 +337,42 @@ public class ServerMainWindowController {
         primaryStage.show();
     }
 
+	/**
+	 * Sets the server UI.
+	 *
+	 * @param serverUI the new server UI
+	 */
 	public void setServerUI(ServerUI serverUI) {
 		this.serverUI = serverUI;
 		flagServerUIset = true;
 	}
 	
+	/**
+	 * Sets the label show message error message.
+	 *
+	 * @param msg the new label show message error message
+	 */
 	private void setLabelShowMessageErrorMessage(String msg) {
 		labelShowMessage.setText(msg);
 		labelShowMessage.setStyle("-fx-text-fill: red;");
 	}
 	
+	/**
+	 * Sets the label show message success message.
+	 *
+	 * @param msg the new label show message success message
+	 */
 	private void setLabelShowMessageSucceessMessage(String msg) {
 		labelShowMessage.setText(msg);
 		labelShowMessage.setStyle("-fx-text-fill: green;");
 	}
 	
+	/**
+	 * Import users from outside system and check if the 
+	 * import was successful or not.
+	 *
+	 * @param event the event
+	 */
 	@FXML
     void importUsers(ActionEvent event) {
         if(ServerUI.importUsers()) {
