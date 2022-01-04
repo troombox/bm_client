@@ -2,7 +2,7 @@ package utility.enums;
 
 /**
  * The Enum DBActionType.
- * represent all actions related to type in system.
+ * represent all actions related to db in system.
  */
 public enum DBActionType {
 	
