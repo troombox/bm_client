@@ -21,20 +21,30 @@ import utility.entity.Dish;
 import utility.entity.Order;
 
 /* 
+ * The Class ControllerFX_ActiveOrdersShowDishesInOrderScreen.
  * this screen presented to supplier at his active orders,
  * after  the button "show dishes in order" - this screen will show - all dishes in the selected order
  */
 
 public class ControllerFX_ActiveOrdersShowDishesInOrderScreen implements IClientFxController, Initializable{
 
+    /** The headline. present order number*/
     @FXML
     private Label headline;
 
+    /** The dishes grid. */
     @FXML
     private GridPane dishesGrid;
     
+    /** The order. */
     public static Order order;
 
+	/**
+	 * Initialize.
+	 *
+	 * @param location the location
+	 * @param resources the resources
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		headline.setText("order number " + order.getOrderID());
@@ -80,6 +90,11 @@ public class ControllerFX_ActiveOrdersShowDishesInOrderScreen implements IClient
 		
 	}
 
+	/**
+	 * Start.
+	 *
+	 * @param stage the stage
+	 */
 	@Override
 	public void start(Stage stage) {
 		Parent root = null;

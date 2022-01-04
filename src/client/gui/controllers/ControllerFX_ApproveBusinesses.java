@@ -24,31 +24,47 @@ import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
+/**
+ * The Class ControllerFX_ApproveBusinesses.
+ * this screen is shown in branch manager account, the manager can approve businesses that are waiting for approval
+ */
 public class ControllerFX_ApproveBusinesses  implements  IClientFxController, Initializable{
 	
+	/** The selected client. */
 	ObservableList<String> selectedClient;
 
+    /** The button sign out. */
     @FXML
     private Button buttonSignOut;
 
+    /** The button go back. */
     @FXML
     private Button buttonGoBack;
 
+    /** The Approve btn. */
     @FXML
     private Button ApproveBtn;
 
+    /** The Decline btn. */
     @FXML
     private Button DeclineBtn;
 
 
+    /** The list view. */
     @FXML
     private ListView<String> listView;
     
+    /** The result label. */
     @FXML
     private Label resultLabel;
 
     
 
+    /**
+     * Approve request of business.
+     *
+     * @param event the event
+     */
     @FXML
     void aproveRequest(ActionEvent event) {
     	User user = ClientUI.clientLogic.getLoggedUser();
@@ -71,6 +87,11 @@ public class ControllerFX_ApproveBusinesses  implements  IClientFxController, In
     	populateTable();
     }
 
+    /**
+     * Decline request of business.
+     *
+     * @param event the event
+     */
     @FXML
     void declineRequest(ActionEvent event) {
     	User user = ClientUI.clientLogic.getLoggedUser();
@@ -94,11 +115,21 @@ public class ControllerFX_ApproveBusinesses  implements  IClientFxController, In
     }
 
 
+    /**
+     * Do go back.
+     *
+     * @param event the event
+     */
     @FXML
     void doGoBack(ActionEvent event) {
     	ClientUI.historyStack.popFxController().start(ClientUI.parentWindow);
     }
 
+    /**
+     * Do sign out.
+     *
+     * @param event the event
+     */
     @FXML
     void doSignOut(ActionEvent event) {
     	ClientUI.clientLogic.logOutUser();
@@ -106,6 +137,9 @@ public class ControllerFX_ApproveBusinesses  implements  IClientFxController, In
     	ClientUI.loginScreen.start(ClientUI.parentWindow);
     }
 
+    /**
+     * Populate table. insert values to business to approve table
+     */
     private void populateTable() {
 		User user = ClientUI.clientLogic.getLoggedUser();
 		ClientUI.clientLogic.sendMessageToServer(user.getPersonalBranch(), DataType.GET_DATA_OF_BUSINESS,
@@ -127,11 +161,22 @@ public class ControllerFX_ApproveBusinesses  implements  IClientFxController, In
 		}
 	}
     
+	/**
+	 * Initialize.
+	 *
+	 * @param location the location
+	 * @param resources the resources
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		populateTable();
 	}
 
+	/**
+	 * Start.
+	 *
+	 * @param stage the stage
+	 */
 	@Override
 	public void start(Stage stage) {
 		Parent root = null;

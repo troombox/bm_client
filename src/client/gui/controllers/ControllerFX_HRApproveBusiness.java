@@ -18,7 +18,6 @@ import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ControllerFX_HRApproveBusiness.
  */
@@ -46,7 +45,7 @@ public class ControllerFX_HRApproveBusiness implements IClientFxController, Init
     /**
      * go to table of the users to approve.
      *
-     * @param ActionEvent approveUsersBtn was pressed
+     * @param event the event
      */
     @FXML
     void approveUsers(ActionEvent event) {
@@ -58,9 +57,9 @@ public class ControllerFX_HRApproveBusiness implements IClientFxController, Init
 
 
     /**
-     * make request to approve your business
+     * make request to approve your business.
      *
-     * @param ActionEvent approveBusinessBtn was pressed
+     * @param event the event
      */
     @FXML
     void approveBusiness(ActionEvent event) {

@@ -44,7 +44,6 @@ import utility.enums.RequestType;
 
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ControllerFX_ActiveOrdersScreen.
  */

@@ -27,9 +27,9 @@ import utility.entity.Restaurant;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ControllerFX_SupplierScreen.
+ * this screen is shown to supplier, it shows all possible options the supplier can make 
  */
 public class ControllerFX_SupplierScreen implements IClientFxController, Initializable {
 
@@ -45,7 +45,7 @@ public class ControllerFX_SupplierScreen implements IClientFxController, Initial
     private Restaurant res;
 
     /**
-     * Edits the menu.
+     * move to Edit menu screen 
      *
      * @param event the event
      */
@@ -113,7 +113,7 @@ public class ControllerFX_SupplierScreen implements IClientFxController, Initial
     }
 
     /**
-     * Show active orders.
+     * move to Show active orders screen
      *
      * @param event the event
      */

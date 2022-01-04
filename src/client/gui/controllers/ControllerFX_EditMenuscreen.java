@@ -32,32 +32,44 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-/*
- * this screen is show to the supplier after clicking "edit menu" button in his home page
+
+/**
+ * The Class ControllerFX_EditMenuscreen.
+ * * this screen is show to the supplier after clicking "edit menu" button in his home page
  * the screen present a list of all the supplier's dishes, 
  * the supplier can add a new dish to his menu
  * the supplier can edit an existing dish in his menu by clicking the dish's "edit dish" button
  */
-
 public class ControllerFX_EditMenuscreen implements IClientFxController, Initializable {
 	
 
+    /** The firsts tab. */
     @FXML
     private Tab firstsTab;
 
+    /** The main dish tab. */
     @FXML
     private Tab mainDishTab;
 
+    /** The desserts tab. */
     @FXML
     private Tab dessertsTab;
 
+    /** The drinks tab. */
     @FXML
     private Tab drinksTab;
     
+    /** The res. */
     public static Restaurant res;
     
+    /** The menu. */
     public static ArrayList<Dish> menu;
 
+    /**
+     * Adds the new dish. move to add new dish screen 
+     *
+     * @param event the event
+     */
     @FXML
     void addNewDish(ActionEvent event) {
     	ClientUI.historyStack.pushFxController(this);
@@ -68,17 +80,32 @@ public class ControllerFX_EditMenuscreen implements IClientFxController, Initial
 
     }
 
+    /**
+     * Go back.
+     *
+     * @param event the event
+     */
     @FXML
     void goBack(ActionEvent event) {
     	ClientUI.historyStack.popFxController().start(ClientUI.parentWindow);
     }
 
+    /**
+     * Sign out.
+     *
+     * @param event the event
+     */
     @FXML
     void signOut(ActionEvent event) {
     	ClientUI.clientLogic.logOutUser();
     	ClientUI.loginScreen.start(ClientUI.parentWindow);
     }
     
+    /**
+     * Start.
+     *
+     * @param stage the stage
+     */
     @Override
 	public void start(Stage stage) {
     	Parent root = null;
@@ -95,6 +122,12 @@ public class ControllerFX_EditMenuscreen implements IClientFxController, Initial
 
 	}
 
+	/**
+	 * Initialize. update in "edit menu" screen the menu of the given restaurant (of the current supplier) 
+	 *
+	 * @param location the location
+	 * @param resources the resources
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		ClientUI.clientLogic.sendMessageToServer(res.getRes_ID(),

@@ -29,46 +29,67 @@ import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
+/**
+ * The Class ControllerFX_BranchManagerScreen.
+ * this screen is shown in branch manager account, it shows all options that branch manager can do in biteme 
+ */
+
 public class ControllerFX_BranchManagerScreen implements IClientFxController, Initializable{
 
+	/** The previous. */
 	IClientFxController previous;
 	
+    /** The title txt. hello to user message*/
     @FXML
     private Label titleTxt;
     
+    /** The signout btn. */
     @FXML
     private Button signoutBtn;
 
+    /** The back btn. */
     @FXML
     private Button backBtn;
     
+    /** The register client btn. */
     @FXML
     private Button registerClientBtn;
 
+    /** The register supplier btn. */
     @FXML
     private Button registerSupBtn;
 
+    /** The view reports btn. */
     @FXML
     private Button viewRepBtn;
     
 
+    /** The approve business. */
     @FXML
     private Button approveBusiness;
     
 
+    /** The permission btn. */
     @FXML
     private Button permissionBtn;
     
 
+    /** The report CEO btn. */
     @FXML
     private Button reportCEObtn;
     
 
+    /** The report success popup. */
     @FXML
     private Pane reportSuccessPopup;
     
     
 
+    /**
+     * Move to register client window
+     *
+     * @param event the event
+     */
     @FXML
     void moveToRegisterClientWin(ActionEvent event) {
     	IClientFxController nextScreen = new ControllerFX_RegisterClientScreen();
@@ -76,6 +97,11 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController, In
     	nextScreen.start(ClientUI.parentWindow);
     }
 
+    /**
+     * Move to register supplier window
+     *
+     * @param event the event
+     */
     @FXML
     void moveToRegisterSupWin(ActionEvent event) {
     	IClientFxController nextScreen = new ControllerFX_RegisterSupplierScreen();
@@ -83,6 +109,11 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController, In
     	nextScreen.start(ClientUI.parentWindow);
     }
 
+    /**
+     * Move to view report window
+     *
+     * @param event the event
+     */
     @FXML
     void moveToViewReportWin(ActionEvent event) {
     	IClientFxController nextScreen = new ControllerFX_OpenReportBranch();
@@ -90,6 +121,11 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController, In
     	nextScreen.start(ClientUI.parentWindow);
     }
     
+    /**
+     * Move to change permission of users window
+     *
+     * @param event the event
+     */
     @FXML
     void moveToChangePermissionWin(ActionEvent event) {
     	IClientFxController nextScreen = new ControllerFX_ChangePermission();
@@ -98,6 +134,11 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController, In
     }
     
 
+    /**
+     * Move to approve business window
+     *
+     * @param event the event
+     */
     @FXML
     void doApproveBusiness(ActionEvent event) {
     	IClientFxController nextScreen = new ControllerFX_ApproveBusinesses();
@@ -106,6 +147,11 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController, In
     }
     
 
+    /**
+     * Send report to CEO.
+     *
+     * @param event the event
+     */
     @FXML
     void sendReportToCEO(ActionEvent event) {
     	User user = ClientUI.clientLogic.getLoggedUser();
@@ -142,6 +188,11 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController, In
     }
     
 
+	/**
+	 * Start.
+	 *
+	 * @param stage the stage
+	 */
 	@Override
 	public void start(Stage stage) {
 		Parent root = null;
@@ -161,6 +212,9 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController, In
 	}
 	
 	
+	/**
+	 * Sets the welcome message.
+	 */
 	public void setWelcomeMessage() {
 		String name = ClientUI.clientLogic.getLoggedUser().getFirstName();
 		String last = ClientUI.clientLogic.getLoggedUser().getLastName();
@@ -169,20 +223,36 @@ public class ControllerFX_BranchManagerScreen implements IClientFxController, In
         titleTxt.setText(welcomeMessage);
 	}
 	
-	  @FXML
+	  /**
+  	 * Do go back.
+  	 *
+  	 * @param event the event
+  	 */
+  	@FXML
 	    void doGoBack(ActionEvent event) {
 		  	ClientUI.clientLogic.logOutUser();
 	    	ClientUI.historyStack.clearControllerHistory();
 	    	ClientUI.loginScreen.start(ClientUI.parentWindow);
 	    }
 	  
-	    @FXML
+	    /**
+    	 * Do sign out.
+    	 *
+    	 * @param event the event
+    	 */
+    	@FXML
 	    void doSignOut(ActionEvent event) {
 	    	ClientUI.clientLogic.logOutUser();
 	    	ClientUI.historyStack.clearControllerHistory();
 	    	ClientUI.loginScreen.start(ClientUI.parentWindow);
 	    }
 
+		/**
+		 * Initialize.
+		 *
+		 * @param location the location
+		 * @param resources the resources
+		 */
 		@Override
 		public void initialize(URL location, ResourceBundle resources) {	
 			setWelcomeMessage();

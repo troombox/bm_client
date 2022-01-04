@@ -17,34 +17,54 @@ import utility.entity.Business;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
+/**
+ * The Class ControllerFX_RegisterNewBusiness.
+ */
 public class ControllerFX_RegisterNewBusiness implements IClientFxController {
 
+    /** The signout btn. */
     @FXML
     private Button signoutBtn;
 
+    /** The back btn. */
     @FXML
     private Button backBtn;
 
+    /** The business name. */
     @FXML
     private TextField businessName;
 
+    /** The business ID. */
     @FXML
     private TextField businessID;
 
+    /** The business branch. */
     @FXML
     private TextField businessBranch;
 
+    /** The register btn. */
     @FXML
     private Button registerBtn;
 
+    /** The result txt. */
     @FXML
     private Label resultTxt;
 
+    /**
+     * Do go back.
+     *
+     * @param event the event
+     */
     @FXML
     void doGoBack(ActionEvent event) {
     	ClientUI.historyStack.popFxController().start(ClientUI.parentWindow);
     }
 
+    /**
+     * Do sign out.
+     *
+     * @param event the event
+     */
     @FXML
     void doSignOut(ActionEvent event) {
     	ClientUI.clientLogic.logOutUser();
@@ -52,6 +72,11 @@ public class ControllerFX_RegisterNewBusiness implements IClientFxController {
     	ClientUI.loginScreen.start(ClientUI.parentWindow);
     }
 
+    /**
+     * Register new business.
+     *
+     * @param event the event
+     */
     @FXML
     void registerNewBusiness(ActionEvent event) {
     	String businessName1 = businessName.getText();
@@ -78,6 +103,14 @@ public class ControllerFX_RegisterNewBusiness implements IClientFxController {
     	
     }
     
+     /**
+      * Check valid input for business.
+      *
+      * @param businessName the business name
+      * @param businessId the business id
+      * @param businessBranch the business branch
+      * @return true, if successful
+      */
      private boolean checkValidInputForBusiness(String businessName,String businessId, String businessBranch) {
 		if (businessName.trim().isEmpty()) {
 			resultTxt.setText("You must enter a business name");
@@ -95,6 +128,11 @@ public class ControllerFX_RegisterNewBusiness implements IClientFxController {
 		return true;
     }
 
+	/**
+	 * Start.
+	 *
+	 * @param stage the stage
+	 */
 	@Override
 	public void start(Stage stage) {
 		Parent root = null;

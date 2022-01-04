@@ -39,138 +39,193 @@ import utility.enums.OrderType;
 import utility.enums.RequestType;
 import utility.enums.UserType;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ControllerFX_ClientCheckoutScreen.
+ */
 public class ControllerFX_ClientCheckoutScreen implements IClientFxController, Initializable {
 	
+	/** The calendar. */
 	private Calendar calendar = Calendar.getInstance();
 	
+	/** The delivery type. */
 	private OrderType deliveryType = OrderType.DELIVERY_REGULAR;
 	
+	/** The delivery price. */
 	private final int deliveryPrice = 25;
 	
+	/** The price. */
 	private int price;
 	
+	/** The final price. */
 	private int finalPrice;
 	
+	/** The total refund value. */
 	private int totalRefundValue = 0;
 	
+	/** The crf. */
 	private ClientRefundsData crf;
 	
+	/** The bcd. */
 	private BusinessClientData bcd = null;
 	
+    /** The Warning msg. */
     @FXML
     private Label WarningMsg;
 	
+    /** The pick early delivery. */
     @FXML
     private RadioButton pickEarlyDelivery;
 
+    /** The pick regualr delivery. */
     @FXML
     private RadioButton pickRegualrDelivery;
 
+    /** The pick pickup delivery. */
     @FXML
     private RadioButton pickPickupDelivery;
 
+    /** The date picker. */
     @FXML
     private DatePicker datePicker;
 
+    /** The dish grid pane. */
     @FXML
     private GridPane dishGridPane;
 
+    /** The time picker. */
     @FXML
     private ComboBox<String> timePicker;
 
+    /** The type of delivery. */
     @FXML
     private ComboBox<String> typeOfDelivery;
 
+    /** The txt address. */
     @FXML
     private TextField txtAddress;
 
+    /** The txt name. */
     @FXML
     private TextField txtName;
 
+    /** The txt phone. */
     @FXML
     private TextField txtPhone;
 
+    /** The label delivery. */
     @FXML
     private Label labelDelivery;
 
+    /** The label final price. */
     @FXML
     private Label labelFinalPrice;
     
+    /** The txt price pre discount. */
     @FXML
     private Label txtPricePreDiscount;
 
+    /** The button pay. */
     @FXML
     private Button buttonPay;
     
+    /** The txt final price. */
     @FXML
     private Label txtFinalPrice;
     
+    /** The txt delivery price. */
     @FXML
     private Label txtDeliveryPrice;
     
+    /** The confirmation pane. */
     @FXML
     private Pane confirmationPane;
     
+    /** The business pane. */
     @FXML
     private Pane businessPane;
     
+    /** The business choice. */
     @FXML
     private Pane businessChoice;
     
+    /** The button business no. */
     @FXML
     private Button buttonBusinessNo;
     
+    /** The button business yes. */
     @FXML
     private Button buttonBusinessYes;
     
+    /** The button cancel. */
     @FXML
     private Button buttonCancel;
     
+    /** The txt confirm delivery. */
     @FXML
     private Label txtConfirmDelivery;
 
+    /** The txt confirm time. */
     @FXML
     private Label txtConfirmTime;
 
+    /** The txt confirm date. */
     @FXML
     private Label txtConfirmDate;
 
+    /** The txt confirm price. */
     @FXML
     private Label txtConfirmPrice;
 
+    /** The button confirm pay. */
     @FXML
     private Button buttonConfirmPay;
     
+    /** The button confirm pay business. */
     @FXML
     private Button buttonConfirmPayBusiness;
 
+    /** The button cancel business. */
     @FXML
     private Button buttonCancelBusiness;
     
+    /** The label B cfinal price. */
     @FXML
     private Label labelBCfinalPrice;
 
+    /** The label B ccurrent budget. */
     @FXML
     private Label labelBCcurrentBudget;
 
+    /** The vbox field. */
     @FXML
     private VBox vboxField;
     
+    /** The sucessfully sent pane. */
     @FXML
     private Pane sucessfullySentPane;
 
+    /** The button success go back. */
     @FXML
     private Button buttonSuccessGoBack;
     
+    /** The label refunds value. */
     @FXML
     private Label labelRefundsValue;
     
+    /** The pick shared delivery. */
     @FXML
     private RadioButton pickSharedDelivery;
     
+    /** The Error msg. */
     @FXML
     private Label ErrorMsg;
 
+    /**
+     * Do payment.
+     *
+     * @param event the event
+     */
     @FXML
     void doPayment(ActionEvent event) {
     	//validate the inputs:
@@ -218,12 +273,22 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     	showError(false, null);
     }
     
+    /**
+     * Do cancel.
+     *
+     * @param event the event
+     */
     @FXML
     void doCancel(ActionEvent event) {
     	confirmationPane.setVisible(false);
     	vboxField.setDisable(false);
     }
     
+    /**
+     * Do confirm payment.
+     *
+     * @param event the event
+     */
     @FXML
     void doConfirmPayment(ActionEvent event) {
     	if(ClientUI.clientLogic.getLoggedUser().getUserType() == UserType.CLIENT_BUSINESS) {
@@ -235,12 +300,22 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     	}
     }
     
+    /**
+     * Do bno.
+     *
+     * @param event the event
+     */
     @FXML
     void doBno(ActionEvent event) {
     	businessChoice.setVisible(false);
     	doSendOrderToServer(true);
     }
 
+    /**
+     * Do byes.
+     *
+     * @param event the event
+     */
     @FXML
     void doByes(ActionEvent event) {
     	ClientUI.clientLogic.sendMessageToServer(String.valueOf(ClientUI.clientLogic.getLoggedUser().getBuisnessCode()), 
@@ -267,12 +342,22 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     }
     
 
+    /**
+     * Do cancel business.
+     *
+     * @param event the event
+     */
     @FXML
     void doCancelBusiness(ActionEvent event) {
     	businessPane.setVisible(false);
     	confirmationPane.setVisible(true);
     }
 
+    /**
+     * Do confirm payment business.
+     *
+     * @param event the event
+     */
     @FXML
     void doConfirmPaymentBusiness(ActionEvent event) {
     	businessPane.setVisible(false);
@@ -280,6 +365,11 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     	doSendOrderToServer(false);
     }
     
+    /**
+     * Do success go back.
+     *
+     * @param event the event
+     */
     @FXML
     void doSuccessGoBack(ActionEvent event) {
     	IClientFxController ctrl = ClientUI.historyStack.getBaseController();
@@ -288,6 +378,11 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     	ctrl.start(ClientUI.parentWindow);
     }
 
+	/**
+	 * Start.
+	 *
+	 * @param stage the stage
+	 */
 	@Override
 	public void start(Stage stage) {
         Parent root = null;
@@ -303,17 +398,32 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
         stage.show();
 	}
 	
+    /**
+     * Do go back.
+     *
+     * @param event the event
+     */
     @FXML
     void doGoBack(ActionEvent event) {
     	ClientUI.historyStack.popFxController().start(ClientUI.parentWindow);
     }
     
+    /**
+     * Do sign out.
+     *
+     * @param event the event
+     */
     @FXML
     void doSignOut(ActionEvent event) {
     	ClientUI.clientLogic.logOutUser();
     	ClientUI.loginScreen.start(ClientUI.parentWindow);
     }
     
+    /**
+     * Do pick early delivery.
+     *
+     * @param event the event
+     */
     @FXML
     void doPickEarlyDelivery(ActionEvent event) {
 		if(pickEarlyDelivery.isSelected()) {
@@ -333,6 +443,11 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
 		setPrices();
     }
 
+    /**
+     * Do pick pickup delivery.
+     *
+     * @param event the event
+     */
     @FXML
     void doPickPickupDelivery(ActionEvent event) {
     	setTimeComboBox(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
@@ -351,6 +466,11 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
 		setPrices();
     }
 
+    /**
+     * Do pick regualr delivery.
+     *
+     * @param event the event
+     */
     @FXML
     void doPickRegualrDelivery(ActionEvent event) {
     	setTimeComboBox(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
@@ -369,6 +489,11 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
 		setPrices();
     }
 
+    /**
+     * Do shared delivery.
+     *
+     * @param event the event
+     */
     @FXML
     void doSharedDelivery(ActionEvent event) {
     	setTimeComboBox(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
@@ -387,6 +512,12 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     }
 
 	
+	/**
+	 * Initialize.
+	 *
+	 * @param location the location
+	 * @param resources the resources
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		if(ClientUI.clientLogic.getLoggedUser().getUserType() == UserType.CLIENT_BUSINESS) {
@@ -403,7 +534,10 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
 		
 	}
 	
- 	private void setDeliveryTypeComboBox() {
+ 	/**
+	  * Sets the delivery type combo box.
+	  */
+	 private void setDeliveryTypeComboBox() {
  		ArrayList<String> deliveryType = new ArrayList<String>();
  		deliveryType.add("Regular");
  		deliveryType.add("Robotic");
@@ -411,7 +545,13 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
  		typeOfDelivery.getItems().addAll(list);
  	}
 	
- 	private void setTimeComboBox(int startingHour, int startingMinute) {
+ 	/**
+	  * Sets the time combo box.
+	  *
+	  * @param startingHour the starting hour
+	  * @param startingMinute the starting minute
+	  */
+	 private void setTimeComboBox(int startingHour, int startingMinute) {
  		timePicker.getItems().clear();
  		ArrayList<String> time = new ArrayList<String>();
  		if(startingMinute < 30) {
@@ -427,7 +567,10 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
  		timePicker.setValue(timePicker.getItems().get(0));
  	}
  	
- 	public void setRefundsValue(){
+ 	/**
+	  * Sets the refunds value.
+	  */
+	 public void setRefundsValue(){
  		ArrayList<String> requestForRefunds = new ArrayList<String>();
  		requestForRefunds.add(String.valueOf(ClientUI.clientLogic.getLoggedUser().getUser_ID()));
  		requestForRefunds.addAll(ClientUI.clientLogic.getOrder().restaurantsInOrderList());
@@ -451,6 +594,9 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     	
  	}
 	
+	/**
+	 * Fill in cart.
+	 */
 	private void fillInCart() {
 		if(ClientUI.clientLogic.isOrderListEmpty()) {
 			return;
@@ -497,6 +643,9 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     }
 	
 	
+	/**
+	 * Sets the prices.
+	 */
 	private void setPrices() {
 		int numberOfRes = ClientUI.clientLogic.getOrder().numberOfRestaurantsInOrder();
 		txtPricePreDiscount.setText(String.valueOf(price));
@@ -519,6 +668,11 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
 		}
 	}
 	
+	/**
+	 * Do send order to server.
+	 *
+	 * @param isPrivate the is private
+	 */
 	private void doSendOrderToServer(boolean isPrivate) {
     	//if payment is confirmed we send the orders to the server
     	ArrayList<Dish> currentOrder = ClientUI.clientLogic.getOrderDishes();
@@ -605,6 +759,12 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     	sucessfullySentPane.setVisible(true);
 	}
 	
+	/**
+	 * Show error.
+	 *
+	 * @param show the show
+	 * @param message the message
+	 */
 	void showError(boolean show, String message) {
 		if(message == null || message.equals("") || !show) {
 			ErrorMsg.setVisible(false);

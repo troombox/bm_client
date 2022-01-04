@@ -30,50 +30,71 @@ import utility.entity.Restaurant;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
+/**
+ * The Class ControllerFX_CategoriesScreen.
+ * this screen is shown to the client, it shows all categories of restaurants in biteme
+ */
 public class ControllerFX_CategoriesScreen implements IClientFxController, Initializable {
 	
-//	ArrayList<String> greetings = new ArrayList<>();
 	
-    @FXML
+    /** The search button. */
+@FXML
     private Button searchButton;
 
+    /** The cart button. */
     @FXML
     private Button cartButton;
 
+    /** The exit cart button. */
     @FXML
     private Button exitCartButton;
 
+    /** The cart V box. */
     @FXML
     private VBox cartVBox;
 
+    /** The cart dishes grid. */
     @FXML
     private GridPane cartDishesGrid;
 
+    /** The label total price. */
     @FXML
     private Label labelTotalPrice;
 
+    /** The empty cart label 1. */
     @FXML
     private Label emptyCartLabel1;
     
+    /** The main pane. */
     @FXML
     private Pane mainPane;
 
+    /** The split pane. */
     @FXML
     private SplitPane splitPane;
     
+    /** The label hello text. */
     @FXML
     private Label labelHelloText;
     
+    /** The approve order pane. */
     @FXML
     private Pane approveOrderPane;
 
+    /** The order number text filed. */
     @FXML
     private TextField orderNumberTextFiled;
     
+    /** The Error msg. */
     @FXML
     private Label ErrorMsg;
 
 
+	/**
+	 * Start.
+	 *
+	 * @param stage the stage
+	 */
 	@Override
 	public void start(Stage stage) {
     	ClientUI.historyStack.pushFxController(this);
@@ -92,18 +113,33 @@ public class ControllerFX_CategoriesScreen implements IClientFxController, Initi
         stage.show();
 	}
 	
+	/**
+	 * Exit cart.
+	 *
+	 * @param event the event
+	 */
 	@FXML
     void exitCart(ActionEvent event) {
 		splitPane.setDividerPosition(0, 1);
 
     }
 	
+	/**
+	 * View cart. shows the cart in the same screen
+	 *
+	 * @param event the event
+	 */
 	@FXML
     void viewCart(ActionEvent event) {
 		splitPane.setDividerPosition(0, 0.7);
     }
 	
-	 @FXML
+	 /**
+ 	 * move to search restaurant screen 
+ 	 *
+ 	 * @param event the event
+ 	 */
+ 	@FXML
 	void searchGui(ActionEvent event) {
 		IClientFxController nextScreen = new ControllerFX_ClientSearchscreen();
 		ClientUI.historyStack.pushFxController(this);
@@ -111,7 +147,13 @@ public class ControllerFX_CategoriesScreen implements IClientFxController, Initi
 
 	}
 	 
-	 private void getRestaurants(String category) {
+	 /**
+ 	 * Gets the restaurants from DB, according to branch of the user, and category
+ 	 *
+ 	 * @param category the category
+ 	 * @return the restaurants
+ 	 */
+ 	private void getRestaurants(String category) {
 		 ArrayList<String> CategoryBranch = new ArrayList<>();
 		 CategoryBranch.add(category);
 		 CategoryBranch.add(ClientUI.clientLogic.getLoggedUser().getPersonalBranch());
@@ -153,59 +195,113 @@ public class ControllerFX_CategoriesScreen implements IClientFxController, Initi
 			
 		}
 	 
-	 @FXML
+	 /**
+ 	 * Asian category.
+ 	 *
+ 	 * @param event the event
+ 	 */
+ 	@FXML
 	 void AsianCategory(ActionEvent event) {
 		 getRestaurants("asian");
 	 }
 
-	    @FXML
+	    /**
+    	 * Coffee category.
+    	 *
+    	 * @param event the event
+    	 */
+    	@FXML
 	    void CoffeeCategory(ActionEvent event) {
 	    	getRestaurants("coffee");
 	    }
 
-	    @FXML
+	    /**
+    	 * Desserts category.
+    	 *
+    	 * @param event the event
+    	 */
+    	@FXML
 	    void DessertsCategory(ActionEvent event) {
 	    	getRestaurants("desserts");
 	    }
 
-	    @FXML
+	    /**
+    	 * Fast food category.
+    	 *
+    	 * @param event the event
+    	 */
+    	@FXML
 	    void FastFoodCategory(ActionEvent event) {
 	    	getRestaurants("fast food");
 	    }
 
-	    @FXML
+	    /**
+    	 * Hummus category.
+    	 *
+    	 * @param event the event
+    	 */
+    	@FXML
 	    void HummusCategory(ActionEvent event) {
 	    	getRestaurants("hummus");
 	    }
 
-	    @FXML
+	    /**
+    	 * Indian category.
+    	 *
+    	 * @param event the event
+    	 */
+    	@FXML
 	    void IndianCategory(ActionEvent event) {
 	    	getRestaurants("indian");
 	    }
 
-	    @FXML
+	    /**
+    	 * Italian category.
+    	 *
+    	 * @param event the event
+    	 */
+    	@FXML
 	    void ItalianCategory(ActionEvent event) {
 	    	getRestaurants("italian");
 	    }
 
-	    @FXML
+	    /**
+    	 * Meat category.
+    	 *
+    	 * @param event the event
+    	 */
+    	@FXML
 	    void MeatCategory(ActionEvent event) {
 	    	getRestaurants("meat");
 	    } 
 	    
-	    @FXML
+	    /**
+    	 * Do sign out.
+    	 *
+    	 * @param event the event
+    	 */
+    	@FXML
 	    void doSignOut(ActionEvent event) {
 	    	ClientUI.clientLogic.logOutUser();
 	    	ClientUI.loginScreen.start(ClientUI.parentWindow);
 	    }
 	    
-	    @Override
+	    /**
+    	 * Initialize.
+    	 *
+    	 * @param location the location
+    	 * @param resources the resources
+    	 */
+    	@Override
 		public void initialize(URL location, ResourceBundle resources) {
 	    	updateCart();
 	    	labelHelloText.setText("Hello " +  ClientUI.clientLogic.getLoggedUser().getFirstName() + " " 
 	    	+ ClientUI.clientLogic.getLoggedUser().getLastName() + "!");
 	    }
 	    
+		/**
+		 * Update cart according to user's choice current order
+		 */
 		private void updateCart() {
 			if(ClientUI.clientLogic.isOrderListEmpty()) {
 				return;
@@ -226,14 +322,24 @@ public class ControllerFX_CategoriesScreen implements IClientFxController, Initi
 			labelTotalPrice.setText(String.valueOf(cartPrice));
 		}
 		
-	    @FXML
+	    /**
+    	 * Do checkout. move to checkout screen
+    	 *
+    	 * @param event the event
+    	 */
+    	@FXML
 	    void doCheckout(ActionEvent event) {
 			IClientFxController nextScreen = new ControllerFX_ClientCheckoutScreen();
 			ClientUI.historyStack.pushFxController(this);
 			nextScreen.start(ClientUI.parentWindow);
 	    }
 	    
-	    @FXML
+	    /**
+    	 * Do approve order action. according to user's input - order ID , the status is updates to complete
+    	 *
+    	 * @param event the event
+    	 */
+    	@FXML
 	    void doApproveOrderAction(ActionEvent event) {
 	    	String orderNumber = orderNumberTextFiled.getText();
 	    	int inputedOrderNumber;
@@ -271,17 +377,32 @@ public class ControllerFX_CategoriesScreen implements IClientFxController, Initi
 			}		
 	    }
 
-	    @FXML
+	    /**
+    	 * Do approve order open pane. open popup of approve order by client
+    	 *
+    	 * @param event the event
+    	 */
+    	@FXML
 	    void doApproveOrderOpenPane(ActionEvent event) {
 	    	approveOrderPane.setVisible(true);
 	    }
 
-	    @FXML
+	    /**
+    	 * Do cancel order open pane. close popup of approve order
+    	 *
+    	 * @param event the event
+    	 */
+    	@FXML
 	    void doCancelOrderOpenPane(ActionEvent event) {
 	    	approveOrderPane.setVisible(false);
 	    }
 	    
-	    private void showErrorForApprovePane(String text) {
+	    /**
+    	 * Show error for approve pane. present givent text in an error message to 3 seconds
+    	 *
+    	 * @param text the text
+    	 */
+    	private void showErrorForApprovePane(String text) {
 	    	ErrorMsg.setVisible(true);
 	    	ErrorMsg.setText(text);
 	    	PauseTransition delay = new PauseTransition(Duration.seconds(3));

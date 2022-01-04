@@ -27,29 +27,48 @@ import utility.enums.DataType;
 import utility.enums.ErrorType;
 import utility.enums.RequestType;
 
+/**
+ * The Class ControllerFX_ReportFromBranchesCEO.
+ * open reports screen in CEO
+ */
 public class ControllerFX_ReportFromBranchesCEO  implements  IClientFxController, Initializable{
 
+    /** The button sign out. */
     @FXML
     private Button buttonSignOut;
 
+    /** The button go back. */
     @FXML
     private Button buttonGoBack;
 
+    /** The open btn. */
     @FXML
     private Button openBtn;
 
+    /** The list view. */
     @FXML
     private ListView<String> listView;
 
+    /** The result label. */
     @FXML
     private Label resultLabel;
 
 
+    /**
+     * Do go back.
+     *
+     * @param event the event
+     */
     @FXML
     void doGoBack(ActionEvent event) {
     	ClientUI.historyStack.popFxController().start(ClientUI.parentWindow);
     }
 
+    /**
+     * Do sign out.
+     *
+     * @param event the event
+     */
     @FXML
     void doSignOut(ActionEvent event) {
     	ClientUI.clientLogic.logOutUser();
@@ -58,6 +77,11 @@ public class ControllerFX_ReportFromBranchesCEO  implements  IClientFxController
     }
 
 
+    /**
+     * Open request. open chosen report 
+     *
+     * @param event the event
+     */
     @FXML
     void openRequest(ActionEvent event) {
     	ObservableList<String> item  = listView.getSelectionModel().getSelectedItems();
@@ -110,12 +134,21 @@ public class ControllerFX_ReportFromBranchesCEO  implements  IClientFxController
     	}
     }
 
+	/**
+	 * Initialize.
+	 *
+	 * @param location the location
+	 * @param resources the resources
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		populateTable();
 	}
 	
-	 private void populateTable() {
+	 /**
+ 	 * Populate table.
+ 	 */
+ 	private void populateTable() {
 			ClientUI.clientLogic.sendMessageToServer("", DataType.SINGLE_TEXT_STRING,
 					RequestType.CLIENT_REQUEST_TO_SERVER_CEO_GET_BRANCHES_REPORTS);
 			try {
@@ -138,6 +171,11 @@ public class ControllerFX_ReportFromBranchesCEO  implements  IClientFxController
 			}
 		}
 
+	/**
+	 * Start.
+	 *
+	 * @param stage the stage
+	 */
 	@Override
 	public void start(Stage stage) {
 		Parent root = null;

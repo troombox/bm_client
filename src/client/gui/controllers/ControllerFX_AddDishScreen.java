@@ -29,59 +29,82 @@ import utility.enums.DataType;
 import utility.enums.RequestType;
 
 /*
+ * The Class ControllerFX_AddDishScreen.
  * this screen presented to supplier in edit menu - after pressing the button "add dish"
  * supplier can add a new dish to his menu
  */
 
 public class ControllerFX_AddDishScreen implements IClientFxController, Initializable {
+	
+	/** The dish name text box. */
 	@FXML
     private TextField dishNameTextBox;
 
+    /** The dish description text box. */
     @FXML
     private TextArea dishDescriptionTextBox;
 
+    /** The size text box. */
     @FXML
     private TextField sizeTextBox;
     
+    /** The price text box. */
     @FXML
     private TextField priceTextBox;
 
+    /** The dish type combo box. */
     @FXML
     private ComboBox<String> dishTypeComboBox;
 
+    /** The level of cooking text box. */
     @FXML
     private TextField levelOfCookingTextBox;
 
+    /** The size list. */
     @FXML
     private ListView<String> sizeList;
 
+    /** The level of cooking list. */
     @FXML
     private ListView<String> levelOfCookingList;
     
+    /** The price list. */
     @FXML
     private ListView<String> priceList;
 
     
+    /** The restaurant */
     public static Restaurant res;
     
+    /** The Error massage. */
     @FXML
     private Label ErrorMsg;
     
+    /** The cooking level V box. */
     @FXML
     private VBox cookingLevelVBox;
     
+    /** The menu. */
     public static ArrayList<Dish> menu;
     
+    /** The price list tooltip. */
     @FXML
     private Tooltip priceTT;
     
+    /** The size list tooltip. */
     @FXML
     private Tooltip sizeTT;
     
+    /** The coocking level list tooltip. */
     @FXML
     private Tooltip coockingLevelTT;
 
 
+    /**
+     * Removes the selected level of cooking.
+     *
+     * @param event the event
+     */
     @FXML
     void removeSelectedLevelOfCooking(ActionEvent event) {
     	String levelOfCooking = levelOfCookingList.getSelectionModel().getSelectedItem();
@@ -90,6 +113,11 @@ public class ControllerFX_AddDishScreen implements IClientFxController, Initiali
     	}
     }
     
+    /**
+     * Check selected type of dish value. update disability of cooking level according to type
+     *
+     * @param event the event
+     */
     @FXML
     void checkSelectedTypeValue(ActionEvent event) {
     	if(dishTypeComboBox.getValue() == "drink") {
@@ -99,6 +127,11 @@ public class ControllerFX_AddDishScreen implements IClientFxController, Initiali
     }
     
 
+    /**
+     * Removes the selected size off the list
+     *
+     * @param event the event
+     */
     @FXML
     void removeSelectedSize(ActionEvent event) {
     	String size = sizeList.getSelectionModel().getSelectedItem();
@@ -114,6 +147,11 @@ public class ControllerFX_AddDishScreen implements IClientFxController, Initiali
     }
 
     
+    /**
+     * Adds the new level of cooking to the list
+     *
+     * @param event the event
+     */
     @FXML
     void AddNewLevelOfCooking(ActionEvent event) {
     	String levelOfCooking = levelOfCookingTextBox.getText();
@@ -122,6 +160,11 @@ public class ControllerFX_AddDishScreen implements IClientFxController, Initiali
     	}
     }
 
+    /**
+     * Adds the new size to the list
+     *
+     * @param event the event
+     */
     @FXML
     void addNewSize(ActionEvent event) {
     	String size = sizeTextBox.getText();
@@ -148,6 +191,11 @@ public class ControllerFX_AddDishScreen implements IClientFxController, Initiali
     	priceList.getItems().add(price);
     }
 
+    /**
+     * Adds the dish to menu.
+     *
+     * @param event the event
+     */
     @FXML
     void addDishToMenu(ActionEvent event) {
     	String dishType = dishTypeComboBox.getValue();
@@ -235,17 +283,32 @@ public class ControllerFX_AddDishScreen implements IClientFxController, Initiali
 
     }
 
+    /**
+     * Go back.
+     *
+     * @param event the event
+     */
     @FXML
     void goBack(ActionEvent event) {
     	ClientUI.historyStack.popFxController().start(ClientUI.parentWindow);
     }
 
+    /**
+     * Sign out.
+     *
+     * @param event the event
+     */
     @FXML
     void signOut(ActionEvent event) {
     	ClientUI.clientLogic.logOutUser();
     	ClientUI.loginScreen.start(ClientUI.parentWindow);
     }
 
+	/**
+	 * Start.
+	 *
+	 * @param stage the stage
+	 */
 	@Override
 	public void start(Stage stage) {
 		Parent root = null;
@@ -262,6 +325,12 @@ public class ControllerFX_AddDishScreen implements IClientFxController, Initiali
 		
 	}
 
+	/**
+	 * Initialize.
+	 *
+	 * @param location the location
+	 * @param resources the resources
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		dishTypeComboBox.getItems().add("first");

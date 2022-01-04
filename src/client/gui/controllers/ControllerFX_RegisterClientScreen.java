@@ -22,52 +22,77 @@ import utility.enums.DataType;
 import utility.enums.RequestType;
 import utility.enums.UserType;
 
+/**
+ * The Class ControllerFX_RegisterClientScreen.
+ * this screen is shown is branch manager, he can register a client to his branch according to the imported users 
+ */
 public class ControllerFX_RegisterClientScreen implements IClientFxController {
 
+	/** The signout btn. */
 	@FXML
 	private Button signoutBtn;
 
+	/** The back btn. */
 	@FXML
 	private Button backBtn;
+	
+	/** The first name txt. */
 	@FXML
 	private TextField firstNameTxt;
 
+	/** The Last name txt. */
 	@FXML
 	private TextField LastNameTxt;
 
+	/** The phone num txt. */
 	@FXML
 	private TextField phoneNumTxt;
 
+	/** The email txt. */
 	@FXML
 	private TextField emailTxt;
 
+	/** The id txt. */
 	@FXML
 	private TextField idTxt;
 
+	/** The cardit num txt. */
 	@FXML
 	private TextField carditNumTxt;
 
+	/** The send btn. */
 	@FXML
 	private Button sendBtn;
 
+	/** The business check box. */
 	@FXML
 	private CheckBox businessCheckBox;
 
+	/** The employer cod txt. */
 	@FXML
 	private TextField employerCodTxt;
 
+	/** The monthly balance txt. */
 	@FXML
 	private TextField monthlyBalanceTxt;
 
+	/** The message label txt. */
 	@FXML
 	private Label messageLabelTxt;
 
+	/** The success message pane. */
 	@FXML
 	private Pane successMessagePane;
 
+	/** The Error msg. */
 	@FXML
 	private Label ErrorMsg;
 
+	/**
+	 * Enable business fields according checked checkbox of business client 
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void enableBusinessFields(ActionEvent event) {
 		if (businessCheckBox.isSelected()) {
@@ -79,6 +104,11 @@ public class ControllerFX_RegisterClientScreen implements IClientFxController {
 		}
 	}
 
+	/**
+	 * Send information. register the client to his branch. 
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void sendInformation(ActionEvent event) {
 		ErrorMsg.setVisible(false);
@@ -134,6 +164,11 @@ public class ControllerFX_RegisterClientScreen implements IClientFxController {
 		return;
 	}
 
+	/**
+	 * Check all input fields are full 
+	 *
+	 * @return true, if successful
+	 */
 	private boolean checkInputFilledData() {
 		if (firstNameTxt.getText().equals(""))
 			return false;
@@ -156,6 +191,11 @@ public class ControllerFX_RegisterClientScreen implements IClientFxController {
 		return true;
 	}
 	
+	/**
+	 * Check input numerical data of relevant numerical fields 
+	 *
+	 * @return true, if successful
+	 */
 	private boolean checkInputNumericalData() {
 		if (!isNumeric(idTxt.getText())) {
 			ErrorMsg.setVisible(true);
@@ -182,6 +222,12 @@ public class ControllerFX_RegisterClientScreen implements IClientFxController {
 		return true;
 	}
 
+	/**
+	 * Checks if given txt is numeric.
+	 *
+	 * @param str the str
+	 * @return true, if is numeric
+	 */
 	public static boolean isNumeric(String str) {
 		try {
 			Integer.parseInt(str);
@@ -191,6 +237,11 @@ public class ControllerFX_RegisterClientScreen implements IClientFxController {
 		}
 	}
 
+	/**
+	 * Start.
+	 *
+	 * @param stage the stage
+	 */
 	@Override
 	public void start(Stage stage) {
 		Parent root = null;
@@ -207,11 +258,21 @@ public class ControllerFX_RegisterClientScreen implements IClientFxController {
 		stage.show();
 	}
 
+	/**
+	 * Do go back.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void doGoBack(ActionEvent event) {
 		ClientUI.historyStack.popFxController().start(ClientUI.parentWindow);
 	}
 
+	/**
+	 * Do sign out.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void doSignOut(ActionEvent event) {
 		ClientUI.clientLogic.logOutUser();
@@ -219,6 +280,19 @@ public class ControllerFX_RegisterClientScreen implements IClientFxController {
 		ClientUI.loginScreen.start(ClientUI.parentWindow);
 	}
 
+	/**
+	 * Check valid input for business client. all fields of the user must suit to the user that was imported - in DB
+	 *
+	 * @param id the id
+	 * @param first the first
+	 * @param last the last
+	 * @param email the email
+	 * @param phone the phone
+	 * @param cradit the cradit
+	 * @param employerCode the employer code
+	 * @param monthlyBalance the monthly balance
+	 * @return true, if successful
+	 */
 	private boolean checkValidInputForBusiness(String id, String first, String last, String email, String phone,
 			String cradit, String employerCode, String monthlyBalance) {
 		if (id.trim().isEmpty()) {
@@ -256,6 +330,17 @@ public class ControllerFX_RegisterClientScreen implements IClientFxController {
 		return true;
 	}
 
+	/**
+	 * Check valid input for personal client. all fields of the user must suit to the user that was imported - in DB
+	 *
+	 * @param id the id
+	 * @param first the first
+	 * @param last the last
+	 * @param email the email
+	 * @param phone the phone
+	 * @param cradit the cradit
+	 * @return true, if successful
+	 */
 	private boolean checkValidInputForPersonal(String id, String first, String last, String email, String phone,
 			String cradit) {
 		if (id.trim().isEmpty()) {

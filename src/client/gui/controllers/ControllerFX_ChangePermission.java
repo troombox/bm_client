@@ -27,43 +27,68 @@ import utility.enums.DataType;
 import utility.enums.ErrorType;
 import utility.enums.RequestType;
 
+/**
+ * The Class ControllerFX_ChangePermission.
+ * this screen is shown to branch manager account, he can change permissions of users in his branch
+ */
+
 public class ControllerFX_ChangePermission implements IClientFxController, Initializable{
 
+	/** The observable client list. */
 	ObservableList<ClientChangePermission> observableClient;
+	
+	/** The selected client list. */
 	ObservableList<ClientChangePermission> selectedClient;
 
+	/** The button sign out. */
 	@FXML
 	private Button buttonSignOut;
 
+	/** The button go back. */
 	@FXML
 	private Button buttonGoBack;
 
+	/** The first name column. */
 	@FXML
 	private TableColumn<ClientChangePermission,String> firstName;
 
+	/** The last name column. */
 	@FXML
 	private TableColumn<ClientChangePermission,String> lastName;
 
+	/** The status column. */
 	@FXML
 	private TableColumn<ClientChangePermission,String> status;
 
+	/** The branch column. */
 	@FXML
 	private TableColumn<ClientChangePermission,String> branch;
+    
+    /** The id column. */
     @FXML
     private TableColumn<ClientChangePermission,String> id;
     
+	/** The users table. */
 	@FXML
 	private TableView<ClientChangePermission> usersTable;
 
+	/** The change btn. */
 	@FXML
 	private Button changeBtn;
 
+	/** The status cmbobox. */
 	@FXML
 	private ComboBox<String> statusCmbo;
 	
+    /** The result label. */
     @FXML
     private Label resultLabel;
 
+	/**
+	 * Do change status.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void doChangeStatus(ActionEvent event) {
 		String newStatus = statusCmbo.getValue();
@@ -90,6 +115,9 @@ public class ControllerFX_ChangePermission implements IClientFxController, Initi
 
 
 
+	/**
+	 * Populate table.
+	 */
 	private void populateTable() {
 		User user = ClientUI.clientLogic.getLoggedUser();
 		ClientUI.clientLogic.sendMessageToServer(user.getPersonalBranch(), DataType.GET_DATA_OF_CLIENT,
@@ -110,6 +138,12 @@ public class ControllerFX_ChangePermission implements IClientFxController, Initi
 	}
 
 
+	/**
+	 * Initialize.
+	 *
+	 * @param location the location
+	 * @param resources the resources
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		String[] categoryNames = {"frozen","active","unregistered"};
@@ -122,6 +156,11 @@ public class ControllerFX_ChangePermission implements IClientFxController, Initi
 		populateTable();
 	}
 
+	/**
+	 * Start.
+	 *
+	 * @param stage the stage
+	 */
 	@Override
 	public void start(Stage stage) {
 		Parent root = null;
@@ -140,11 +179,21 @@ public class ControllerFX_ChangePermission implements IClientFxController, Initi
 
 	}
 
+	/**
+	 * Do go back.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void doGoBack(ActionEvent event) {
 		ClientUI.historyStack.popFxController().start(ClientUI.parentWindow);
 	}
 
+	/**
+	 * Do sign out.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void doSignOut(ActionEvent event) {
 		ClientUI.clientLogic.logOutUser();
@@ -152,6 +201,13 @@ public class ControllerFX_ChangePermission implements IClientFxController, Initi
 		ClientUI.loginScreen.start(ClientUI.parentWindow);
 	}
 
+	/**
+	 * Check valid input for business. user ,ust select a row before pressing the change premission btn
+	 *
+	 * @param newStatus the new status
+	 * @param selectedClient the selected client
+	 * @return true, if successful
+	 */
 	private boolean checkValidInputForBusiness(String newStatus,ObservableList<ClientChangePermission> selectedClient) {
 		if (newStatus == null) {
 			resultLabel.setText("You must select new status");

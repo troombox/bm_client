@@ -29,61 +29,84 @@ import utility.entity.Restaurant;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
-/*
- * this screen will be shown to the supplier after clicking a dish's "edit dish" button in the edit menu page
+
+
+/**
+ * The Class ControllerFX_EditDishScreen.
+ *  this screen will be shown to the supplier after clicking a dish's "edit dish" button in the edit menu page
  * the screen will show the details of the chosen dish,
  * the supplier can edit any detail of the dish in his menu
  */
-
 public class ControllerFX_EditDishScreen implements IClientFxController, Initializable {
 
+    /** The dish name text box. */
     @FXML
     private TextField dishNameTextBox;
 
+    /** The dish type combo box. */
     @FXML
     private ComboBox<String> dishTypeComboBox;
 
+    /** The dish description text box. */
     @FXML
     private TextArea dishDescriptionTextBox;
 
+    /** The size list. */
     @FXML
     private ListView<String> sizeList;
 
+    /** The price list. */
     @FXML
     private ListView<String> priceList;
 
+    /** The size text box. */
     @FXML
     private TextField sizeTextBox;
 
+    /** The price text box. */
     @FXML
     private TextField priceTextBox;
 
+    /** The level of cooking list. */
     @FXML
     private ListView<String> levelOfCookingList;
 
+    /** The level of cooking text box. */
     @FXML
     private TextField levelOfCookingTextBox;
     
+    /** The dish. */
     public static Dish dish;
     
+    /** The Error msg. */
     @FXML
     private Label ErrorMsg;
     
+    /** The cooking level V box. */
     @FXML
     private VBox cookingLevelVBox;
     
+    /** The menu. */
     public static ArrayList<Dish> menu;
     
+    /** The price list tooltip. */
     @FXML
     private Tooltip priceTT;
     
+    /** The size list tooltip. */
     @FXML
     private Tooltip sizeTT;
     
+    /** The coocking level list tooltip. */
     @FXML
     private Tooltip coockingLevelTT;
 
     
+    /**
+     * Removes the selected level of cooking off the list
+     *
+     * @param event the event
+     */
     @FXML
     void removeSelectedLevelOfCooking(ActionEvent event) {
     	String levelOfCooking = levelOfCookingList.getSelectionModel().getSelectedItem();
@@ -92,6 +115,11 @@ public class ControllerFX_EditDishScreen implements IClientFxController, Initial
     	}
     }
     
+    /**
+     * Check selected type value. sets disability of cooking level if the chosen dish type is drink
+     *
+     * @param event the event
+     */
     @FXML
     void checkSelectedTypeValue(ActionEvent event) {
     	if(dishTypeComboBox.getValue() == "drink") {
@@ -100,6 +128,11 @@ public class ControllerFX_EditDishScreen implements IClientFxController, Initial
     	else cookingLevelVBox.setDisable(false);
     }
 
+    /**
+     * Removes the selected size off the list
+     *
+     * @param event the event
+     */
     @FXML
     void removeSelectedSize(ActionEvent event) {
     	String size = sizeList.getSelectionModel().getSelectedItem();
@@ -115,6 +148,11 @@ public class ControllerFX_EditDishScreen implements IClientFxController, Initial
     }
 
     
+    /**
+     * Adds the new level of cooking to the list
+     *
+     * @param event the event
+     */
     @FXML
     void AddNewLevelOfCooking(ActionEvent event) {
     	String levelOfCooking = levelOfCookingTextBox.getText();
@@ -123,6 +161,11 @@ public class ControllerFX_EditDishScreen implements IClientFxController, Initial
     	}
     }
 
+    /**
+     * Adds the new size to the list
+     *
+     * @param event the event
+     */
     @FXML
     void addNewSize(ActionEvent event) {
     	String size = sizeTextBox.getText();
@@ -149,17 +192,32 @@ public class ControllerFX_EditDishScreen implements IClientFxController, Initial
     	priceList.getItems().add(price);
     }
 
+    /**
+     * Go back.
+     *
+     * @param event the event
+     */
     @FXML
     void goBack(ActionEvent event) {
     	ClientUI.historyStack.popFxController().start(ClientUI.parentWindow);
     }
 
+    /**
+     * Sign out.
+     *
+     * @param event the event
+     */
     @FXML
     void signOut(ActionEvent event) {
     	ClientUI.clientLogic.logOutUser();
     	ClientUI.loginScreen.start(ClientUI.parentWindow);
     }
     
+    /**
+     * Delete dish off menu
+     *
+     * @param event the event
+     */
     @FXML
     void deleteDish(ActionEvent event) {
     	
@@ -194,6 +252,11 @@ public class ControllerFX_EditDishScreen implements IClientFxController, Initial
     	}
     }
 
+    /**
+     * Update dish in the menu
+     *
+     * @param event the event
+     */
     @FXML
     void updateDish(ActionEvent event) {
     	String dishType = dishTypeComboBox.getValue();
@@ -276,6 +339,12 @@ public class ControllerFX_EditDishScreen implements IClientFxController, Initial
     	
     }
 
+	/**
+	 * Initialize.
+	 *
+	 * @param location the location
+	 * @param resources the resources
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		dishNameTextBox.setText(dish.getName());
@@ -315,6 +384,11 @@ public class ControllerFX_EditDishScreen implements IClientFxController, Initial
 		
 	}
 
+	/**
+	 * Start.
+	 *
+	 * @param stage the stage
+	 */
 	@Override
 	public void start(Stage stage) {
 		Parent root = null;

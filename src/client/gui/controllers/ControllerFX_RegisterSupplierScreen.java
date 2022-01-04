@@ -26,50 +26,79 @@ import utility.entity.Supplier;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
+/**
+ * The Class ControllerFX_RegisterSupplierScreen.
+ * this screen is shown to branch manager, it can register supplier (own a restaurant) to his branch
+ */
 public class ControllerFX_RegisterSupplierScreen implements IClientFxController, Initializable {
 	
+    /** The file chooser. */
     final FileChooser fileChooser = new FileChooser();
     
+    /** The file. */
     File file = null;
 
+    /** The register btn. */
     @FXML
     private Button registerBtn;
 	
+    /** The signout btn. */
     @FXML
     private Button signoutBtn;
 
+    /** The back btn. */
     @FXML
     private Button backBtn;
 
+    /** The res name txt. */
     @FXML
     private TextField resNameTxt;
 
+    /** The button open image. */
     @FXML
     private Button buttonOpenImage;
     
 //    @FXML
 //    private Label resultTxt;
     
-    @FXML
+    /** The txt field file path. */
+@FXML
     private TextField txtFieldFilePath;
 
+    /** The category cmbo. */
     @FXML
     private ComboBox<String> categoryCmbo;
     
+    /** The worker ID. */
     @FXML
     private TextField workerID;
     
+    /** The success message pane. */
     @FXML
     private Pane successMessagePane;
 
+    /** The Error msg. */
     @FXML
     private Label ErrorMsg;
     
+    /**
+     * Choose category in cmbo.
+     *
+     * @param event the event
+     */
     @FXML
     void chooseCategoryInCmbo(ActionEvent event) {
-
+    	/*
+    	 * will be implemented in next version 
+    	 */
     }
     
+    /**
+     * Initialize.
+     *
+     * @param location the location
+     * @param resources the resources
+     */
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
     	String[] categoryNames = {"Italian","Dessert","Fast Food","Coffee","Asian","Meat","Indian","Hummus"};
@@ -77,6 +106,11 @@ public class ControllerFX_RegisterSupplierScreen implements IClientFxController,
     }
   
     
+    /**
+     * Do open file.
+     *
+     * @param event the event
+     */
     @FXML
     void doOpenFile(ActionEvent event) {
         fileChooser.getExtensionFilters().addAll(
@@ -91,6 +125,11 @@ public class ControllerFX_RegisterSupplierScreen implements IClientFxController,
     }
     
 
+    /**
+     * Send information. register the supplier to the branch in biteme 
+     *
+     * @param event the event
+     */
     @FXML
     void sendInformation(ActionEvent event) {
     	ErrorMsg.setVisible(false);
@@ -126,6 +165,14 @@ public class ControllerFX_RegisterSupplierScreen implements IClientFxController,
 //    	ClientUI.clientLogic.sendImageToServer(FileWrapper image);
     }
     
+    /**
+     * Check valid input for business all fields are full 
+     *
+     * @param restaurantName the restaurant name
+     * @param categoryCmbo the category cmbo
+     * @param workerID the worker ID
+     * @return true, if successful
+     */
     private boolean checkValidInputForBusiness(String restaurantName,String categoryCmbo, String workerID) {
     	ErrorMsg.setVisible(false);
 		if (restaurantName.trim().isEmpty()) {
@@ -147,6 +194,11 @@ public class ControllerFX_RegisterSupplierScreen implements IClientFxController,
 		return true;
     }
 
+	/**
+	 * Start.
+	 *
+	 * @param stage the stage
+	 */
 	@Override
 	public void start(Stage stage) {
 		Parent root = null;
@@ -164,12 +216,22 @@ public class ControllerFX_RegisterSupplierScreen implements IClientFxController,
         stage.show();
 	}
 	
-	  @FXML
+	  /**
+  	 * Do go back.
+  	 *
+  	 * @param event the event
+  	 */
+  	@FXML
 	    void doGoBack(ActionEvent event) {
 	    	ClientUI.historyStack.popFxController().start(ClientUI.parentWindow);
 	    }
 	  
-	    @FXML
+	    /**
+    	 * Do sign out.
+    	 *
+    	 * @param event the event
+    	 */
+    	@FXML
 	    void doSignOut(ActionEvent event) {
 	    	ClientUI.clientLogic.logOutUser();
 	    	ClientUI.historyStack.clearControllerHistory();

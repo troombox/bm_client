@@ -25,88 +25,137 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import utility.entity.Dish;
 
+/**
+ * The Class ControllerFX_ChooseDishScreen.
+ * this screen is shown to client, it shows the details of the chosen dish. he can add the dish to his cart from this screen 
+ */
 public class ControllerFX_ChooseDishScreen implements IClientFxController, Initializable {
 
+    /** The dish. */
     public static Dish dish;
     
+    /** The index of size in sizes array. */
     private int index;
     
+    /** The price array. */
     private String[] priceArray;
     
+    /** The price. */
     private String price;
 
+	/** The split pane. */
 	@FXML
     private SplitPane splitPane;
 
+    /** The dish name label. */
     @FXML
     private Label dishNameLabel;
 
+    /** The dish description label. */
     @FXML
     private Label dishDescriptionLabel;
 
+    /** The size combo. */
     @FXML
     private ComboBox<String> sizeCombo;
 
+    /** The level of cooking combo. */
     @FXML
     private ComboBox<String> levelOfCookingCombo;
 
+    /** The instructions text box. */
     @FXML
     private TextField instructionsTextBox;
 
+    /** The price label. */
     @FXML
     private Label priceLabel;
 
+    /** The add to cart button. */
     @FXML
     private Button addToCartButton;
 
+    /** The exit cart button 1. */
     @FXML
     private Button exitCartButton1;
 
+    /** The empty cart label 1. */
     @FXML
     private Label emptyCartLabel1;
     
+    /** The cart V box. */
     @FXML
     private VBox cartVBox;
 
+    /** The cart dishes grid. */
     @FXML
     private GridPane cartDishesGrid;
     
+    /** The label total price. */
     @FXML
     private Label labelTotalPrice;
     
+	/** The button checkout. */
 	@FXML
 	private Button buttonCheckout;
 	
+    /** The Error msg. */
     @FXML
     private Label ErrorMsg;
     
+    /** The dish added popup. */
     @FXML
     private Pane dishAddedPopup;
 
 
+    /**
+     * Exit cart.
+     *
+     * @param event the event
+     */
     @FXML
     void exitCart(ActionEvent event) {
     	splitPane.setDividerPosition(0, 1);
     }
     
+    /**
+     * Show cart in the same screen. 
+     *
+     * @param event the event
+     */
     @FXML
     void showCart(ActionEvent event) {
     	splitPane.setDividerPosition(0, 0.7);
     }
 
 
+    /**
+     * Go back.
+     *
+     * @param event the event
+     */
     @FXML
     void goBack(ActionEvent event) {
     	ClientUI.historyStack.popFxController().start(ClientUI.parentWindow);
     }
 
     
+    /**
+     * Sign out.
+     *
+     * @param event the event
+     */
     @FXML
     void signOut(ActionEvent event) {
     	ClientUI.clientLogic.logOutUser();
     	ClientUI.loginScreen.start(ClientUI.parentWindow);
     }
     
+    /**
+     * Adds the dish to cart.
+     *
+     * @param event the event
+     */
     @FXML
     void addToCart(ActionEvent event) {
     	String dishSize = "";
@@ -142,6 +191,11 @@ public class ControllerFX_ChooseDishScreen implements IClientFxController, Initi
     	updateCart();
     }
     
+    /**
+     * Do check out. move to checkout screen 
+     *
+     * @param event the event
+     */
     @FXML
     void doCheckOut(ActionEvent event) {
 		IClientFxController nextScreen = new ControllerFX_ClientCheckoutScreen();
@@ -149,6 +203,11 @@ public class ControllerFX_ChooseDishScreen implements IClientFxController, Initi
 		nextScreen.start(ClientUI.parentWindow);
     }
     
+    /**
+     * Choose size in combo. update the price label according to the chosen size of dish
+     *
+     * @param event the event
+     */
     @FXML
     void chooseSizeInCombo(ActionEvent event) {
     	index = sizeCombo.getSelectionModel().getSelectedIndex();
@@ -157,6 +216,12 @@ public class ControllerFX_ChooseDishScreen implements IClientFxController, Initi
     	priceLabel.setText("price: " + price + "$");
     }
 
+	/**
+	 * Initialize.
+	 *
+	 * @param location the location
+	 * @param resources the resources
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		dishNameLabel.setText(dish.getName());
@@ -182,6 +247,11 @@ public class ControllerFX_ChooseDishScreen implements IClientFxController, Initi
 		updateCart();
 	}
 
+	/**
+	 * Start.
+	 *
+	 * @param stage the stage
+	 */
 	@Override
 	public void start(Stage stage) {
 		Parent root = null;
@@ -197,6 +267,9 @@ public class ControllerFX_ChooseDishScreen implements IClientFxController, Initi
         stage.show();
 	}
 	
+	/**
+	 * Update cart according to DB
+	 */
 	private void updateCart() {
 		if(ClientUI.clientLogic.isOrderListEmpty()) {
 			return;
@@ -217,6 +290,12 @@ public class ControllerFX_ChooseDishScreen implements IClientFxController, Initi
 		labelTotalPrice.setText(String.valueOf(cartPrice));
 	}
     
+	/**
+	 * Show error msg to screen 
+	 *
+	 * @param show the show
+	 * @param message the message
+	 */
 	void showError(boolean show, String message) {
 		if(message == null || message.equals("") || !show) {
 			ErrorMsg.setVisible(false);

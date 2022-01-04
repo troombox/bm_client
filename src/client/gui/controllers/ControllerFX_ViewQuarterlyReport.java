@@ -27,40 +27,63 @@ import javafx.stage.Stage;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
+/**
+ * The Class ControllerFX_ViewQuarterlyReport.
+ * this screen is shown to the CEO, he can choose quarterly report to watch 
+ */
 public class ControllerFX_ViewQuarterlyReport implements Initializable, IClientFxController {
 
+    /** The signout btn. */
     @FXML
     private Button signoutBtn;
 
+    /** The back btn. */
     @FXML
     private Button backBtn;
 
+    /** The quarter 1 combo. */
     @FXML
     private ComboBox<String> quarter1Combo;
 
+    /** The year 1 conbo. */
     @FXML
     private ComboBox<String> year1Conbo;
 
+    /** The quarter 2 combo. */
     @FXML
     private ComboBox<String> quarter2Combo;
 
+    /** The year 2 combo. */
     @FXML
     private ComboBox<String> year2Combo;
 
+    /** The compare check box. */
     @FXML
     private CheckBox compareCheckBox;
 
+    /** The open btn. */
     @FXML
     private Button openBtn;
 
+    /** The result label. */
     @FXML
     private Label resultLabel;
 
+    /**
+     * Do go back.
+     *
+     * @param event the event
+     */
     @FXML
     void doGoBack(ActionEvent event) {
     	ClientUI.historyStack.popFxController().start(ClientUI.parentWindow);
     }
   
+    /**
+     * Do sign out.
+     *
+     * @param event the event
+     */
     @FXML
     void doSignOut(ActionEvent event) {
     	ClientUI.clientLogic.logOutUser();
@@ -68,6 +91,11 @@ public class ControllerFX_ViewQuarterlyReport implements Initializable, IClientF
     	ClientUI.loginScreen.start(ClientUI.parentWindow);
     }
     
+    /**
+     * Compare check box.
+     *
+     * @param event the event
+     */
     @FXML
     void compareCheckBox(ActionEvent event) {
     	if(compareCheckBox.isSelected()) {
@@ -79,6 +107,11 @@ public class ControllerFX_ViewQuarterlyReport implements Initializable, IClientF
     	}
     }
 
+    /**
+     * Open chosen report.
+     *
+     * @param event the event
+     */
     @FXML
     void openReport(ActionEvent event) {
     	if(compareCheckBox.isSelected()) {
@@ -122,6 +155,13 @@ public class ControllerFX_ViewQuarterlyReport implements Initializable, IClientF
     	}
     }
     
+    /**
+     * Handle open report request.
+     *
+     * @param quarter the quarter
+     * @param year the year
+     * @param path the path
+     */
     private void handleOpenReportRequest(String quarter,String year,String path) {
     	ArrayList<String> reportRequest = new ArrayList<String>();
     	reportRequest.add(RequestType.CLIENT_REQUEST_TO_SERVER_CEO_QUARTERLY_REPORT.toString());
@@ -158,6 +198,11 @@ public class ControllerFX_ViewQuarterlyReport implements Initializable, IClientF
 		}
     }
 
+	/**
+	 * Start.
+	 *
+	 * @param stage the stage
+	 */
 	@Override
 	public void start(Stage stage) {
 		Parent root = null;
@@ -176,6 +221,12 @@ public class ControllerFX_ViewQuarterlyReport implements Initializable, IClientF
 		
 	}
 
+	/**
+	 * Initialize.
+	 *
+	 * @param location the location
+	 * @param resources the resources
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		String[] quarters = {"1","2","3","4"};
@@ -188,6 +239,13 @@ public class ControllerFX_ViewQuarterlyReport implements Initializable, IClientF
 		year2Combo.getItems().addAll(years);
 	}
 	
+	/**
+	 * Check valid input for one CEO report.
+	 *
+	 * @param quarter the quarter
+	 * @param year1 the year 1
+	 * @return true, if successful
+	 */
 	private boolean checkValidInputForOneCEOReport(String quarter,String year1) {
 		if (quarter == null) {
 			resultLabel.setText("You must choose a quarter");
@@ -200,6 +258,15 @@ public class ControllerFX_ViewQuarterlyReport implements Initializable, IClientF
 		return true;
     }
 	
+	/**
+	 * Check valid input for two CEO report.
+	 *
+	 * @param quarter the quarter
+	 * @param year1 the year 1
+	 * @param quarter2 the quarter 2
+	 * @param year2 the year 2
+	 * @return true, if successful
+	 */
 	private boolean checkValidInputForTwoCEOReport(String quarter,String year1,String quarter2,String year2) {
 		if (quarter == null) {
 			resultLabel.setText("You must choose a quarter");

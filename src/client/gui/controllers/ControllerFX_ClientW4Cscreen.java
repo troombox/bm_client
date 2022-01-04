@@ -19,16 +19,17 @@ import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class ControllerFX_ClientW4Cscreen - used as a controller for JavaFX,
- *  implementing code needed for the W4C screen in the application
+ *  implementing code needed for the W4C screen in the application.
  */
 public class ControllerFX_ClientW4Cscreen implements IClientFxController {
 	
-	/** The previous screen (should be login screen controller) */
+	/**  The previous screen (should be login screen controller). */
 	IClientFxController previous;
 	
-	/** The QR reader, should be initialized to an */
+	/**  The QR reader, should be initialized to an. */
 	IQRReader reader;
 	
     /** The button sign out. */

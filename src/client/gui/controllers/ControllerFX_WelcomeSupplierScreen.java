@@ -18,7 +18,6 @@ import utility.entity.Restaurant;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ControllerFX_WelcomeSupplierScreen.
  */

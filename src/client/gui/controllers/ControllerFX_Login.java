@@ -19,20 +19,34 @@ import utility.enums.ErrorType;
 import utility.enums.RequestType;
 import utility.enums.UserType;
 
+/**
+ * The Class ControllerFX_Login.
+ * this is the first screen that present to every user that is in biteme. the user login to biteme according to his user type
+ */
 public class ControllerFX_Login implements IClientFxController {
 
+    /** The User email. */
     @FXML
     private TextField Useremail;
 
+    /** The Password. */
     @FXML
     private TextField Password;
 
+    /** The login button. */
     @FXML
     private Button loginbutton;
     
+    /** The Error msg. */
     @FXML
     private Label ErrorMsg;
 
+    /**
+     * Login button pressed. move to the next screen according to the user type that is logging in 
+     *
+     * @param event the event
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @FXML
     void loginButtonPressed(ActionEvent event) throws IOException {
     	String userEmail = Useremail.getText();
@@ -82,6 +96,12 @@ public class ControllerFX_Login implements IClientFxController {
 	    	}
     }
     
+    /**
+     * Open wanted window - according to user type
+     *
+     * @param userType the user type
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void openWantedWindow(UserType userType) throws IOException {
     	IClientFxController nextScreen = new TempScreenControllerFx();
     	if(userType == UserType.CLIENT_PERSONAL || userType == UserType.CLIENT_BUSINESS) {
@@ -112,6 +132,13 @@ public class ControllerFX_Login implements IClientFxController {
     		
     }
     
+    /**
+     * Check valid input. - all fields must be full
+     *
+     * @param userEmail the user email
+     * @param password the password
+     * @return true, if successful
+     */
     private boolean checkValidInput(String userEmail, String password) {
     	 if (userEmail.trim().isEmpty()) {
     		 ErrorMsg.setVisible(true);
@@ -126,6 +153,11 @@ public class ControllerFX_Login implements IClientFxController {
     	 return true;
     }
 
+	/**
+	 * Start.
+	 *
+	 * @param stage the stage
+	 */
 	@Override
 	public void start(Stage stage) {
         Parent root = null;

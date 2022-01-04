@@ -30,54 +30,82 @@ import utility.enums.DataType;
 import utility.enums.ErrorType;
 import utility.enums.RequestType;
 
+/**
+ * The Class ControllerFX_ClientSearchscreen.
+ * this screen is presented to client, he can search by a restaurant in his branch according to it's name. 
+ * suitable restaurants will show in the screen (restarants that contains the given txt)
+ */
 public class ControllerFX_ClientSearchscreen implements IClientFxController, Initializable{
 	
-	    @FXML
+	    /** The back button. */
+    	@FXML
 	    private Button backButton;
 
-	    @FXML
+	    /** The main pane. */
+    	@FXML
 	    private Pane mainPane;
 
-	    @FXML
+	    /** The split pane. */
+    	@FXML
 	    private SplitPane splitPane;
 
-	    @FXML
+	    /** The search text box. */
+    	@FXML
 	    private TextField searchTextBox;
 
-	    @FXML
+	    /** The search button. */
+    	@FXML
 	    private Button searchButton;
 
-	    @FXML
+	    /** The show cart button. */
+    	@FXML
 	    private Button showCartButton;
 
-	    @FXML
+	    /** The exit cart button 1. */
+    	@FXML
 	    private Button exitCartButton1;
 
-	    @FXML
+	    /** The empty cart label 1. */
+    	@FXML
 	    private Label emptyCartLabel1;
 	    
-	    @FXML
+	    /** The cart V box. */
+    	@FXML
 	    private VBox cartVBox;
 
-	    @FXML
+	    /** The cart dishes grid. */
+    	@FXML
 	    private GridPane cartDishesGrid;
 
-	    @FXML
+	    /** The label total price. */
+    	@FXML
 	    private Label labelTotalPrice;
 	    
-	    @FXML
+	    /** The Error msg. */
+    	@FXML
 	    private Label ErrorMsg;
 	    
-	    @FXML
+	    /** The vbox restaurants. */
+    	@FXML
 	    private VBox vboxRestaurants;
 	    
 
-	    @FXML
+	    /**
+    	 * Exit cart.
+    	 *
+    	 * @param event the event
+    	 */
+    	@FXML
 	    void exitCart(ActionEvent event) {
 	    	splitPane.setDividerPosition(0, 1);
 	    }
 
-	    @FXML
+	    /**
+    	 * Search. present list of suitable restaurants in his branch according to given search txt
+    	 *
+    	 * @param event the event
+    	 */
+    	@FXML
 	    void search(ActionEvent event) {
 	    	String searchText = searchTextBox.getText();
 	    	
@@ -154,22 +182,42 @@ public class ControllerFX_ClientSearchscreen implements IClientFxController, Ini
 			
 		}
 
+		/**
+		 * Go back.
+		 *
+		 * @param event the event
+		 */
 		@FXML
 	    void goBack(ActionEvent event) {
 	    	ClientUI.historyStack.popFxController().start(ClientUI.parentWindow);
 	    }
 
-	    @FXML
+	    /**
+    	 * Sign out.
+    	 *
+    	 * @param event the event
+    	 */
+    	@FXML
 	    void signOut(ActionEvent event) {
 	    	ClientUI.clientLogic.logOutUser();
 	    	ClientUI.loginScreen.start(ClientUI.parentWindow);
 	    }
 
-	    @FXML
+	    /**
+    	 * Show cart in the same screen 
+    	 *
+    	 * @param event the event
+    	 */
+    	@FXML
 	    void showCart(ActionEvent event) {
 	    	splitPane.setDividerPosition(0, 0.7);
 	    }
 
+		/**
+		 * Start.
+		 *
+		 * @param stage the stage
+		 */
 		@Override
 		public void start(Stage stage) {
 			Parent root = null;
@@ -186,6 +234,9 @@ public class ControllerFX_ClientSearchscreen implements IClientFxController, Ini
 			
 		}
 		
+		/**
+		 * Update cart.
+		 */
 		private void updateCart() {
 			if(ClientUI.clientLogic.isOrderListEmpty()) {
 				return;
@@ -206,6 +257,12 @@ public class ControllerFX_ClientSearchscreen implements IClientFxController, Ini
 			labelTotalPrice.setText(String.valueOf(cartPrice));
 		}
 
+		/**
+		 * Initialize.
+		 *
+		 * @param location the location
+		 * @param resources the resources
+		 */
 		@Override
 		public void initialize(URL location, ResourceBundle resources) {
 			updateCart();

@@ -12,20 +12,33 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+/**
+ * The Class ControllerFX_CEOScreen.
+ * this screen is shown to CEO, it shows the possible action the CEO can do in biteme 
+ */
 public class ControllerFX_CEOScreen implements IClientFxController{
 
+    /** The signout btn. */
     @FXML
     private Button signoutBtn;
 
+    /** The back btn. */
     @FXML
     private Button backBtn;
 
+    /** The view quarterly report. */
     @FXML
     private Button viewQuarterlyReport;
 
+    /** The view branches report. */
     @FXML
     private Button viewBranchesReport;
     
+    /**
+     * Do go back.
+     *
+     * @param event the event
+     */
     @FXML
     void doGoBack(ActionEvent event) {
     	ClientUI.clientLogic.logOutUser();
@@ -33,6 +46,11 @@ public class ControllerFX_CEOScreen implements IClientFxController{
     	ClientUI.loginScreen.start(ClientUI.parentWindow);
     }
   
+    /**
+     * Do sign out.
+     *
+     * @param event the event
+     */
     @FXML
     void doSignOut(ActionEvent event) {
     	ClientUI.clientLogic.logOutUser();
@@ -40,6 +58,11 @@ public class ControllerFX_CEOScreen implements IClientFxController{
     	ClientUI.loginScreen.start(ClientUI.parentWindow);
     }
     
+    /**
+     * Move to view branches report screen.
+     *
+     * @param event the event
+     */
     @FXML
     void moveToViewBranchesReport(ActionEvent event) {
     	IClientFxController nextScreen = new ControllerFX_ReportFromBranchesCEO();
@@ -47,6 +70,11 @@ public class ControllerFX_CEOScreen implements IClientFxController{
     	nextScreen.start(ClientUI.parentWindow);
     }
 
+    /**
+     * Move to view quarterly report screen.
+     *
+     * @param event the event
+     */
     @FXML
     void moveToViewQuarterlyReport(ActionEvent event) {
     	IClientFxController nextScreen = new ControllerFX_ViewQuarterlyReport();
@@ -54,6 +82,11 @@ public class ControllerFX_CEOScreen implements IClientFxController{
     	nextScreen.start(ClientUI.parentWindow);
     }
 
+	/**
+	 * Start.
+	 *
+	 * @param stage the stage
+	 */
 	@Override
 	public void start(Stage stage) {
 		Parent root = null;

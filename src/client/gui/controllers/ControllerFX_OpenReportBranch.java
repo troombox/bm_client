@@ -27,37 +27,58 @@ import utility.enums.DataType;
 import utility.enums.RequestType;
 
 
+/**
+ * The Class ControllerFX_OpenReportBranch.
+ */
 public class ControllerFX_OpenReportBranch implements IClientFxController,Initializable{
 
+    /** The title txt. */
     @FXML
     private Label titleTxt;
 
+    /** The signout btn. */
     @FXML
     private Button signoutBtn;
 
+    /** The back btn. */
     @FXML
     private Button backBtn;
 
+    /** The combo type. */
     @FXML
     private ComboBox<String> comboType;
 
+    /** The combo year. */
     @FXML
     private ComboBox<String> comboYear;
 
+    /** The combo month. */
     @FXML
     private ComboBox<String> comboMonth;
 
+    /** The open report btn. */
     @FXML
     private Button openBtn;
 
+    /** The result label. */
     @FXML
     private Label resultLabel;
 
+    /**
+     * Do go back.
+     *
+     * @param event the event
+     */
     @FXML
     void doGoBack(ActionEvent event) {
     	ClientUI.historyStack.popFxController().start(ClientUI.parentWindow);
     }
   
+    /**
+     * Do sign out.
+     *
+     * @param event the event
+     */
     @FXML
     void doSignOut(ActionEvent event) {
     	ClientUI.clientLogic.logOutUser();
@@ -65,6 +86,11 @@ public class ControllerFX_OpenReportBranch implements IClientFxController,Initia
     	ClientUI.loginScreen.start(ClientUI.parentWindow);
     }
 
+    /**
+     * Open report request according to given month, year and report type
+     *
+     * @param event the event
+     */
     @FXML
     void openReportRequest(ActionEvent event) {
     	String personalBranch = ClientUI.clientLogic.getLoggedUser().getPersonalBranch();
@@ -118,6 +144,12 @@ public class ControllerFX_OpenReportBranch implements IClientFxController,Initia
     	}
     }
 
+	/**
+	 * Initialize.
+	 *
+	 * @param location the location
+	 * @param resources the resources
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		String[] types = {"Income","Order","Performance"};
@@ -131,7 +163,15 @@ public class ControllerFX_OpenReportBranch implements IClientFxController,Initia
 		
 	}
 	
-	  private boolean checkValidInputForBusiness(String type,String year, String month) {
+	  /**
+  	 * Check valid input for business. all fields must be full 
+  	 *
+  	 * @param type the type
+  	 * @param year the year
+  	 * @param month the month
+  	 * @return true, if successful
+  	 */
+  	private boolean checkValidInputForBusiness(String type,String year, String month) {
 			if (type == null) {
 				resultLabel.setText("You must choose type of report");
 				return false;
@@ -148,6 +188,11 @@ public class ControllerFX_OpenReportBranch implements IClientFxController,Initia
 			return true;
 	    }
 
+	/**
+	 * Start.
+	 *
+	 * @param stage the stage
+	 */
 	@Override
 	public void start(Stage stage) {
 		Parent root = null;

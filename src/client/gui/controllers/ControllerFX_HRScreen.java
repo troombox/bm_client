@@ -27,7 +27,6 @@ import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ControllerFX_HRScreen.
  */
