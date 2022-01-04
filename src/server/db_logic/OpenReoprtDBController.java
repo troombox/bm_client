@@ -20,12 +20,29 @@ import java.util.Calendar;
 import server.exceptions.BMServerException;
 import utility.enums.ErrorType;
 
+/**
+ * The Class OpenReoprtDBController.
+ * represents all the functions needed to connect with the data base
+ */
 public class OpenReoprtDBController {
+	
+	/** The DB connection. */
 	Connection dbConnection;
+	
+	/** The DB name. */
 	String dbName;
+	
+	/** The table name branch to CEO. */
 	private final String tableNameBranchToCEO = "branch_to_ceo";
+	
+	/** The CEO report table. */
 	private final String ceoReportTable = "ceo_report";
 	
+	/**
+	 * Instantiates a new open report DB controller.
+	 *
+	 * @param dbController the DB controller
+	 */
 	public OpenReoprtDBController(DBController dbController) {
 		this.dbConnection = dbController.getDBConnection();
 		this.dbName = dbController.getDBName();
@@ -33,6 +50,17 @@ public class OpenReoprtDBController {
 	}
 	
 	
+	/**
+	 * get the file from DB, and put it in byteArray, and than change byte array to string
+	 *
+	 * @param type the type of report
+	 * @param year the year of the report
+	 * @param month the month of the report
+	 * @param path the path of the report
+	 * @param branch the branch of the report
+	 * @return the string the report as a string
+	 * @throws BMServerException the BM server exception
+	 */
 	public String openReoprt(String type,String year,String month,String path,String branch) throws BMServerException {
 		PreparedStatement ps;
 		FileOutputStream output = null;
@@ -69,7 +97,6 @@ public class OpenReoprtDBController {
             }
             output.close();
             result = Base64.getEncoder().encodeToString(data);
-            System.out.println(result);
             return result;
         } catch (SQLException e) {
         	e.printStackTrace();
@@ -82,6 +109,16 @@ public class OpenReoprtDBController {
 	}
 	
 
+	/**
+	 * Open quarterly report.
+	 * get the file from DB, and put it in byteArray, and than change byte array to string
+	 *
+	 * @param quarter the quarter of the report
+	 * @param year the year of the report
+	 * @param path the path of the report
+	 * @return the string the report as a string
+	 * @throws BMServerException the BM server exception
+	 */
 	public String openQuarterlyReport(String quarter, String year, String path) throws BMServerException {
 	PreparedStatement ps;
 	FileOutputStream output = null;
@@ -125,6 +162,16 @@ public class OpenReoprtDBController {
 		throw new BMServerException(ErrorType.REPORT_NOT_EXIST, "REPORT_NOT_EXIST");
 	}
 }
+	
+	/**
+	 * Open income report supplier.
+	 * get the file from DB, and put it in byteArray, and than change byte array to string
+	 *
+	 * @param resId the res id of the wanted report
+	 * @param path the path of the report
+	 * @return the string the report as a string
+	 * @throws BMServerException the BM server exception
+	 */
 	public String openIncomReoprtSupplier(int resId, String path) throws BMServerException {
 		PreparedStatement ps;
 		FileOutputStream output = null;
@@ -169,6 +216,12 @@ public class OpenReoprtDBController {
 	
 
 	
+	/**
+	 * Gets the month of quarter.
+	 *
+	 * @param quarter the quarter
+	 * @return the month of quarter
+	 */
 	private String getMonthOfQuarter(String quarter) {
 		String month;
 		switch(quarter) {
@@ -192,6 +245,14 @@ public class OpenReoprtDBController {
 	}
 
 
+	/**
+	 * Save file for CEO in PDF.
+	 * gets the file as byte array and saves it as PDF in the DB
+	 *
+	 * @param arrByteForFile the array byte for file
+	 * @param branch the branch of the report
+	 * @throws BMServerException the BM server exception
+	 */
 	public void saveFileForCEOInPdf(byte[] arrByteForFile,String branch) throws BMServerException {
 		ByteArrayInputStream bais = new ByteArrayInputStream(arrByteForFile);
 		PreparedStatement ps;
@@ -214,6 +275,12 @@ public class OpenReoprtDBController {
 	}
 
 
+	/**
+	 * Gets the table name.
+	 *
+	 * @param type the type of report
+	 * @return the table name
+	 */
 	//genarte name for the right table according to the requset
 	private String getTableName(String type) {
 		String tableName="";
@@ -238,6 +305,13 @@ public class OpenReoprtDBController {
 				
 	
 	}
+	
+	/**
+	 * Checks if the wanted file is closed
+	 *
+	 * @param file the file
+	 * @return true, if is file closed
+	 */
 	//check if the file is open 
 	 private boolean isFileClosed(File file) {  
          boolean closed;
@@ -260,6 +334,12 @@ public class OpenReoprtDBController {
  }
 
 
+	/**
+	 * Gets the branch reports from CEO.
+	 *
+	 * @return the branch reports from CEO
+	 * @throws BMServerException the BM server exception
+	 */
 	public ArrayList<String> getBranchReportsFroCEO() throws BMServerException {
 		String query;
 		String row;

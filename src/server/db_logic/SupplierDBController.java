@@ -11,19 +11,43 @@ import utility.entity.Client;
 import utility.entity.Supplier;
 import utility.enums.ErrorType;
 
+/**
+ * The Class SupplierDBController.
+ * represents all the functions needed to connect with the data base
+ */
 public class SupplierDBController {
 	
+	/** The supplier table in DB. */
 	private final String supplierTableInDB = "restaurant";
+	
+	/** The user table name in DB. */
 	private final String userTableNameInDB = "users";
+	
+	/** The res worker table in DB. */
 	private final String resWorkerTableInDB  = "res_workers";
+	
+	/** The DB connection. */
 	Connection dbConnection;
+	
+	/** The DB name. */
 	String dbName;
 	
+	/**
+	 * Instantiates a new supplier DB controller.
+	 *
+	 * @param dbController the DB controller
+	 */
 	public SupplierDBController(DBController dbController) {
 		this.dbConnection = dbController.getDBConnection();
 		this.dbName = dbController.getDBName();
 	}
 	
+	/**
+	 * Sets the new supplier and updates it in the relevant tables
+	 *
+	 * @param supplier the new new supplier
+	 * @throws BMServerException the BM server exception
+	 */
 	public void setNewSupplier(Supplier supplier)  throws BMServerException{
 		ResultSet rs = null;
 		PreparedStatement ps;
@@ -32,10 +56,10 @@ public class SupplierDBController {
 			ps = dbConnection.prepareStatement(query);
 			ps.setString(1, supplier.getWorkerID());
 			rs = ps.executeQuery();
-			if(!rs.next()) { //worker dosent exist
+			if(!rs.next()) { //worker doesn't exist
 				throw new BMServerException(ErrorType.WORKER_DOSENT_EXIST, "WORKER_DOSENT_EXIST");
 			}
-			if(!rs.getString(7).equals("RESTAURANT_OWNER")) { //the user isnt RESTAURANT_OWNER
+			if(!rs.getString(7).equals("RESTAURANT_OWNER")) { //the user isn't RESTAURANT_OWNER
 				throw new BMServerException(ErrorType.WORKER_DOSENT_RESTAURANT_OWNER, "WORKER_DOSENT_RESTAURANT_OWNER");
 			}
 			//change the status of RESTAURANT_OWNER

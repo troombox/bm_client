@@ -10,19 +10,42 @@ import utility.entity.User;
 import utility.enums.ErrorType;
 import utility.enums.UserType;
 
+/**
+ * The Class UserDBController.
+ * represents all the functions needed to connect with the data base
+ */
 public class UserDBController {
 	
+	/** The user table name in DB. */
 	private final String userTableNameInDB = "users";
+	
+	/** The w 4 c table name in DB. */
 	private final String w4cTableNameInDB = "w4c";
 	
+	/** The DB connection. */
 	Connection dbConnection;
+	
+	/** The DB name. */
 	String dbName;
 	
+	/**
+	 * Instantiates a new user DB controller.
+	 *
+	 * @param dbController the DB controller
+	 */
 	public UserDBController(DBController dbController) {
 		this.dbConnection = dbController.getDBConnection();
 		this.dbName = dbController.getDBName();
 	}
 	
+	/**
+	 * Authenticate and get full user data.
+	 * checks the user status (frozen/active...) and returns all the full data about the user
+	 *
+	 * @param user the user
+	 * @return the user
+	 * @throws BMServerException the BM server exception
+	 */
 	public User	authenticateAndGetFullUserData(User user) throws BMServerException{
 		User result;
 		String userEmail,password;
@@ -66,6 +89,13 @@ public class UserDBController {
 	}
 	
 	
+	/**
+	 * Gets the personal code and business code of the user according to W 4 C.
+	 *
+	 * @param user the user
+	 * @return the user with the codes from W 4 C
+	 * @throws BMServerException the BM server exception
+	 */
 	public User getCodesAccordingToW4C(User user) throws BMServerException {
 		//we assume that the user provided got an w4c
 		User result;
@@ -112,7 +142,12 @@ public class UserDBController {
 //		}
 //	}
 
-	public void setUserToLoggedIn(User user) {
+	/**
+ * Sets the user to logged in into the system by updating the DB
+ *
+ * @param user the new user to logged in
+ */
+public void setUserToLoggedIn(User user) {
 		if (user == null) {
 			throw new IllegalArgumentException("setUserToLoggedIn: user is null");
 		}
@@ -128,6 +163,11 @@ public class UserDBController {
 		}
 	}
 	
+	/**
+	 * Sets the user to logged out by updating the DB
+	 *
+	 * @param user the new user to logged out
+	 */
 	public void setUserToLoggedOut(User user) {
 		if (user == null) {
 			throw new IllegalArgumentException("setUserToLoggedIn: user is null");
@@ -144,6 +184,9 @@ public class UserDBController {
 		}
 	}
 	
+	/**
+	 * Sets the all users to logged out.
+	 */
 	public void setAllUsersToLoggedOut() {
 		String query = "UPDATE `" + dbName + "`." + userTableNameInDB + " SET isSignedIn = 0";
 		try {

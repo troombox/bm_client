@@ -14,21 +14,48 @@ import utility.entity.Dish;
 import utility.entity.Order;
 import utility.enums.OrderType;
 
+/**
+ * The Class OrderDBController.
+ * represents all the functions needed to connect with the data base
+ */
 public class OrderDBController {
+  
+  /** The order table name in DB. */
   private final String orderTableNameInDB = "orders";
+	
+	/** The refunds table name in DB. */
 	private final String refundsTableNameInDB = "refunds";
+	
+	/** The dish in order table name in DB. */
 	private final String dishInOrderTableNameInDB = "dish_in_order";
 	
+	/** The orders table name in DB. */
 	private final String ordersTableNameInDB = "orders";
 	
+	/** The DB connection. */
 	Connection dbConnection;
+	
+	/** The DB name. */
 	String dbName;
 	
+	/**
+	 * Instantiates a new order DB controller.
+	 *
+	 * @param dbController the DB controller
+	 */
 	public OrderDBController(DBController dbController) {
 		this.dbConnection = dbController.getDBConnection();
 		this.dbName = dbController.getDBName();
 	}
 	
+	/**
+	 * changes the status of wanted order.
+	 * also if the order is already delivered and its late, make a refund
+	 *
+	 * @param orderId the order id
+	 * @param status the status we want to change to
+	 * @return true, if the change is successful
+	 */
 	public Boolean moveOrder(String orderId, String status) {
 		PreparedStatement ps;
 		PreparedStatement ps1;
@@ -95,7 +122,6 @@ public class OrderDBController {
                             ps5.executeUpdate();
                         }
                         else {
-                            System.out.println("here");
                             String query6 = "INSERT INTO `bm-db`.refunds (userID,resID,refundAmount) VALUES(?,?,?)";
                             ps6 = dbConnection.prepareStatement(query6);
                             ps6.setFloat(3, (float) (rs.getInt(3) * 0.5));
@@ -113,6 +139,13 @@ public class OrderDBController {
 		return true;
 	}
 	
+	/**
+	 * if the supplier wants to cancel order.
+	 * it removes the order from the order table
+	 *
+	 * @param orderId the order id to be canceled
+	 * @return true, if successful
+	 */
 	public Boolean cancelOrder(String orderId) {
 		PreparedStatement ps;
 		PreparedStatement ps1;
@@ -183,6 +216,14 @@ public class OrderDBController {
 	}
 		
 
+	/**
+	 * Gets all the orders , in specific status, from a wanted restaurant
+	 *
+	 * @param resId the restaurant id
+	 * @param status the status
+	 * @return arrayList of all orders
+	 * @throws BMServerException the BM server exception
+	 */
 	public ArrayList<Order> getOrdersByResId(String resId, String status) throws BMServerException{
 		ArrayList<Order> result = new ArrayList<>();
 		PreparedStatement ps;
@@ -264,7 +305,13 @@ public class OrderDBController {
 		
 	}
 	
-	//Added by Semion:
+	/**
+	 * Write new order data to DB.
+	 * when the user make new order we write its data to the DB
+	 * also adds all the dishes in this order to the dishesInOrder table
+	 *
+	 * @param order the order
+	 */
 	public void writeOrderDataToDB(Order order) {
 		System.out.println("writeOrderDataToDB: " + order.toString());
 		try {
@@ -321,6 +368,12 @@ public class OrderDBController {
 		}
 	}
 	
+	/**
+	 * Checks if the client has a refunds in restaurants
+	 *
+	 * @param resIDs contains the restaurant Id`s and the user Id
+	 * @return the refund data for the client in the restaurants
+	 */
 	public ClientRefundsData getCRFDataForRestaurantsGiven(ArrayList<String> resIDs) {
 		String userID = resIDs.get(0);
 		ClientRefundsData result = new ClientRefundsData(Integer.valueOf(resIDs.get(0)));
@@ -348,6 +401,12 @@ public class OrderDBController {
 	}
 
 
+	/**
+	 * Update refund data, if the user used the money so decreases its amount,
+	 * or if the user got a refund so increases the amount
+	 *
+	 * @param crf the client refund data
+	 */
 	public void updateCRFDataForRestaurantsGiven(ClientRefundsData crf) {
 		int userID = crf.getUserID();
 		String query;
@@ -377,6 +436,16 @@ public class OrderDBController {
 		}
 	}
 
+	/**
+	 * if there is a shared delivery we count the number of clients in this shared delivery.
+	 * up until 15 minutes, and then no clients can join this shared delivery
+	 * if more people join, all the clients get refund of 5/10ILS for the delivery up until 3 people
+	 * and the the refund is fixed
+	 *
+	 * @param before the before
+	 * @param after the after
+	 * @param timeOfOrder the time of order
+	 */
 	public void sharedDelivery(String before,String after,String timeOfOrder) {
 		
 		int amountOfClient=0,refund;

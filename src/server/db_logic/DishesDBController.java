@@ -10,18 +10,38 @@ import server.exceptions.BMServerException;
 import utility.entity.Dish;
 import utility.enums.ErrorType;
 
+/**
+ * The Class DishesDBController.
+ * represents all the functions needed to connect with the data base
+ */
 public class DishesDBController {
 
+	/** The dishes table name in DB. */
 	private final String dishesTableNameInDB = "dishes";
 	
+	/** The DB connection. */
 	Connection dbConnection;
+	
+	/** The DB name. */
 	String dbName;
 	
+	/**
+	 * Instantiates a new dishes DB controller.
+	 *
+	 * @param dbController the DB controller
+	 */
 	public DishesDBController(DBController dbController) {
 		this.dbConnection = dbController.getDBConnection();
 		this.dbName = dbController.getDBName();
 	}
 	
+	/**
+	 * Gets all dishes that belong to the wanted restaurant id
+	 *
+	 * @param resID the restaurant ID
+	 * @return the array list of all the dishes
+	 * @throws BMServerException the BM server exception
+	 */
 	public ArrayList<Dish> GetDishesListFromResIDData(String resID) throws BMServerException {
 		ArrayList<Dish> result = new ArrayList<>();
 		PreparedStatement ps;
@@ -51,6 +71,13 @@ public class DishesDBController {
 		}
 	}
 
+	/**
+	 * Adds new dish to menu.
+	 *
+	 * @param dish the dish to add
+	 * @return the dish
+	 * @throws BMServerException the BM server exception
+	 */
 	public Dish  AddDishToMenu(Dish dish) throws BMServerException{
 		ResultSet rs;
 		PreparedStatement ps = null;
@@ -86,6 +113,12 @@ public class DishesDBController {
 		}
 	}
 
+	/**
+	 * Update dish in menu.
+	 *
+	 * @param dish the dish to update
+	 * @throws BMServerException the BM server exception
+	 */
 	public void UpdateDishInMenu(Dish dish) throws BMServerException{
 		try {
 			String query2 = "UPDATE `" + dbName + "`." + dishesTableNameInDB
@@ -108,6 +141,12 @@ public class DishesDBController {
 		}
 	}
 
+	/**
+	 * Delete dish from menu.
+	 *
+	 * @param dish the dish
+	 * @throws BMServerException the BM server exception
+	 */
 	public void DeleteDishFromMenu(Dish dish) throws BMServerException{
 		try {
 			String query2 = "DELETE FROM `" + dbName + "`." + dishesTableNameInDB

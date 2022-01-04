@@ -34,28 +34,69 @@ import com.itextpdf.text.pdf.PdfWriter;
 import server.exceptions.BMServerException;
 import utility.enums.ErrorType;
 import utility.enums.OrderType;
-//TODO: func get month as arg, delete files maybe? generate only on dates 
+
+/**
+ * The Class ReportsDBController.
+ * represents all the functions needed to connect with the data base
+ */
 public class ReportsDBController {
 
+	/** The orders table in DB. */
 	private final String ordersTableInDB = "orders";
+	
+	/** The restaurant table in DB. */
 	private final String restaurantTableInDB = "restaurant";
+	
+	/** The dish in order table in DB. */
 	private final String dishInOrderTableInDB = "dish_in_order";
+	
+	/** The dishes table in DB. */
 	private final String dishesTableInDB = "dishes";
+	
+	/** The Income report table name in DB. */
 	private final String IncomeReportTableNameInDB = "income_report";
+	
+	/** The order report table name in DB. */
 	private final String orderReportTableNameInDB = "order_report";
+	
+	/** The performance report table name in DB. */
 	private final String performanceReportTableNameInDB = "performance_report";
+	
+	/** The ceo report table name in DB. */
 	private final String ceoReportTableNameInDB = "ceo_report";
+	
+	/** The restaurant total income. */
 	HashMap <Integer,Integer> restaurantTotalIncome; 
+	
+	/** The restaurant order. */
 	HashMap <Integer,Integer> restaurantOrder = new HashMap<Integer,Integer>();
+	
+	/** The restaurant name and id. */
 	HashMap <Integer,String> restaurantNameAndId = new HashMap<Integer,String>();
+	
+	/** The order row PDF. */
 	HashMap <Integer,ArrayList<String>> orderRowPdf = new HashMap<Integer,ArrayList<String>>();
+	
+	/** The res count delays. */
 	HashMap <Integer,ArrayList<Integer>> resCountDelays = new HashMap<Integer,ArrayList<Integer>>();
+	
+	/** The Performance row PDF. */
 	HashMap <String,ArrayList<String>> PerformanceRowPdf = new HashMap<String,ArrayList<String>>();
+	
+	/** The row in pdf. */
 	ArrayList <String> rowInPdf ;
 	
+	/** The DB connection. */
 	Connection dbConnection;
+	
+	/** The DB name. */
 	String dbName;
 	
+	/**
+	 * Instantiates a new reports DB controller.
+	 *
+	 * @param dbController the DB controller
+	 */
 	public ReportsDBController(DBController dbController) {
 		this.dbConnection = dbController.getDBConnection();
 		this.dbName = dbController.getDBName();
@@ -80,7 +121,16 @@ public class ReportsDBController {
 //		
 //	}
 	
-	public void createIncomeReport(String month,String year,String branch)  throws BMServerException{
+	/**
+ * Creates the income report.
+ * it takes the orders data in specific dates and generates PDF files
+ *
+ * @param month the month 
+ * @param year the year
+ * @param branch the branch
+ * @throws BMServerException the BM server exception
+ */
+public void createIncomeReport(String month,String year,String branch)  throws BMServerException{
 		rowInPdf = new ArrayList<String>();
 		restaurantTotalIncome = new HashMap<Integer,Integer>();
 		int currTotalPrice;
@@ -128,6 +178,16 @@ public class ReportsDBController {
 		
 	}
 	
+	/**
+	 * Creates the income report for each supplier.
+	 * that shows how much money he made in specific time,
+	 *  Including and excluding the commission 
+	 *  and generates it into PDF
+	 *
+	 * @param month the month
+	 * @param year the year
+	 * @throws BMServerException the BM server exception
+	 */
 	public void createIncomeReportForEachSupplier(String month,String year)  throws BMServerException{
 		restaurantTotalIncome = new HashMap<Integer,Integer>();
 		int currTotalPrice;
@@ -185,13 +245,23 @@ public class ReportsDBController {
 		
 	}
 	
+	/**
+	 * gets all the data about the file and make it a pdf file
+	 *
+	 * @param table the table
+	 * @param title the title of the file
+	 * @param month the month
+	 * @param year the year
+	 * @param txt the text that needs to be in the file
+	 * @param resId the res id
+	 * @throws BMServerException the BM server exception
+	 */
 	public void generatePdfForComissionFile(String table,String title,String month,String year, ArrayList<String> txt,int resId) throws BMServerException {
 		Document doc =  new Document(); 
 		String location;
 		try {			
 			location = "C:\\reports\\"+title +"-("+year+"-"+month+").pdf";
 			PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(location));
-			System.out.println("PDF created."); 
 			
 			doc.open();
 			doc.add(new Paragraph(title));
@@ -201,7 +271,6 @@ public class ReportsDBController {
 			doc.close();
 			writer.close();
 			savebillReportForSupplier(location,resId);
-			System.out.println("pdf saved to db");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			throw new BMServerException(ErrorType.ERROR_CREATING_REPORT, "ERROR_CREATING_REPORT");
@@ -213,6 +282,15 @@ public class ReportsDBController {
 	}
 	
 
+	/**
+	 * Creates the order report.
+	 * with all the data about the dishes in the order
+	 *
+	 * @param month the month
+	 * @param year the year
+	 * @param branch the branch
+	 * @throws BMServerException the BM server exception
+	 */
 	public void createOrderReport(String month,String year,String branch)  throws BMServerException{
 		rowInPdf = new ArrayList<String>();
 		restaurantOrder = new HashMap<Integer,Integer>();
@@ -279,6 +357,16 @@ public class ReportsDBController {
 	
 	
 	
+	/**
+	 * Creates the performance report.
+	 * all the orders that got on time, and the orders that arrived in delay
+	 * for wanted branch
+	 *
+	 * @param month the month
+	 * @param year the year
+	 * @param branch the branch
+	 * @throws BMServerException the BM server exception
+	 */
 	public void createPerformanceReport(String month,String year,String branch)  throws BMServerException{
 		rowInPdf = new ArrayList<String>();
 		int countonTime=0,countDelay=0;
@@ -370,6 +458,13 @@ public class ReportsDBController {
 		
 	}
 	
+	/**
+	 * gets histogram of all orders from different restaurants and their total value
+	 *
+	 * @param month the month
+	 * @param year the year
+	 * @throws BMServerException the BM server exception
+	 */
 	public void ceoReport(String month,String year) throws BMServerException {
 		rowInPdf = new ArrayList<String>();
 		restaurantTotalIncome = new HashMap<Integer,Integer>();
@@ -453,7 +548,13 @@ public class ReportsDBController {
 		
 	}
 	
-	   public CategoryDataset createDataset(HashMap<Integer,Integer> data ) {      
+	   /**
+   	 * Creates the right type of values to put it in the histogram
+   	 *
+   	 * @param data the data
+   	 * @return the category dataset
+   	 */
+   	public CategoryDataset createDataset(HashMap<Integer,Integer> data ) {      
 		     
 		      final DefaultCategoryDataset dataset = 
 		      new DefaultCategoryDataset( );  
@@ -465,6 +566,19 @@ public class ReportsDBController {
 		      return dataset; 
 		   }
 	
+	/**
+	 * Generate PDF.
+	 * create the PDF file with the histogram
+	 *
+	 * @param table the table
+	 * @param title the title
+	 * @param month the month
+	 * @param year the year
+	 * @param branch the branch
+	 * @param txt the text to be presented in the file
+	 * @param barChart the bar chart
+	 * @throws BMServerException the BM server exception
+	 */
 	public void generatePDF(String table,String title,String month,String year,String branch, ArrayList<String> txt,JFreeChart barChart) throws BMServerException {
 		Document doc =  new Document(); 
 		String location;
@@ -515,6 +629,13 @@ public class ReportsDBController {
 	
 
 
+	/**
+	 * Gets the byte array from file.
+	 *
+	 * @param location the location
+	 * @return the byte array from file
+	 * @throws BMServerException the BM server exception
+	 */
 	private byte[] getByteArrayFromFile(String location) throws BMServerException {
 	    try {
 	    	
@@ -539,6 +660,15 @@ public class ReportsDBController {
 
 	}
 	
+	/**
+	 * Save the report to the data base
+	 *
+	 * @param tableName the table name
+	 * @param location the location
+	 * @param month the month
+	 * @param year the year
+	 * @param branch the branch
+	 */
 	private void saveReport(String tableName,String location,String month,String year,String branch) {
 		PreparedStatement ps;
 		String query;
@@ -557,6 +687,14 @@ public class ReportsDBController {
 		}
 
 	}
+	
+	/**
+	 * Save the bill report for supplier.
+	 * in the data base
+	 *
+	 * @param location the location
+	 * @param resId the res id
+	 */
 	private void savebillReportForSupplier(String location,int resId) {
 		PreparedStatement ps;
 		String query;

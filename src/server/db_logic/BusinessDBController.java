@@ -10,16 +10,37 @@ import server.exceptions.BMServerException;
 import utility.entity.Business;
 import utility.enums.ErrorType;
 
+/**
+ * The Class BusinessDBController.
+ * represents all the functions needed to connect with the data base
+ */
 public class BusinessDBController {
+	
+	/** The businesses table in DB. */
 	private final String businessesTableInDB = "businesses";
+	
+	/** The DB connection. */
 	Connection dbConnection;
+	
+	/** The DB name. */
 	String dbName;
 	
+	/**
+	 * Instantiates a new business DB controller.
+	 *
+	 * @param dbController the DB controller
+	 */
 	public BusinessDBController(DBController dbController) {
 		this.dbConnection = dbController.getDBConnection();
 		this.dbName = dbController.getDBName();
 	}
 	
+	/**
+	 * get all businesses that are in the wanted branch and that they are approved by their HR manager
+	 *
+	 * @param banchName - the branch where we want to find businesses
+	 * @return the businesses names
+	 */
 	public ArrayList<String> getBusinessesNames(String banchName) {	
 		PreparedStatement ps;
 		ArrayList<String> names = new ArrayList<String>();
@@ -41,6 +62,12 @@ public class BusinessDBController {
 		}
 	}
 	
+	/**
+	 * Approve business after the HR registered it.
+	 *
+	 * @param the business that need to be approved
+	 * @throws BMServerException the BM server exception - if there is an SQL exception
+	 */
 	public void approveBusiness(Business business) throws BMServerException{
 		PreparedStatement ps;
 		try {

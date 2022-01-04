@@ -11,27 +11,50 @@ import utility.entity.Client;
 import utility.enums.ErrorType;
 import utility.enums.UserType;
 
+/**
+ * The Class ClientDBController.
+ * represents all the functions needed to connect with the data base
+ */
 public class ClientDBController {
 	
+	/** The personal client table in DB. */
 	private final String personalClientTableInDB = "personal_client";
+	
+	/** The business client table in DB. */
 	private final String businesslClientTableInDB = "business_client";
+	
+	/** The businesses table in DB. */
 	private final String businessesTableInDB = "businesses";
+	
+	/** The user table name in DB. */
 	private final String userTableNameInDB = "users";
+	
+	/** The w 4 c table name in DB. */
 	private final String w4cTableNameInDB = "w4c";
+	
+	/** The DB connection. */
 	Connection dbConnection;
+	
+	/** The DB name. */
 	String dbName;
 	
+	/**
+	 * Instantiates a new client DB controller.
+	 *
+	 * @param dbController the DB controller
+	 */
 	public ClientDBController(DBController dbController) {
 		this.dbConnection = dbController.getDBConnection();
 		this.dbName = dbController.getDBName();
 		
 	}
-	/*This method set a new client in db, first check if the information about this user
+	/*This method set a new client in DB, first check if the information about this user
 	 * exist in the user table, if not return error message with throwing exception.
 	 * Otherwise enter this user into client table depends which client he is.
 	 * 
-	 * @param client with all the data for registration **/
-	
+	 * @param client with all the data for registration 
+	 * 
+	 * **/
 	public void setNewClient(Client client)  throws BMServerException{
 		String userEmail = client.getEmail(), firstName = client.getFirstName(), lastName = client.getLastName();
 		String phone = client.getPhone();
@@ -175,6 +198,13 @@ public class ClientDBController {
 		}
 	}
 	
+	/**
+	 * Gets all the clients that belong to the wanted branch
+	 *
+	 * @param branchName the branch name
+	 * @return the client info
+	 * @throws BMServerException the BM server exception - when there are no clients
+	 */
 	public ArrayList<String> getClientInfo(String branchName) throws BMServerException {
 		ResultSet rs = null;
 		PreparedStatement ps;
@@ -206,6 +236,15 @@ public class ClientDBController {
 	}
 
 
+	/**
+	 * Change permission request. 
+	 * if we want to remove the client we remove it from its user type table to.
+	 *  and change its status in the users table
+	 *
+	 * @param newStatus the new status
+	 * @param id the user id
+	 * @throws BMServerException the BM server exception
+	 */
 	public void changePermissionRequest(String newStatus, String id) throws BMServerException {
 		ResultSet rs = null;
 		PreparedStatement ps;

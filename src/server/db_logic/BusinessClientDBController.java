@@ -10,17 +10,38 @@ import server.exceptions.BMServerException;
 import utility.entity.BusinessClientData;
 import utility.enums.ErrorType;
 
+/**
+ * The Class BusinessClientDBController.
+ * represents all the functions needed to connect with the data base
+ */
 public class BusinessClientDBController {
+	
+	/** The business client table name in DB. */
 	private final String businessClientTableNameInDB = "business_client";
 	
+	/** The DB connection. */
 	Connection dbConnection;
+	
+	/** The DB name. */
 	String dbName;
 	
+	/**
+	 * Instantiates a new business client DB controller.
+	 *
+	 * @param dbController the DB controller
+	 */
 	public BusinessClientDBController(DBController dbController) {
 		this.dbConnection = dbController.getDBConnection();
 		this.dbName = dbController.getDBName();
 	}
 	
+	/**
+	 * Gets all the data of a specific business, with its business code.
+	 *
+	 * @param businessCode the business code of this specific business
+	 * @return the wanted business client
+	 * @throws BMServerException the BM server exception - when user doesn't exist
+	 */
 	public BusinessClientData getBUD(String businessCode) throws BMServerException {
 		int bCode = Integer.parseInt(businessCode);
 		PreparedStatement ps;
@@ -43,6 +64,11 @@ public class BusinessClientDBController {
 		} 
 	}
 
+	/**
+	 * Update budget for a given business client.
+	 *
+	 * @param arrayList updateRequest - the userId and the budget
+	 */
 	public void updateBudgetForClient(ArrayList<String> updateRequest) {
 		String userID = updateRequest.get(0);
 		String newBudget = updateRequest.get(1);

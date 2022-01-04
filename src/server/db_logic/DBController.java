@@ -4,14 +4,32 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * The Class DBController.
+ * represents all the functions needed to connect with the data base
+ */
 public class DBController {
 	
+	/** The controller. */
 	private static DBController controller = null;
 	
+	/** The connection. */
 	private static Connection conn;
+	
+	/** The password. */
 	private static String dbName, user, password;
+	
+	/** The connected. */
 	private static boolean connected = false;
 	
+	/**
+	 * Gets the DB controller instance for.
+	 *
+	 * @param givenDbName the given DB name
+	 * @param givenUser the given user name
+	 * @param givenPassword the given password
+	 * @return the DB controller instance for
+	 */
 	public static DBController getDBControllerInstanceFor(String givenDbName, String givenUser, String givenPassword) {
 		if(givenDbName.equals(dbName) && givenUser.equals(user) && givenPassword.equals(password)) {
 			if(controller == null) {
@@ -26,12 +44,22 @@ public class DBController {
 		return controller;
 	}
 
+	/**
+	 * Instantiates a new DB controller.
+	 *
+	 * @param dbName the DB name
+	 * @param user the user name
+	 * @param password the password
+	 */
 	private DBController(String dbName, String user, String password) {
 		DBController.dbName = dbName;
 		DBController.password = password;
 		DBController.user = user;
 	}
 	
+	/**
+	 * Connect to DB server.
+	 */
 	public void connectToDBServer() {
 		if (connected)
 			return;
@@ -56,18 +84,36 @@ public class DBController {
 		connected = true;
 	}
 	
+	/**
+	 * Gets the DB connection.
+	 *
+	 * @return the DB connection
+	 */
 	public Connection getDBConnection() {
 		return conn;
 	}
 	
+	/**
+	 * Gets the DB name.
+	 *
+	 * @return the DB name
+	 */
 	public String getDBName() {
 		return dbName;
 	}
 	
+	/**
+	 * Checks if is connected.
+	 *
+	 * @return true, if is connected
+	 */
 	public boolean isConnected() {
 		return connected;
 	}
 	
+	/**
+	 * Disconnect from DB.
+	 */
 	public static void disconnectFromDB() {
 		try {
 			if(connected)

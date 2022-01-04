@@ -11,9 +11,9 @@ import utility.entity.BusinessClient;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class HRDBController.
+ * represents all the functions needed to connect with the data base
  */
 public class HRDBController {
 	
@@ -35,7 +35,7 @@ private final static String business_client = "business_client";
 	/**
 	 * Instantiates a new HRDB controller.
 	 *
-	 * @param dbController the db controller
+	 * @param dbController the DB controller
 	 */
 	public HRDBController(DBController dbController) {
 		this.dbConnection = dbController.getDBConnection();
@@ -45,6 +45,8 @@ private final static String business_client = "business_client";
 		
 	/**
 	 * Update users in DB.
+	 * if we need to approve we will update its status
+	 * if we want to decline we will delete it from the business table
 	 *
 	 * @param usersToUpdate the users to update
 	 * @return true, if successful
@@ -157,9 +159,9 @@ private final static String business_client = "business_client";
 	}
 	
 	/**
-	 * Approve business.
+	 * Approve business. and insert the data to the business tabe
 	 *
-	 * @param hr_id the HR id
+	 * @param business the business to insert
 	 * @return true, if successful
 	 */
 	public static boolean approveBusiness(Business business){

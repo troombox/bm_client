@@ -11,18 +11,39 @@ import utility.entity.Restaurant;
 import utility.entity.User;
 import utility.enums.ErrorType;
 
-
+/**
+ * The Class RestaurantDBController.
+ * represents all the functions needed to connect with the data base
+ */
 public class RestaurantDBController {
+	
+	/** The restaurant table name in DB. */
 	private final String restaurantTableNameInDB = "restaurant";
 	
+	/** The DB connection. */
 	Connection dbConnection;
+	
+	/** The DB name. */
 	String dbName;
 	
+	/**
+	 * Instantiates a new restaurant DB controller.
+	 *
+	 * @param dbController the DB controller
+	 */
 	public RestaurantDBController(DBController dbController) {
 		this.dbConnection = dbController.getDBConnection();
 		this.dbName = dbController.getDBName();
 	}
 	
+	/**
+	 * Gets the restaurants list from search data.
+	 * gets all restaurants that are similar the search text
+	 *
+	 * @param searchText the search text
+	 * @return the array list
+	 * @throws BMServerException the BM server exception
+	 */
 	public ArrayList<Restaurant> GetRestaurantsListFromSearchData(ArrayList<String> searchText) throws BMServerException{
 		ArrayList<Restaurant> result = new ArrayList<>();
 		PreparedStatement ps;
@@ -52,6 +73,14 @@ public class RestaurantDBController {
 		}
 	}
 
+	/**
+	 * Gets the restaurants list from categories data.
+	 * gets all the restaurants the belong to specific category
+	 *
+	 * @param category the category
+	 * @return the array list
+	 * @throws BMServerException the BM server exception
+	 */
 	public ArrayList<Restaurant> GetRestaurantsListFromCategoriesData(ArrayList<String> category) throws BMServerException {
 		ArrayList<Restaurant> result = new ArrayList<>();
 		PreparedStatement ps;
@@ -81,6 +110,13 @@ public class RestaurantDBController {
 		}
 	}
 	
+	/**
+	 * Gets the restaurant that belongs to the supplier
+	 *
+	 * @param supplier the supplier
+	 * @return the restaurant
+	 * @throws BMServerException the BM server exception
+	 */
 	public Restaurant GetRestaurantFromUserSupplierData(User supplier) throws BMServerException {
 		String res_workersTableNameInDB = "res_workers";
 		Restaurant result;
