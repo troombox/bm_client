@@ -1,42 +1,108 @@
 package utility.enums;
 
+/**
+ * The Enum ErrorType.
+ * represent error types in system.
+ */
 public enum ErrorType {
 
+	/** invalid credentials wrong password. */
 	INVALID_CREDENTIALS_WRONG_PASSWORD("INVALID_CREDENTIALS_WRONG_PASSWORD"),
-	INVALID_CREDENTIALS_USER_NOT_FOUND("INVALID_CREDENTIALS_USER_NOT_FOUND"),
-	INVALID_CREDENTIALS_USER_ALREADY_LOGGED_IN("INVALID_CREDENTIALS_USER_ALREADY_LOGGED_IN"),
-	INVALID_W4_VALUE_NOT_FOUND("INVALID_W4_VALUE_NOT_FOUND"),
-	INVALID_CREDENTIALS_RESTAURANT_NOT_FOUND("INVALID_CREDENTIALS_RESTAURANT_NOT_FOUND"),
-	CLIENT_ALREADY_EXIST("CLIENT_ALREADY_EXIST"),
-	BUSINESS_DOESNT_EXIST("BUSINESS_DOESNT_EXIST"),
-	BUSINESS_NOT_APPROVE("BUSINESS_NOT_APPROVE"),
-	WORKER_DOSENT_EXIST("WORKER_DOSENT_EXIST"),
-	NO_CLIENTS_IN_THIS_BRANCH("NO_CLIENTS_IN_THIS_BRANCH"),
-	WORKER_DOSENT_RESTAURANT_OWNER("WORKER_DOSENT_RESTAURANT_OWNER"),
-	DISHES_NOT_FOUND("DISHES_NOT_FOUND"),
-	BUSINESS_CLIENT_DATA_NOT_FOUND("BUSINESS_CLIENT_DATA_NOT_FOUND"),
-	SUPPLIER_ALREADY_EXIST("SUPPLIER_ALREADY_EXIST"),
-	REPORT_NOT_EXIST("REPORT_NOT_EXIST"),
-	ERROR_CREATING_REPORT("ERROR_CREATING_REPORT"),
-	FILE_ALREADY_OPEN("FILE_ALREADY_OPEN"),
-	COULD_NOT_UPDATE_BUSINESS_CLIENT("COULD_NOT_UPDATE_BUSINESS_CLIENT"),
-	COULD_NOT_UPDATE_ORDER("COULD_NOT_UPDATE_ORDER"),
-	COULD_NOT_CANCEL_ORDER("COULD_NOT_CANCEL_ORDER"),
-	USER_ACCOUNT_IS_FROZEN("USER_ACCOUNT_IS_FROZEN"),
-	USER_IS_UNREGISTERED("USER_IS_UNREGISTERED"),
-	UNKNOWN("UNKNOWN_ERROR_TYPE");																//used internally, should not be sent as a type
 	
+	/** invalid credentials user not found. */
+	INVALID_CREDENTIALS_USER_NOT_FOUND("INVALID_CREDENTIALS_USER_NOT_FOUND"),
+	
+	/** invalid credentials user already logged in. */
+	INVALID_CREDENTIALS_USER_ALREADY_LOGGED_IN("INVALID_CREDENTIALS_USER_ALREADY_LOGGED_IN"),
+	
+	/** invalid w4 value not found. */
+	INVALID_W4_VALUE_NOT_FOUND("INVALID_W4_VALUE_NOT_FOUND"),
+	
+	/** invalid credentials restaurant not found. */
+	INVALID_CREDENTIALS_RESTAURANT_NOT_FOUND("INVALID_CREDENTIALS_RESTAURANT_NOT_FOUND"),
+	
+	/** client already exist. */
+	CLIENT_ALREADY_EXIST("CLIENT_ALREADY_EXIST"),
+	
+	/** business doesnt exist. */
+	BUSINESS_DOESNT_EXIST("BUSINESS_DOESNT_EXIST"),
+	
+	/** business not approve. */
+	BUSINESS_NOT_APPROVE("BUSINESS_NOT_APPROVE"),
+	
+	/** worker dosent exist. */
+	WORKER_DOSENT_EXIST("WORKER_DOSENT_EXIST"),
+	
+	/** no clients in this branch. */
+	NO_CLIENTS_IN_THIS_BRANCH("NO_CLIENTS_IN_THIS_BRANCH"),
+	
+	/**worker dosent restaurant owner. */
+	WORKER_DOSENT_RESTAURANT_OWNER("WORKER_DOSENT_RESTAURANT_OWNER"),
+	
+	/** dishes not found. */
+	DISHES_NOT_FOUND("DISHES_NOT_FOUND"),
+	
+	/** business client data not found. */
+	BUSINESS_CLIENT_DATA_NOT_FOUND("BUSINESS_CLIENT_DATA_NOT_FOUND"),
+	
+	/** supplier already exist. */
+	SUPPLIER_ALREADY_EXIST("SUPPLIER_ALREADY_EXIST"),
+	
+	/** report not exist. */
+	REPORT_NOT_EXIST("REPORT_NOT_EXIST"),
+	
+	/** error creating report. */
+	ERROR_CREATING_REPORT("ERROR_CREATING_REPORT"),
+	
+	/** file already open. */
+	FILE_ALREADY_OPEN("FILE_ALREADY_OPEN"),
+	
+	/** could not update business client. */
+	COULD_NOT_UPDATE_BUSINESS_CLIENT("COULD_NOT_UPDATE_BUSINESS_CLIENT"),
+	
+	/** could not update order. */
+	COULD_NOT_UPDATE_ORDER("COULD_NOT_UPDATE_ORDER"),
+	
+	/** could not cancel order. */
+	COULD_NOT_CANCEL_ORDER("COULD_NOT_CANCEL_ORDER"),
+	
+	/** user account is frozen. */
+	USER_ACCOUNT_IS_FROZEN("USER_ACCOUNT_IS_FROZEN"),
+	
+	/** user is unregistered. */
+	USER_IS_UNREGISTERED("USER_IS_UNREGISTERED"),
+	
+	/** unknown. */
+	UNKNOWN("UNKNOWN_ERROR_TYPE");																
+	
+	/** The error type. used internally, should not be sent as a type */
 	private String errorType;
 	
+	/**
+	 * Instantiates a new error type.
+	 *
+	 * @param errorType the error type
+	 */
 	private ErrorType(String errorType) {
 		this.errorType = errorType;
 	}
 	
+	/**
+	 * To string.
+	 *
+	 * @return the errorType string
+	 */
 	@Override
 	public String toString() {
 		return errorType;
 	}
 	
+	/**
+	 * From string.
+	 *
+	 * @param errorTypeString the error type string
+	 * @return the error type
+	 */
 	public static ErrorType fromString(String errorTypeString) {
 		switch(errorTypeString) {
 		case "INVALID_CREDENTIALS_WRONG_PASSWORD":
