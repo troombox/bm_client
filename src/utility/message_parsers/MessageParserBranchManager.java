@@ -2,9 +2,13 @@ package utility.message_parsers;
 
 import java.util.ArrayList;
 
+<<<<<<< HEAD
 import utility.entity.Business;
 import utility.entity.Client;
 import utility.entity.ClientChangePermission;
+=======
+import utility.entity.Client;
+>>>>>>> main
 import utility.entity.Supplier;
 import utility.enums.DataType;
 import utility.enums.RequestType;
@@ -74,18 +78,29 @@ public class MessageParserBranchManager {
 			// TODO:ADD ERROR HANDLING
 			return null;
 		}
+<<<<<<< HEAD
 		return new Supplier(msg.get(2), msg.get(3), msg.get(4), msg.get(5), msg.get(6));
+=======
+		return new Supplier(msg.get(2), msg.get(3), msg.get(4), msg.get(5));
+>>>>>>> main
 	}
 	
 	public static Object prepareMessageWithDataType_Supplier(Supplier supplier, RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
 		messageToPrepare.add(requestType.toString());
 		messageToPrepare.add(DataType.SUPPLIER.toString());
+<<<<<<< HEAD
 		messageToPrepare.add(supplier.getRestaurantName());
 		messageToPrepare.add(supplier.getImagePath());
 		messageToPrepare.add(supplier.getCategories());
 		messageToPrepare.add(supplier.getPersonalBranch());
 		messageToPrepare.add(supplier.getWorkerID());
+=======
+		messageToPrepare.add(String.valueOf(supplier.getRestaurantName()));
+		messageToPrepare.add(supplier.getImagePath());
+		messageToPrepare.add(supplier.getCategories());
+		messageToPrepare.add(supplier.getPersonalBranch());
+>>>>>>> main
 		
 		return messageToPrepare;
 	}
@@ -102,6 +117,7 @@ public class MessageParserBranchManager {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		return msg.get(0);
 	}
+<<<<<<< HEAD
 	//------------------------------------------------>approve_business
 	
 	public static Object prepareMessageWithDataType_GET_DATA_OF_BUSINESS(String branchName ,RequestType requestType) {
@@ -219,4 +235,9 @@ public class MessageParserBranchManager {
 		return msg.get(0);
 	}
 
+=======
+	
+	
+	
+>>>>>>> main
 }

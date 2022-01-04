@@ -45,6 +45,7 @@ public class MessageParser {
 			return RequestType.CLIENT_REQUEST_TO_SERVER_CATEGORY_RESTAURANT_REQUEST;
 		case "CLIENT_REQUEST_TO_SERVER_MENU_REQUEST":
 			return RequestType.CLIENT_REQUEST_TO_SERVER_MENU_REQUEST;
+<<<<<<< HEAD
 		case "CLIENT_REQUEST_TO_SERVER_BUSINESS_CLIENT_DATA":
 			return RequestType.CLIENT_REQUEST_TO_SERVER_BUSINESS_CLIENT_DATA;
 		case "CLIENT_REQUEST_TO_SERVER_GET_CLIENT_REFUNDS_DATA":
@@ -91,6 +92,8 @@ public class MessageParser {
         	return RequestType.CLIENT_REQUEST_TO_SERVER_UPDATE_REFUND_AMOUNT_AFTER_REFUNDS_USED;
         case "CLIENT_REQUEST_TO_SERVER_BUSINESS_CLIENT_BUDGED_UPDATE":
         	return RequestType.CLIENT_REQUEST_TO_SERVER_BUSINESS_CLIENT_BUDGED_UPDATE;
+=======
+>>>>>>> main
 		default:
 			// TODO: ADD error handling for this case;
 			return RequestType.CLIENT_REQUEST_TO_SERVER_UNKNOWN_REQUEST;
@@ -107,8 +110,11 @@ public class MessageParser {
 			return DataType.USER;
 		case "CLIENT":
 			return DataType.CLIENT;
+<<<<<<< HEAD
 		case "SUPPLIER":
 			return DataType.SUPPLIER;
+=======
+>>>>>>> main
 		case "SINGLE_TEXT_STRING":
 			return DataType.SINGLE_TEXT_STRING;
 		case "RESTAURANTS_LIST":
@@ -121,6 +127,7 @@ public class MessageParser {
 			return DataType.ARRAYLIST_STRING;
 		case "ERROR_MESSAGE":
 			return DataType.ERROR_MESSAGE;
+<<<<<<< HEAD
 		case "BUSINESS_CLIENT_DATA":
 			return DataType.BUSINESS_CLIENT_DATA;
 		case "GET_DATA_OF_BUSINESS":
@@ -143,6 +150,10 @@ public class MessageParser {
 			return DataType.CLIENT_REFUNDS_DATA;
 		default:
 			System.out.println("parseMessage_DataType: unknown dataType - " + msg.get(1));
+=======
+		default:
+			// TODO: ADD error handling for this case;
+>>>>>>> main
 			return DataType.UNKNOWN;
 		}
 	}

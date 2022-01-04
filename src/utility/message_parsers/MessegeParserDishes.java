@@ -3,6 +3,10 @@ package utility.message_parsers;
 import java.util.ArrayList;
 
 import utility.entity.Dish;
+<<<<<<< HEAD
+=======
+import utility.entity.Restaurant;
+>>>>>>> main
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
@@ -47,6 +51,7 @@ public class MessegeParserDishes {
 		return result;
 	}
 
+<<<<<<< HEAD
 
 	public static Object prepareMessageWithDataType_SingleDish(Object dataToSendToServer, RequestType requestType) {
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
@@ -79,4 +84,6 @@ public class MessegeParserDishes {
 		return result;
 	}
 
+=======
+>>>>>>> main
 }

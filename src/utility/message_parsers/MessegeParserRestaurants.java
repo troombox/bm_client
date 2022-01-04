@@ -41,6 +41,7 @@ public class MessegeParserRestaurants {
 		return messageToPrepare;
 	}
 
+<<<<<<< HEAD
 	public static Restaurant handleMessageExtractDataType_singleRestaurant(Object message) {
 		ArrayList<String> msg = (ArrayList<String>) message;
 		if (!msg.get(1).equals("RESTAURANT")) {
@@ -64,4 +65,6 @@ public class MessegeParserRestaurants {
 		return messageToPrepare;
 	}
 
+=======
+>>>>>>> main
 }

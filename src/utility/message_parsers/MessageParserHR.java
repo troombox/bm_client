@@ -8,6 +8,10 @@ import utility.enums.RequestType;
 
 public class MessageParserHR {
 	
+<<<<<<< HEAD
+=======
+	
+>>>>>>> main
 	public static ArrayList<BusinessClient>  handleMessageExtractDataType_HRGetData(Object message) {
 		ArrayList<BusinessClient> parsedData = new ArrayList<BusinessClient>();
 		ArrayList<String> DataFromServer = (ArrayList<String>)message;
@@ -33,6 +37,7 @@ public class MessageParserHR {
 
 	}
 	
+<<<<<<< HEAD
 	public static Object prepareMessageToServer_HRUpdateDB(BusinessClient businessClient,  DataType dataType,RequestType requestType) {	
 		ArrayList<String> messageToPrepare = new ArrayList<String>();
 		
@@ -79,6 +84,11 @@ public class MessageParserHR {
 		return messageToPrepare;
 
 	}
+=======
+	public static ArrayList<String> handleMessageFromClient_HRGetData(Object msg){
+		return (ArrayList<String>)msg;
+	}
+>>>>>>> main
 }
 //	public static Object prepareMessageWithDataType_User(BusinessClient BusinessClient, RequestType requestType) {
 //		

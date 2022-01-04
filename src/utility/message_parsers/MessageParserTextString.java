@@ -33,23 +33,37 @@ public class MessageParserTextString {
 		ArrayList<String> messageToServer = new ArrayList<String>();	
 		messageToServer.add(requestType.toString());
 		messageToServer.add(DataType.ARRAYLIST_STRING.toString());
+<<<<<<< HEAD
 		for(int i = 0; i < dataToSendToServer.size(); i++) {
 			messageToServer.add(dataToSendToServer.get(i));
 		}
+=======
+		messageToServer.add(dataToSendToServer.get(0));
+		messageToServer.add(dataToSendToServer.get(1));
+>>>>>>> main
 		return messageToServer;
 	}
 	
 	public static ArrayList<String> parseMessageDataType_ArrayListString(Object message) {
 		ArrayList<String> msg = (ArrayList<String>)message;
+<<<<<<< HEAD
+=======
+		System.out.println(msg.get(1));
+>>>>>>> main
 		if (!msg.get(1).equals("ARRAYLIST_STRING")) {
 			// TODO: ADD error handling for this case;
 			System.out.println("Error parseMessageDataType_ArrayListString not arraylist");
 			return null;
 		}
 		ArrayList<String> arraylist = new ArrayList<>();
+<<<<<<< HEAD
 		for(int i = 2; i < msg.size(); i++) {
 			arraylist.add(msg.get(i));
 		}
+=======
+		arraylist.add(msg.get(2));
+		arraylist.add(msg.get(3));
+>>>>>>> main
 		return arraylist;
 	}
 }

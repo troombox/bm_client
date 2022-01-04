@@ -1,5 +1,6 @@
 package utility.entity;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -7,6 +8,12 @@ public class Dish {
 
 	private String dish_ID, description,size,cooking_level;
 	private String res_ID, price, name, type, exceptions;
+=======
+public class Dish {
+
+	private String dish_ID, description,size,cooking_level;
+	private String res_ID, price, name, type;
+>>>>>>> main
 	
 	
 	public Dish(String dish_ID,String res_ID, String type, String name, String description, String size,
@@ -59,6 +66,7 @@ public class Dish {
 	public void setCooking_level(String cooking_level) {
 		this.cooking_level = cooking_level;
 	}
+<<<<<<< HEAD
 	
 	public String getPriceBySize(String size){
 		//fix for a null, no idea where the bug comes from
@@ -97,4 +105,6 @@ public class Dish {
 		this.exceptions = exceptions;
 	}
 	
+=======
+>>>>>>> main
 }
