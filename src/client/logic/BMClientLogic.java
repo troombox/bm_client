@@ -30,20 +30,52 @@ import utility.message_parsers.MessegeParserDishes;
 import utility.message_parsers.MessegeParserRestaurants;
 
 
+
+/**
+ * The Class BMClientLogic subclass of abstractClient.
+ * The class uses for parse the data type of the request
+ * in order to send the right data to server side.
+ */
 public class BMClientLogic extends AbstractClient{
 	
+	/** The last data received. */
 	private Object lastDataRecieved;
+	
+	/** The type of last data received. */
 	private DataType typeOfLastDataRecieved;
+	
+	/** The type of last request received. */
 	private RequestType typeOfLastRequestRecieved;
 	
+	/** The logged in user. */
 	private User loggedInUser;
 	
+	/** The current order. */
 	private MultiOrder currentOrder;
+	
+	/**
+	 * Constructor initialize the connection parameters
+	 * the host and the port number.
+	 * Open the connection with server. 
+	 *
+	 * @param host the host
+	 * @param port the port
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public BMClientLogic(String host, int port) throws IOException {
 	    super(host, port); //Call the superclass constructor
 	    openConnection();
 	}
 
+	/**
+	 * Handle message from server.
+	 * Check which data type got from server 
+	 * and save the parser data in the variable lastDataRecieved.
+	 * Parsing the data using the right parser method according to 
+	 * the data type and request type.
+	 *
+	 * @param messageFromServerToClient the message from server to client
+	 */
 	@Override
 	protected void handleMessageFromServer(Object messageFromServerToClient) {
 		RequestType messageRequestType = MessageParser.parseMessage_RequestType(messageFromServerToClient);
@@ -117,6 +149,15 @@ public class BMClientLogic extends AbstractClient{
 		}	
 	}
 	
+	/**
+	 * Send message to server data.
+	 * According to the data type we using the right parser
+	 * to parse the data to something we except in the server side.
+	 *
+	 * @param dataToSendToServer the data to send to server
+	 * @param dataType the data type
+	 * @param requestType the request type
+	 */
 	public void sendMessageToServer(Object dataToSendToServer, DataType dataType, RequestType requestType) {
 		Object message=null;
 		switch(dataType) {
@@ -189,6 +230,13 @@ public class BMClientLogic extends AbstractClient{
 		handleMessageToServer(message);
 	}
 	
+	/**
+	 * Handle message to server.
+	 * Get parsed data and send it 
+	 * to server using sendToServer method.
+	 *
+	 * @param msg the msg
+	 */
 	private void handleMessageToServer(Object msg) {
 		try {
 			sendToServer(msg);
@@ -199,6 +247,9 @@ public class BMClientLogic extends AbstractClient{
 		}
 	}
 	
+	/**
+	 * Close connection with message to server.
+	 */
 	public void closeConnectionWithMessageToServer() {
 		sendMessageToServer("disconnected", DataType.SINGLE_TEXT_STRING, RequestType.CLIENT_REQUEST_TO_SERVER_CONNECTION_STATUS);
 		try {
@@ -211,10 +262,21 @@ public class BMClientLogic extends AbstractClient{
 	
 	//----------------LOGGED-IN USER METHODS
 	
+	/**
+	 * Login user.
+	 * Saving the logged in user in variable.
+	 *
+	 * @param user the user
+	 */
 	public void loginUser(User user) {
 		this.loggedInUser = user;
 	}
 	
+	/**
+	 * Log out user.
+	 * Method for log out request.
+	 * Send to server log out request.
+	 */
 	public void logOutUser() {
 		if(loggedInUser == null) {
 			return;
@@ -224,6 +286,13 @@ public class BMClientLogic extends AbstractClient{
 		currentOrder = null;
 	}
 	
+	/**
+	 * Gets the logged user.
+	 * Getter for getting the variable that
+	 * save the logged in user
+	 *
+	 * @return the logged user
+	 */
 	public User getLoggedUser() {
 		if(loggedInUser == null)
 			return new User(-1, "", "", "", "", "", UserType.USER, "", "", false, "");
@@ -234,6 +303,12 @@ public class BMClientLogic extends AbstractClient{
 	
 	//--------------CURRENT ORDER METHODS
 	
+	/**
+	 * Creates the order.
+	 * create new order.
+	 *
+	 * @param restaurantID the restaurant ID
+	 */
 	public void createOrder(int restaurantID) {
 		if(currentOrder == null) {
 			currentOrder = new MultiOrder(loggedInUser, restaurantID);
@@ -241,11 +316,21 @@ public class BMClientLogic extends AbstractClient{
 		return;
 	}
 	
+	/**
+	 * Add dish to order.
+	 *
+	 * @param dishToAdd the dish to add
+	 */
 	public void addToOrder(Dish dishToAdd) {
 		createOrder(Integer.parseInt(dishToAdd.getRes_ID()));
 		currentOrder.addDish(dishToAdd);
 	}
 	
+	/**
+	 * Removes dish from order.
+	 *
+	 * @param dishToRemove the dish to remove
+	 */
 	public void removeFromOrder(Dish dishToRemove) {
 		if(currentOrder == null) {
 			return;
@@ -255,6 +340,11 @@ public class BMClientLogic extends AbstractClient{
 		}
 	}
 	
+	/**
+	 * Checks if is order list empty.
+	 *
+	 * @return true, if is order list empty
+	 */
 	public boolean isOrderListEmpty() {
 		if(currentOrder == null) {
 			return true;
@@ -265,6 +355,11 @@ public class BMClientLogic extends AbstractClient{
 		return true;
 	}
 	
+	/**
+	 * Gets the order dishes.
+	 *
+	 * @return the order dishes
+	 */
 	public ArrayList<Dish> getOrderDishes(){
 		if(currentOrder == null) {
 			return null;
@@ -272,6 +367,11 @@ public class BMClientLogic extends AbstractClient{
 		return currentOrder.getDishesInOrder();
 	}
 	
+	/**
+	 * Gets the order.
+	 *
+	 * @return the order
+	 */
 	public MultiOrder getOrder(){
 		if(currentOrder == null) {
 			return null;
@@ -279,21 +379,39 @@ public class BMClientLogic extends AbstractClient{
 		return currentOrder;
 	}
 	
+	/**
+	 * Clear current order.
+	 */
 	public void clearCurrentOrder() {
 		currentOrder = null;
 	}
 	
 
 	
+	/**
+	 * Gets the last data received from server.
+	 *
+	 * @return the last data received
+	 */
 	//----------------TO BE CHANGED WHEN MESSAGE HISTORY ADDED (POSSIBLY)
 	public Object getLastDataRecieved() {
 		return lastDataRecieved;
 	}
 
+	/**
+	 * Gets the type of last data received from server.
+	 *
+	 * @return the type of last data received
+	 */
 	public DataType getTypeOfLastDataRecieved() {
 		return typeOfLastDataRecieved;
 	}
 
+	/**
+	 * Gets the type of last request received.
+	 *
+	 * @return the type of last request received
+	 */
 	public RequestType getTypeOfLastRequestRecieved() {
 		return typeOfLastRequestRecieved;
 	}
