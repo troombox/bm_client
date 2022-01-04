@@ -19,47 +19,47 @@ import utility.entity.User;
 import utility.enums.DataType;
 import utility.enums.RequestType;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ControllerFX_ClientW4Cscreen - used as a controller for JavaFX,
- *  implementing code needed for the W4C screen in the application.
+ *  implementing code needed for the W4C screen in the application
  */
 public class ControllerFX_ClientW4Cscreen implements IClientFxController {
 	
-	/**  The previous screen (should be login screen controller). */
+	/** The previous screen (should be login screen controller) */
 	IClientFxController previous;
 	
-	/**  The QR reader, should be initialized to an. */
+	/** The QR reader, should be initialized to an */
 	IQRReader reader;
 	
-    /** The button sign out. */
+    /** The button to sign out. */
     @FXML
     private Button buttonSignOut;
 
-    /** The button go back. */
+    /** The button to go back. */
     @FXML
     private Button buttonGoBack;
 
-    /** The button continue. */
+    /** The button to continue. */
     @FXML
     private Button buttonContinue;
 
-    /** The button scan QR code. */
+    /** The button to scan QR code. */
     @FXML
     private Button buttonScanQRCode;
     
-    /** The text box W 4 C code. */
+    /** The text field to input W4C code. */
     @FXML
     private TextField textBoxW4CCode;
     
-    /** The Error msg. */
+    /** The label to display error message. */
     @FXML
     private Label ErrorMsg;
 
     /**
-     * Do continue.
+     * Do continue - called on press of "continue" button, 
+     * checks input validity and goes to next screen
      *
-     * @param event the event
+     * @param event  - the action event from button press
      */
     @FXML
     void doContinue(ActionEvent event) {
@@ -73,9 +73,9 @@ public class ControllerFX_ClientW4Cscreen implements IClientFxController {
     }
 
     /**
-     * Do go back.
+     * Do go back - called on press of "go back" button.
      *
-     * @param event the event
+     * @param event  - the action event from button press
      */
     @FXML
     void doGoBack(ActionEvent event) {
@@ -84,9 +84,10 @@ public class ControllerFX_ClientW4Cscreen implements IClientFxController {
     }
 
     /**
-     * Do scan QR code.
+     * Do scan QR code - called on press of "scan QR" button.
+     * Calls for the module used to scan QR codes
      *
-     * @param event the event
+     * @param event  - the action event from button press
      */
     @FXML
     void doScanQRCode(ActionEvent event) {
@@ -100,9 +101,10 @@ public class ControllerFX_ClientW4Cscreen implements IClientFxController {
     }
 
     /**
-     * Do sign out.
+     * Do sign out - called on press of "sign out" button.
+     * Returns user to Login screen
      *
-     * @param event the event
+     * @param event - the action event from button press
      */
     @FXML
     void doSignOut(ActionEvent event) {
@@ -112,9 +114,9 @@ public class ControllerFX_ClientW4Cscreen implements IClientFxController {
     }
 
 	/**
-	 * Start.
+	 *  This method starts the FX window of the controller 
 	 *
-	 * @param stage the stage
+	 * @param stage - main stage of the application
 	 */
 	@Override
 	public void start(Stage stage) {
@@ -135,9 +137,10 @@ public class ControllerFX_ClientW4Cscreen implements IClientFxController {
 	}
 	
 	/**
-	 * Check W 4 C input text.
+	 * Checks W4C input text to make sure it is the 
+	 * one that belongs to the logged in user
 	 *
-	 * @param w4cInput the w 4 c input
+	 * @param w4cInput - the w4c input text string
 	 * @return true, if successful
 	 */
 	private boolean checkW4CInputText(String w4cInput) {
