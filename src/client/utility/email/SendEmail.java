@@ -11,19 +11,43 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 
+/**
+ * The Class SendEmail.
+ * main is running a thread
+ */
 public class SendEmail extends Thread {
+	
+	/** The msg. */
 	private String msg;
+	
+	/** The to. */
 	private String to;
 	
-	 public SendEmail (String to, String msg) {
+	 /**
+ 	 * Instantiates a new send email.
+ 	 *
+ 	 * @param email to send to
+ 	 * @param msg to send
+ 	 */
+ 	public SendEmail (String to, String msg) {
 		 this.to = to;
 		 this.msg=msg;
 	 }
 	
-	  public void main(String[] args) {
+	  /**
+  	 * The main method. run a thread
+  	 *
+  	 * @param args the arguments
+  	 */
+  	public void main(String[] args) {
 	    this.start();
 	  }
-	  public void run() {
+	  
+  	/**
+  	 * Run.
+  	 * send status update email that contains the given message to the given mail that are initialized in the constructor
+  	 */
+  	public void run() {
 	    
 	    	final String from = "mebite857@gmail.com";
 	    	final String Password = "group@#16";
