@@ -1,0 +1,17 @@
+client.debug
+client.gui.controllers
+client.gui.history
+client.gui.logic
+client.interfaces
+client.logic
+client.utility.email
+client.utility.qr
+client.utility.wrappers
+server.db_logic
+server.exceptions
+server.gui
+server.logic
+utility.entity
+utility.enums
+utility.files
+utility.message_parsers
