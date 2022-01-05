@@ -264,11 +264,11 @@ public class ControllerFX_ClientCheckoutScreen implements IClientFxController, I
     	txtConfirmDate.setText(datePicker.getValue().toString());
     	txtConfirmTime.setText(timePicker.getValue());
     	int priceToConfirm = price;
+       	if(deliveryType == OrderType.DELIVERY_EARLY) {
+    		priceToConfirm = (int) Math.round(priceToConfirm * 0.9);
+    	}
     	if(!(deliveryType == OrderType.PICKUP)) {
     		priceToConfirm+=deliveryPrice;
-    	}
-    	if(deliveryType == OrderType.DELIVERY_EARLY) {
-    		priceToConfirm = (int) Math.round(priceToConfirm * 0.9);
     	}
     	txtConfirmPrice.setText(String.valueOf(priceToConfirm));
     	showError(false, null);
